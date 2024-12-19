@@ -19,7 +19,7 @@ export async function generateStaticParams() {
     "https://video.bunnycdn.com/library/350908/videos",
     {
       headers: {
-        AccessKey: process.env.BUNNYNET_ACCESS_KEY || "",
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
         "Content-Type": "application/json",
       },
     }
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Params }) {
     `https://video.bunnycdn.com/library/350908/videos/${guid}`,
     {
       headers: {
-        AccessKey: process.env.BUNNYNET_ACCESS_KEY || "",
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
         "Content-Type": "application/json",
       },
     }
