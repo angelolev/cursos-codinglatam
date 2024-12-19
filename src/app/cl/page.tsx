@@ -3,46 +3,27 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../auth/auth-context";
 
-// Login Page Component
-export default function LoginPage() {
+export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn } = useAuth();
+  const { signUp } = useAuth();
   const router = useRouter();
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signIn(email, password);
+      await signUp(email, password);
       router.push("/dashboard");
     } catch (error) {
       console.log(error);
     }
   };
 
-  // const handleGoogleLogin = async () => {
-  //   try {
-  //     await signInWithGoogle();
-  //     router.push("/dashboard");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleGithubLogin = async () => {
-  //   try {
-  //     await signInWithGithub();
-  //     router.push("/dashboard");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-md w-96">
         <h2 className="text-2xl mb-4">Login</h2>
-        <form onSubmit={handleEmailLogin}>
+        <form onSubmit={handleSubmit}>
           <input
             type="email"
             placeholder="Email"
@@ -63,24 +44,9 @@ export default function LoginPage() {
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded"
           >
-            Login
+            Registrar usuario
           </button>
         </form>
-
-        {/* <div className="mt-4 space-y-2">
-          <button
-            onClick={handleGoogleLogin}
-            className="w-full bg-red-500 text-white p-2 rounded"
-          >
-            Login with Google
-          </button>
-          <button
-            onClick={handleGithubLogin}
-            className="w-full bg-gray-800 text-white p-2 rounded"
-          >
-            Login with GitHub
-          </button>
-        </div> */}
       </div>
     </div>
   );

@@ -94,13 +94,12 @@ export default async function CoursePage({ params }: { params: Params }) {
   const videos = await data.json();
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 pt-24">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">{course.title}</h1>
-        <p>{course.description}</p>
-
+        <h1 className="text-4xl font-bold mb-8">{course.title}</h1>
+        <p className="text-white/60">{course.description}</p>
         <div className="mt-6">
-          <h2 className="text-xl font-semibold mb-2">Clases</h2>
+          <h2 className="text-xl font-semibold mb-6">Clases</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {videos.items.map((item: Course) => (
               <div className="video" key={item.guid}>
@@ -108,7 +107,9 @@ export default async function CoursePage({ params }: { params: Params }) {
                   <Image src={jsLogo} width={100} height={100} alt="JS logo" />
                 </div>
                 <div className="title mt-2">
-                  <Link href={`/clases/${item.guid}`}>{item.title}</Link>
+                  <Link href={`/clases/${item.guid}`} className="text-white/70">
+                    {item.title}
+                  </Link>
                 </div>
               </div>
             ))}
