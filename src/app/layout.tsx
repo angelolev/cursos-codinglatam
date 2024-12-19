@@ -18,9 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body
-        className={`bg-slate-100 dark:bg-light-black ${firaCode.className}`}
-      >
+      <body className={`bg-light-black ${firaCode.className}`}>
         <Navbar />
         <AuthProviderWrapper>{children}</AuthProviderWrapper>
       </body>
