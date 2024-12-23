@@ -2,11 +2,12 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../auth/auth-context";
+import LogoDark from "@/components/LogoDark";
 
-// Login Page Component
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<null | string>(null);
   const { signIn } = useAuth();
   const router = useRouter();
 
@@ -16,6 +17,7 @@ export default function LoginPage() {
       await signIn(email, password);
       router.push("/dashboard");
     } catch (error) {
+      setError("Hubo un error al iniciar sesión");
       console.log(error);
     }
   };
@@ -41,7 +43,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl mb-4">Login</h2>
+        <div className="flex justify-center pb-6">
+          <LogoDark />
+        </div>
         <form onSubmit={handleEmailLogin}>
           <input
             type="email"
@@ -63,8 +67,9 @@ export default function LoginPage() {
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded"
           >
-            Login
+            Ingresar
           </button>
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </form>
 
         {/* <div className="mt-4 space-y-2">
