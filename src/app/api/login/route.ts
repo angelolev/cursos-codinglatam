@@ -29,7 +29,7 @@ export async function POST(req: Request): Promise<NextResponse> {
 
   try {
     // Verify the ID token and create a session cookie
-    const decodedToken = await getAuth().verifyIdToken(idToken);
+    await getAuth().verifyIdToken(idToken);
     const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
     const sessionCookie = await getAuth().createSessionCookie(idToken, {
       expiresIn,
