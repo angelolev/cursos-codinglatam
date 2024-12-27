@@ -1,3 +1,5 @@
+import LikeIcon from "@/components/LikeIcon";
+
 type Params = Promise<{ guid: string }>;
 
 interface IVideo {
@@ -65,10 +67,13 @@ export default async function Page({ params }: { params: Params }) {
       <div className="class-information p-4">
         <h1 className="text-2xl mb-4 font-bold">{video.title}</h1>
         {video.metaTags.map((item: IMetatag) => (
-          <p className="text-base" key={item.value}>
+          <p className="text-base text-white/70" key={item.value}>
             {item.value}
           </p>
         ))}
+        <div className="like max-w-fit max-h-fit">
+          <LikeIcon classId={guid} />
+        </div>
       </div>
     </div>
   );
