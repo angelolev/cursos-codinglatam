@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`bg-light-black ${firaCode.className}`}>
         <AuthProviderWrapper>
           <Navbar />
-          <main className="pt-24">{children}</main>
+          <main className="pt-24 mx-auto max-w-7xl px-4">{children}</main>
         </AuthProviderWrapper>
       </body>
     </html>
