@@ -27,7 +27,7 @@ const LikeIcon = ({ classId }: LikeIconProps) => {
 
   const [optimisticState, addOptimisticState] = useOptimistic(
     { liked, likesCount },
-    (state, newState) => ({
+    (state, newState: { liked: boolean; likesCount: number }) => ({
       ...state,
       ...newState,
     })

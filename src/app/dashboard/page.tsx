@@ -45,7 +45,7 @@ export default function DashboardPage() {
             type="password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="Current Password"
+            placeholder="Contraseña actual"
             className="w-full p-2 mb-4 border rounded"
             required
           />
@@ -53,7 +53,7 @@ export default function DashboardPage() {
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="New Password"
+            placeholder="Nueva contraseña"
             className="w-full p-2 mb-4 border rounded"
             required
           />
@@ -62,13 +62,13 @@ export default function DashboardPage() {
               type="submit"
               className="bg-blue-500 text-white p-2 rounded"
             >
-              {isLoading ? "Actualizando..." : "Actualizar contraseña"}
+              {isLoading ? "Cargando..." : "Actualizar contraseña"}
             </button>
             <button
               onClick={logout}
               className="text-white p-2 rounded bg-red-600"
             >
-              Logout
+              Salir
             </button>
           </div>
           {error && <p style={{ color: "red" }}>{error}</p>}
