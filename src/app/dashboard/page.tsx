@@ -33,32 +33,50 @@ export default function DashboardPage() {
   };
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome, {user?.email}!</p>
-      <button onClick={logout}>Logout</button>
-      <p>Cambia tu contraseña</p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-          placeholder="Current Password"
-        />
-        <input
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="New Password"
-        />
-        <button type="submit">
-          {isLoading ? "Actualizando..." : "Actualizar contraseña"}
-        </button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && (
-          <p style={{ color: "green" }}>Password updated successfully!</p>
-        )}
-      </form>
+    <div className="flex items-center justify-center">
+      <div className="bg-white p-8 rounded shadow-md">
+        <h1 className="text-black font-bold text-2xl mb-1">Dashboard</h1>
+        <p className="text-gray-500">Welcome, {user?.email}!</p>
+        <form onSubmit={handleSubmit} className="grid mt-6">
+          <h2 className="text-black font-bold text-xl mb-2">
+            Cambia tu contraseña
+          </h2>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            placeholder="Current Password"
+            className="w-full p-2 mb-4 border rounded"
+            required
+          />
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="New Password"
+            className="w-full p-2 mb-4 border rounded"
+            required
+          />
+          <div className="my-2 flex flex-col gap-4 md:justify-between md:flex-row-reverse">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white p-2 rounded"
+            >
+              {isLoading ? "Actualizando..." : "Actualizar contraseña"}
+            </button>
+            <button
+              onClick={logout}
+              className="text-white p-2 rounded bg-red-600"
+            >
+              Logout
+            </button>
+          </div>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          {success && (
+            <p style={{ color: "green" }}>Password updated successfully!</p>
+          )}
+        </form>
+      </div>
     </div>
   );
 }
