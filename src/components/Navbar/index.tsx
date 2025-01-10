@@ -32,7 +32,7 @@ export function Navbar() {
 
   return (
     <nav className="bg-slate-800 shadow-sm fixed w-full z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
             <Link href={"/"}>

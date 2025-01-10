@@ -1,21 +1,9 @@
 import { CourseCard } from "@/components/CourseCard";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
+import { CourseProps } from "@/types/course";
 
-interface Courses {
-  id: string;
-  guid: string;
-  title: string;
-  description: string;
-  buyLink: string;
-  available: boolean;
-  slug: string;
-  duration: string;
-  image: string;
-  level: string;
-}
-
-async function getCourses(): Promise<Courses[] | null> {
+async function getCourses(): Promise<CourseProps[] | null> {
   try {
     const coursesCollection = collection(db, "courses");
     const querySnapshot = await getDocs(coursesCollection);
@@ -26,12 +14,14 @@ async function getCourses(): Promise<Courses[] | null> {
         guid: data.guid,
         title: data.title,
         description: data.description,
+        shortDescription: data.shortDescription,
         buyLink: data.buyLink,
         available: data.available,
         slug: data.slug,
         duration: data.duration,
         image: data.image,
         level: data.level,
+        topics: data.topics || [],
       };
     });
     return coursesList;
