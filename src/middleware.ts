@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("auth-token")?.value;
-  console.log(token, "tokencillo");
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -22,5 +21,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/clases/:path*"],
+  matcher: ["/dashboard/:path*", "/cursos/javascript/clases"],
 };
