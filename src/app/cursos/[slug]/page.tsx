@@ -66,7 +66,7 @@ export default async function CoursePage({ params }: { params: Params }) {
     `https://video.bunnycdn.com/library/${library[0].Id}/videos`,
     {
       headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+        AccessKey: library[0].ApiKey || "",
         "Content-Type": "application/json",
       },
     }
