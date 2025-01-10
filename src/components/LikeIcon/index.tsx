@@ -108,12 +108,12 @@ const LikeIcon = ({ classId }: LikeIconProps) => {
   };
 
   return (
-    <div className="mt-4 flex items-center gap-2">
+    <div className="flex items-center gap-2 cursor-pointer">
       <svg
-        height="32px"
+        height="24px"
         version="1.1"
         viewBox="0 0 512 512"
-        width="32px"
+        width="24px"
         xmlSpace="preserve"
         xmlns="http://www.w3.org/2000/svg"
         onClick={handleLike}

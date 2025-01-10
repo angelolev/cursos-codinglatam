@@ -27,6 +27,15 @@ export default function CompleteProfile() {
     e.preventDefault();
     if (!user) return;
 
+    const isFormValid = Object.values(formData).every(
+      (value) => value.trim() !== ""
+    );
+
+    if (!isFormValid) {
+      alert("Por favor, completa todos los campos.");
+      return;
+    }
+
     try {
       await setDoc(doc(db, "users", user.uid), {
         name: formData.name,
@@ -34,7 +43,6 @@ export default function CompleteProfile() {
         email: formData.email,
         github: formData.github,
       });
-      alert("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile: ", error);
     }
