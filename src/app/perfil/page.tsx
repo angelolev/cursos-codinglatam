@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Swal from "sweetalert2";
 import { doc, setDoc } from "firebase/firestore";
 import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
@@ -32,7 +33,10 @@ export default function CompleteProfile() {
     );
 
     if (!isFormValid) {
-      alert("Por favor, completa todos los campos.");
+      Swal.fire({
+        icon: "warning",
+        text: "Por favor, complete todos los campos",
+      });
       return;
     }
 
@@ -43,9 +47,19 @@ export default function CompleteProfile() {
         email: formData.email,
         github: formData.github,
       });
+      Swal.fire({
+        icon: "success",
+        text: "Perfil actualizado correctamente",
+      });
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        text: "Ocurrió un error al actualizar el perfil",
+      });
       console.error("Error updating profile: ", error);
     }
+
+    setFormData({ name: "", lastName: "", email: "", github: "" });
   };
 
   return (
@@ -61,7 +75,7 @@ export default function CompleteProfile() {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-3 py-2 text-white bg-[#2a2e33] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
           />
         </div>
         <div>
@@ -73,7 +87,7 @@ export default function CompleteProfile() {
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full px-3 py-2 text-white bg-[#2a2e33] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
           />
         </div>
         <div>
@@ -85,7 +99,7 @@ export default function CompleteProfile() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-3 py-2 text-white bg-[#2a2e33] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
           />
         </div>
         <div>
@@ -97,7 +111,7 @@ export default function CompleteProfile() {
             name="github"
             value={formData.github}
             onChange={handleChange}
-            className="w-full px-3 py-2 text-white bg-[#2a2e33] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
           />
         </div>
         <button

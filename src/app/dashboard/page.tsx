@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Swal from "sweetalert2";
 import { useProtectedRoute } from "@/app/hooks/useProtectedRoutes";
 import { useAuth } from "../auth/auth-context";
 
@@ -10,35 +11,39 @@ export default function DashboardPage() {
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  /*   const [isLoading, setIsLoading] = useState<boolean>(false); */
 
   if (!user) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    setSuccess(false);
+    /*   setIsLoading(true); */
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      Swal.fire({
+        icon: "warning",
+        text: "Las contraseñas no coinciden",
+      });
     } else {
       if (await updateUserPassword(currentPassword, newPassword)) {
-        setSuccess(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        Swal.fire({
+          icon: "success",
+          text: "Se ha actualizado la contraseña correctamente",
+        });
       } else {
-        setError("Failed to update password");
+        Swal.fire({
+          icon: "error",
+          text: "Ocurrió un error al actualizar la contraseña",
+        });
       }
     }
-
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setIsLoading(false);
+    /*     setIsLoading(false); */
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  /*if (isLoading) return <p>Loading...</p>; */
 
   return (
     <div className="p-8 max-w-md mx-auto">
@@ -52,7 +57,8 @@ export default function DashboardPage() {
             type="password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            className="w-full px-3 py-2 text-white bg-[#2a2e33] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            required
           />
         </div>
         <div>
@@ -63,7 +69,8 @@ export default function DashboardPage() {
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full px-3 py-2 text-white bg-[#2a2e33] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            required
           />
         </div>
         <div>
@@ -74,7 +81,8 @@ export default function DashboardPage() {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full px-3 py-2 text-white bg-[#2a2e33] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+            required
           />
         </div>
         <button
@@ -84,12 +92,6 @@ export default function DashboardPage() {
           Actualizar Contraseña
         </button>
       </form>
-      {error && <p style={{ color: "red", marginTop: "16px" }}>{error}</p>}
-      {success && (
-        <p style={{ color: "green", marginTop: "16px" }}>
-          Password updated successfully!
-        </p>
-      )}
     </div>
   );
 }

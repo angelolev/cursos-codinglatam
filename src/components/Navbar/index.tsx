@@ -81,30 +81,30 @@ export function Navbar() {
 
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50">
-                    <Link
+                    {/* <Link
                       href="/"
                       className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <Home size={20} />
                       <span>Inicio</span>
-                    </Link>
-                    <Link
+                    </Link> */}
+                    {/* <Link
                       href="/"
                       className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <BookOpen size={20} />
                       <span>Mis cursos</span>
-                    </Link>
+                    </Link> */}
                     <button
                       className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                       onClick={() => {
                         setIsSettingsOpen(!isSettingsOpen);
                       }}
                     >
-                      <Settings size={20} />
-                      <span>Setting</span>
+                      <User size={20} />
+                      Mi perfil
                       <ChevronDown
                         size={16}
                         className={`ml-2 transform transition-transform ${
@@ -187,28 +187,28 @@ export function Navbar() {
               </div>
             )}
 
-            <Link
+            {/* <Link
               href="/"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
             >
               <Home className="h-4 w-4 inline mr-2" />
               Inicio
-            </Link>
-            <Link
+            </Link> */}
+            {/* <Link
               href="/"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
             >
               <BookOpen className="h-4 w-4 inline mr-2" />
               Mis cursos
-            </Link>
+            </Link> */}
             <button
               className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
               onClick={() => {
                 setIsSettingsOpen(!isSettingsOpen);
               }}
             >
-              <Settings className="h-4 w-4 inline mr-2" />
-              Setting
+              <User className="h-4 w-4 inline mr-2" />
+              Mi Perfil
               <ChevronDown
                 size={16}
                 className={`ml-2 transform transition-transform ${
