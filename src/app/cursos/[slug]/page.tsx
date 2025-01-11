@@ -75,11 +75,12 @@ export default async function CoursePage({ params }: { params: Params }) {
   );
   const { items } = await data.json();
 
-  const filteredClases = items.filter(
+  const filteredClases = items?.filter(
     (item) => item.collectionId === courseCollections[slug].collectionId
   );
 
-  const clases = orderVideosByTitle(filteredClases);
+  const clases =
+    filteredClases.length > 0 ? orderVideosByTitle(filteredClases) : null;
 
   return (
     <div className="container max-w-7xl mx-auto px-0 pt-0 pb-8">
@@ -113,16 +114,24 @@ export default async function CoursePage({ params }: { params: Params }) {
                   Clases
                 </h2>
                 <ul className="space-y-4">
-                  {clases?.map((item: VideoProps) => (
-                    <Link
-                      key={item.guid}
-                      href={`/cursos/${course.slug}/clases/${item.guid}`}
-                      className="flex items-center"
-                    >
-                      <BookOpen className="h-5 w-5 text-indigo-600 mr-3 mt-1" />
-                      <span>{item.title}</span>
-                    </Link>
-                  ))}
+                  {clases &&
+                    clases?.map((item: VideoProps) => (
+                      <Link
+                        key={item.guid}
+                        href={`/cursos/${course.slug}/clases/${item.guid}`}
+                        className="flex items-center"
+                      >
+                        <BookOpen className="h-5 w-5 text-indigo-600 mr-3 mt-1" />
+                        <span>{item.title}</span>
+                      </Link>
+                    ))}
+                  {!clases &&
+                    course?.topics?.map((item) => (
+                      <div className="flex items-center" key={item}>
+                        <BookOpen className="h-5 w-5 text-indigo-600 mr-3 mt-1" />
+                        <p className="text-black/70">{item}</p>
+                      </div>
+                    ))}
                 </ul>
               </div>
               <CourseReviews courseId={"modern-react"} />
@@ -145,15 +154,18 @@ export default async function CoursePage({ params }: { params: Params }) {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <Link
-                    href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
-                    className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors inline-block text-center"
-                  >
-                    Empezar curso
-                  </Link>
-                  {/* <button className="w-full border border-indigo-600 text-indigo-600 px-6 py-3 rounded-md hover:bg-indigo-50 transition-colors">
-                  Add to Wishlist
-                </button> */}
+                  {clases ? (
+                    <Link
+                      href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
+                      className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors inline-block text-center"
+                    >
+                      Empezar curso
+                    </Link>
+                  ) : (
+                    <p className="text-2xl text-center text-primary-300 font-bold">
+                      Próximamente
+                    </p>
+                  )}
                 </div>
                 <div className="mt-6 text-center text-sm text-gray-500">
                   Disponible mientras tu suscripción esté activa
