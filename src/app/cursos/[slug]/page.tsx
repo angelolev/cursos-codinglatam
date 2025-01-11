@@ -7,7 +7,7 @@ import Link from "next/link";
 import { CourseReviews } from "@/components/CourseReviews";
 import {
   getCourseBySlug,
-  getCourseClasses,
+  getCourseLibrary,
   orderVideosByTitle,
 } from "@/utils/common";
 import { VideoProps } from "@/types/video";
@@ -52,7 +52,7 @@ export async function generateStaticParams() {
 export default async function CoursePage({ params }: { params: Params }) {
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
-  const library = await getCourseClasses(slug);
+  const library = await getCourseLibrary(slug);
 
   if (!course) {
     notFound();
@@ -63,7 +63,7 @@ export default async function CoursePage({ params }: { params: Params }) {
   }
 
   const data = await fetch(
-    `https://video.bunnycdn.com/library/${library[0].Id}/videos`,
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${library[0].Id}/videos`,
     {
       headers: {
         AccessKey: library[0].ApiKey || "",

@@ -1,7 +1,9 @@
 import LikeIcon from "@/components/LikeIcon";
 import Resources from "@/components/Resources";
+import { getCourseLibrary } from "@/utils/common";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 type Params = Promise<{ guid: string; slug: string }>;
 
@@ -21,10 +23,10 @@ interface IMetatag {
 
 export async function generateStaticParams() {
   const videos = await fetch(
-    "https://video.bunnycdn.com/library/350908/videos",
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/350908/videos`,
     {
       headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY_JAVASCRIPT || "",
         "Content-Type": "application/json",
       },
     }
@@ -37,18 +39,28 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: Params }) {
   const { guid, slug } = await params;
+  const library = await getCourseLibrary(slug);
+
+  if (!library) {
+    notFound();
+  }
 
   const data = await fetch(
-    `https://video.bunnycdn.com/library/350908/videos/${guid}`,
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${library[0].Id}/videos/${guid}`,
     {
       headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+        AccessKey:
+          process.env[
+            `NEXT_PUBLIC_BUNNYNET_ACCESS_KEY_${slug.toUpperCase()}`
+          ] || "",
         "Content-Type": "application/json",
       },
     }
   );
 
   const video = await data.json();
+
+  console.log(video);
 
   return (
     <div className="flex flex-col lg:flex-row gap-6">

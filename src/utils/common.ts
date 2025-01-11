@@ -30,7 +30,7 @@ export async function getCourseBySlug(
   }
 }
 
-export async function getCourseClasses(
+export async function getCourseLibrary(
   slug: string
 ): Promise<VideoLibrary[] | null> {
   try {

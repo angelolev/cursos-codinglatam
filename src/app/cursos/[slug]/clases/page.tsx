@@ -2,22 +2,25 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { CourseProps } from "@/types/course";
-import { getCourseClasses } from "@/utils/common";
+import { getCourseLibrary } from "@/utils/common";
 type Params = Promise<{ slug: string }>;
 
 export default async function Clases({ params }: { params: Params }) {
   const { slug } = await params;
-  const library = await getCourseClasses(slug);
+  const library = await getCourseLibrary(slug);
 
   if (!library) {
     notFound();
   }
 
   const data = await fetch(
-    `https://video.bunnycdn.com/library/${library[0].Id}/videos`,
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${library[0].Id}/videos`,
     {
       headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+        AccessKey:
+          process.env[
+            `NEXT_PUBLIC_BUNNYNET_ACCESS_KEY_${slug.toUpperCase()}`
+          ] || "",
         "Content-Type": "application/json",
       },
     }
