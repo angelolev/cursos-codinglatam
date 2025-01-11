@@ -1,26 +1,16 @@
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { CourseProps } from "@/types/course";
-import { getCourseLibrary } from "@/utils/common";
 type Params = Promise<{ slug: string }>;
 
 export default async function Clases({ params }: { params: Params }) {
   const { slug } = await params;
-  const library = await getCourseLibrary(slug);
-
-  if (!library) {
-    notFound();
-  }
 
   const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${library[0].Id}/videos`,
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
     {
       headers: {
-        AccessKey:
-          process.env[
-            `NEXT_PUBLIC_BUNNYNET_ACCESS_KEY_${slug.toUpperCase()}`
-          ] || "",
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
         "Content-Type": "application/json",
       },
     }
@@ -36,13 +26,13 @@ export default async function Clases({ params }: { params: Params }) {
         <ArrowLeft className="h-4 w-4 mr-2" />
         Volver al curso
       </Link>
-      <h2 className="text-xl font-semibold mb-6">Clases</h2>
+      <h2 className="text-xl font-semibold mb-6">Clases xd</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {videos.items.map((item: CourseProps) => (
           <div className="video" key={item.guid}>
             <div className="thumbnail bg-slate-400 h-60 flex items-center justify-center rounded-md relative">
               <iframe
-                src={`https://iframe.mediadelivery.net/embed/${library[0].Id}/${item.guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true`}
+                src={`https://iframe.mediadelivery.net/embed/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/${item.guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true`}
                 loading="lazy"
                 style={{
                   border: 0,

@@ -1,9 +1,7 @@
 import LikeIcon from "@/components/LikeIcon";
 import Resources from "@/components/Resources";
-import { getCourseLibrary } from "@/utils/common";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 type Params = Promise<{ guid: string; slug: string }>;
 
@@ -23,10 +21,10 @@ interface IMetatag {
 
 export async function generateStaticParams() {
   const videos = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/350908/videos`,
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
     {
       headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY_JAVASCRIPT || "",
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
         "Content-Type": "application/json",
       },
     }
@@ -39,20 +37,12 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: Params }) {
   const { guid, slug } = await params;
-  const library = await getCourseLibrary(slug);
-
-  if (!library) {
-    notFound();
-  }
 
   const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${library[0].Id}/videos/${guid}`,
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
     {
       headers: {
-        AccessKey:
-          process.env[
-            `NEXT_PUBLIC_BUNNYNET_ACCESS_KEY_${slug.toUpperCase()}`
-          ] || "",
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
         "Content-Type": "application/json",
       },
     }
@@ -60,14 +50,12 @@ export default async function Page({ params }: { params: Params }) {
 
   const video = await data.json();
 
-  console.log(video);
-
   return (
     <div className="flex flex-col lg:flex-row gap-6">
       <div className="w-full">
         <div className="w-full relative mb-8 overflow-hidden bg-gray-800 rounded aspect-video">
           <iframe
-            src={`https://iframe.mediadelivery.net/embed/350908/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true`}
+            src={`https://iframe.mediadelivery.net/embed/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true`}
             loading="lazy"
             style={{
               border: 0,
