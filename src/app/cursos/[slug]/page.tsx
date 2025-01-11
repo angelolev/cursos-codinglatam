@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import { notFound } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { ArrowLeft, Clock, BookOpen, Award } from "lucide-react";
@@ -5,14 +7,19 @@ import { db } from "@/utils/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import { CourseReviews } from "@/components/CourseReviews";
-import {
-  getCourseBySlug,
-  getCourseClasses,
-  orderVideosByTitle,
-} from "@/utils/common";
+import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
 import { VideoProps } from "@/types/video";
 
 type Params = Promise<{ slug: string }>;
+
+const courseCollections = {
+  react: {
+    collectionId: "ec89bb8c-a703-444c-8f00-70a6f138dfe7",
+  },
+  javascript: {
+    collectionId: "50efd55f-c061-4c22-a2ee-032ad92b2f6c",
+  },
+};
 
 export async function generateMetadata({ params }: { params: Params }) {
   const { slug } = await params;
@@ -52,27 +59,27 @@ export async function generateStaticParams() {
 export default async function CoursePage({ params }: { params: Params }) {
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
-  const library = await getCourseClasses(slug);
 
   if (!course) {
     notFound();
   }
 
-  if (!library) {
-    notFound();
-  }
-
   const data = await fetch(
-    `https://video.bunnycdn.com/library/${library[0].Id}/videos`,
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
     {
       headers: {
-        AccessKey: library[0].ApiKey || "",
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
         "Content-Type": "application/json",
       },
     }
   );
   const { items } = await data.json();
-  const clases = orderVideosByTitle(items);
+
+  const filteredClases = items.filter(
+    (item) => item.collectionId === courseCollections[slug].collectionId
+  );
+
+  const clases = orderVideosByTitle(filteredClases);
 
   return (
     <div className="container max-w-7xl mx-auto px-0 pt-0 pb-8">

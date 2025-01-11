@@ -1,7 +1,6 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import { CourseProps } from "@/types/course";
 import { db } from "@/utils/firebase";
-import { VideoLibrary } from "@/types/video-library";
 
 export async function getCourseBySlug(
   slug: string
@@ -26,26 +25,6 @@ export async function getCourseBySlug(
     } as CourseProps;
   } catch (error) {
     console.error("Failed to fetch course:", error);
-    return null;
-  }
-}
-
-export async function getCourseClasses(
-  slug: string
-): Promise<VideoLibrary[] | null> {
-  try {
-    const videoLibraries = await fetch("https://api.bunny.net/videolibrary", {
-      headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_STREAM_KEY || "",
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-
-    if (!videoLibraries) return null;
-
-    return videoLibraries.filter((item: VideoLibrary) => item.Name === slug);
-  } catch (error) {
-    console.error("Failed to fetch video librarie:", error);
     return null;
   }
 }
