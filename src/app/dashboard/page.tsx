@@ -38,6 +38,8 @@ export default function DashboardPage() {
     setIsLoading(false);
   };
 
+  if (isLoading) return <p>Loading...</p>;
+
   return (
     <div className="p-8 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-6">Cambiar Contraseña</h1>
