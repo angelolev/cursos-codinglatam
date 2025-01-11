@@ -10,9 +10,15 @@ export function CourseCard({
   level,
   duration,
   slug,
+  available,
 }: CourseProps) {
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
+    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative">
+      <div className="absolute right-0">
+        {!available ? (
+          <span className=" bg-red-500 px-2 py-1 text-white">Febrero 2025</span>
+        ) : null}
+      </div>
       <div className="h-48 w-full overflow-hidden">
         <img className="w-full h-full object-cover" src={image} alt={title} />
       </div>
