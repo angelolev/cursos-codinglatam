@@ -2,15 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import Image from "next/image";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 interface CourseReviewsProps {
