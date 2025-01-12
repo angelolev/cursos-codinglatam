@@ -22,20 +22,22 @@ async function getClassResources(
 
     const querySnapshot = await getDocs(q);
 
-    const resourcesDoc = querySnapshot.docs.find(
+    const resourcesDocs = querySnapshot.docs.filter(
       (doc) => doc.data().classId === classId
     );
 
-    if (!resourcesDoc) return null;
+    if (!resourcesDocs) return null;
 
-    const data = resourcesDoc.data();
-    return [
-      {
+    const resources = resourcesDocs.map((doc) => {
+      const data = doc.data();
+      return {
         classId: data.classId,
         href: data.href,
         title: data.title,
-      },
-    ];
+      };
+    });
+
+    return resources;
   } catch (error) {
     console.error("Failed to fetch resource:", error);
     return null;
@@ -51,11 +53,11 @@ export default async function Resources({ classId }: ResourcesProps) {
         <Link
           href={item.href}
           target="_blank"
-          className="flex items-center gap-2"
-          key={item.classId}
+          className="flex items-center gap-2 mb-4"
+          key={item.title}
         >
-          <BookText color="#eec048" />
-          <span className="text-white/80">{item.title}</span>
+          <BookText size={24} color="#eec048" />
+          <span className="w-full text-white/80">{item.title}</span>
         </Link>
       ))}
     </>
