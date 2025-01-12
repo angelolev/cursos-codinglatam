@@ -9,8 +9,15 @@ interface CourseReviewsProps {
   courseId: string;
 }
 
+interface courseReviewsProps {
+  name: string | null;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
 export function CourseReviews({ courseId }: CourseReviewsProps) {
-  const [courseReviews, setCourseReviews] = useState<any[]>([]);
+  const [courseReviews, setCourseReviews] = useState<courseReviewsProps[]>([]);
 
   useEffect(() => {
     const reviewsRef = collection(db, "reviews");
@@ -18,7 +25,15 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
     const unsubscribe = onSnapshot(reviewsRef, (querySnapshot) => {
       const filteredReviews = querySnapshot.docs
         .filter((doc) => doc.id.startsWith(courseId + "-"))
-        .map((doc) => doc.data());
+        .map((doc) => {
+          const data = doc.data();
+          return {
+            name: data.name,
+            rating: data.rating,
+            comment: data.comment,
+            date: data.date,
+          } as courseReviewsProps;
+        });
 
       setCourseReviews(filteredReviews);
     });

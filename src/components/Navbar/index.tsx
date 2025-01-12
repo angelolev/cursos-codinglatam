@@ -5,8 +5,8 @@ import {
   X,
   LogOut,
   LogIn,
-  Home,
-  BookOpen,
+  /*   Home,
+  BookOpen, */
   Settings,
   User,
   ChevronDown,

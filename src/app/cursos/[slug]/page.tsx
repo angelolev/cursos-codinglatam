@@ -8,11 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CourseReviews } from "@/components/CourseReviews";
 import { AddCourseReview } from "@/components/AddCourseReview";
-import {
-  getCourseBySlug,
-  getCourseClasses,
-  orderVideosByTitle,
-} from "@/utils/common";
+import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
 import { VideoProps } from "@/types/video";
 
 type Params = Promise<{ slug: string }>;
