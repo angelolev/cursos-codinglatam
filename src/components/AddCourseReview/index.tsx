@@ -102,16 +102,23 @@ export function AddCourseReview({ courseId }: CourseReviewsProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setHasCommented(true);
+
     if (!user) return;
+
+    if (!newComment.comment.trim()) {
+      setHasCommented(false);
+      alert(
+        "El comentario no puede estar vacío o contener solo espacios en blanco."
+      );
+      return;
+    }
 
     try {
       await setDoc(doc(db, "reviews", `${courseId}-${user.uid}`), {
         ...newComment,
         date: new Date().toISOString(),
       });
-
-      setHasCommented(true);
-
       setNewComment((prevComment) => ({
         ...prevComment,
         rating: 0,

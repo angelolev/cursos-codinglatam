@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 interface CourseReviewsProps {
@@ -13,27 +13,18 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
   const [courseReviews, setCourseReviews] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const reviewsRef = collection(db, "reviews");
-        const querySnapshot = await getDocs(reviewsRef);
+    const reviewsRef = collection(db, "reviews");
 
-        if (!querySnapshot.empty) {
-          const filteredReviews = querySnapshot.docs
-            .filter((doc) => doc.id.startsWith(courseId + "-"))
-            .map((doc) => doc.data());
+    const unsubscribe = onSnapshot(reviewsRef, (querySnapshot) => {
+      const filteredReviews = querySnapshot.docs
+        .filter((doc) => doc.id.startsWith(courseId + "-"))
+        .map((doc) => doc.data());
 
-          setCourseReviews(filteredReviews);
-        } else {
-          console.log("No hay comentarios para este curso!");
-        }
-      } catch (error) {
-        console.error("Error fetching reviews: ", error);
-      }
-    };
+      setCourseReviews(filteredReviews);
+    });
 
-    fetchData();
-  }, [courseId, courseReviews]);
+    return () => unsubscribe();
+  }, [courseId]);
 
   return (
     <div className="mt-16">
