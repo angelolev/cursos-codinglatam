@@ -15,7 +15,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await signIn(email, password);
-      router.push("/dashboard");
+      router.push("/perfil");
     } catch (error) {
       setError("Hubo un error al iniciar sesión");
       console.log(error);

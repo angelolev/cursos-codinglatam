@@ -7,6 +7,7 @@ import { db } from "@/utils/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import { CourseReviews } from "@/components/CourseReviews";
+import { AddCourseReview } from "@/components/AddCourseReview";
 import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
 import { VideoProps } from "@/types/video";
 
@@ -137,7 +138,8 @@ export default async function CoursePage({ params }: { params: Params }) {
                     ))}
                 </ul>
               </div>
-              <CourseReviews courseId={"modern-react"} />
+              <AddCourseReview courseId={course.id} />
+              <CourseReviews courseId={course.id} />
             </div>
 
             <div className="lg:col-span-1">
