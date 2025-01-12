@@ -132,7 +132,7 @@ export function AddCourseReview({ courseId }: CourseReviewsProps) {
 
   return (
     <>
-      {!hasCommented && (
+      {user && !hasCommented && (
         <div className="mt-16">
           <h2 className="text-2xl font-bold text-white/90 mb-8">
             ¿Qué te pareció el curso?
