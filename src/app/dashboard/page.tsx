@@ -3,6 +3,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { useProtectedRoute } from "@/app/hooks/useProtectedRoutes";
 import { useAuth } from "../auth/auth-context";
+import { redirect } from "next/navigation";
 
 export default function DashboardPage() {
   const user = useProtectedRoute();
@@ -33,6 +34,7 @@ export default function DashboardPage() {
           icon: "success",
           text: "Se ha actualizado la contraseña correctamente",
         });
+        redirect("/");
       } else {
         Swal.fire({
           icon: "error",

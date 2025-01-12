@@ -5,13 +5,13 @@ import Swal from "sweetalert2";
 import { doc, setDoc } from "firebase/firestore";
 import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
+import { redirect } from "next/navigation";
 
 export default function CompleteProfile() {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
-    email: "",
     github: "",
   });
 
@@ -44,13 +44,13 @@ export default function CompleteProfile() {
       await setDoc(doc(db, "users", user.uid), {
         name: formData.name,
         lastName: formData.lastName,
-        email: formData.email,
         github: formData.github,
       });
       Swal.fire({
         icon: "success",
         text: "Perfil actualizado correctamente",
       });
+      redirect("/");
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -59,7 +59,7 @@ export default function CompleteProfile() {
       console.error("Error updating profile: ", error);
     }
 
-    setFormData({ name: "", lastName: "", email: "", github: "" });
+    setFormData({ name: "", lastName: "", github: "" });
   };
 
   return (
@@ -86,18 +86,6 @@ export default function CompleteProfile() {
             type="text"
             name="lastName"
             value={formData.lastName}
-            onChange={handleChange}
-            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">
-            Correo electronico
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
             onChange={handleChange}
             className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
           />

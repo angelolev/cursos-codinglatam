@@ -10,6 +10,7 @@ import { CourseReviews } from "@/components/CourseReviews";
 import { AddCourseReview } from "@/components/AddCourseReview";
 import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
 import { VideoProps } from "@/types/video";
+import RegisterButton from "@/components/RegisterButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -167,9 +168,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                       Empezar curso
                     </Link>
                   ) : (
-                    <p className="text-2xl text-center text-primary-300 font-bold">
-                      Próximamente
-                    </p>
+                    <RegisterButton />
                   )}
                 </div>
                 <div className="mt-6 text-center text-sm text-gray-500">

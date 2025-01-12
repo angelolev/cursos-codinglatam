@@ -3,8 +3,9 @@ import { db } from "@/utils/firebase";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/utils/common";
 import Link from "next/link";
-import { ArrowLeft, Book, Download } from "lucide-react";
+import { ArrowLeft, Book } from "lucide-react";
 import Image from "next/image";
+import DownloadButton from "@/components/DownloadButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -51,11 +52,6 @@ export default async function ProductPage({ params }: { params: Params }) {
                 alt={product.title}
                 className="w-full md:w-64 h-80 object-cover rounded-xl shadow-lg"
               />
-              {/* <img
-                src={product.image}
-                alt={product.title}
-                className="w-full md:w-64 h-80 object-cover rounded-xl shadow-lg"
-              /> */}
               <div>
                 <h1 className="text-4xl font-bold text-white mb-4">
                   {product.title}
@@ -69,10 +65,6 @@ export default async function ProductPage({ params }: { params: Params }) {
                 </div>
               </div>
             </div>
-
-            {/* <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">test</h2>
-            </div> */}
 
             <div className="bg-white rounded-xl shadow-md p-6 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -110,17 +102,7 @@ export default async function ProductPage({ params }: { params: Params }) {
                 </div>
               </div>
               <div className="space-y-4">
-                <Link
-                  href={product.href}
-                  target="_blank"
-                  className="w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors flex items-center justify-center"
-                >
-                  <Download className="h-5 w-5 mr-2" />
-                  Descargar
-                </Link>
-                {/* <button className="w-full border border-indigo-600 text-indigo-600 px-6 py-3 rounded-md hover:bg-indigo-50 transition-colors">
-                  Add to Wishlist
-                </button> */}
+                <DownloadButton href={product.href} />
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">
                 Descarga digital inmediata
