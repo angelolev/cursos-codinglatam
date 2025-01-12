@@ -20,6 +20,9 @@ const courseCollections = {
   javascript: {
     collectionId: "50efd55f-c061-4c22-a2ee-032ad92b2f6c",
   },
+  web: {
+    collectionId: "80e121f4-0083-444c-bb22-10b89383114d",
+  },
 };
 
 export async function generateMetadata({ params }: { params: Params }) {
