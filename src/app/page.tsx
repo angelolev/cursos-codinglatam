@@ -2,6 +2,10 @@ import { CourseCard } from "@/components/CourseCard";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { CourseProps } from "@/types/course";
+import Product from "@/components/ProductCard";
+import { ProductProps } from "@/types/product";
+import Workshop from "@/components/WorkshopCard";
+import { WorkshopProps } from "@/types/workshop";
 
 async function getCourses(): Promise<CourseProps[] | null> {
   try {
@@ -25,6 +29,51 @@ async function getCourses(): Promise<CourseProps[] | null> {
       };
     });
     return coursesList;
+  } catch (error) {
+    console.error("Failed to fetch course:", error);
+    return null;
+  }
+}
+
+async function getProducts(): Promise<ProductProps[] | null> {
+  try {
+    const productsCollection = collection(db, "products");
+    const querySnapshot = await getDocs(productsCollection);
+    const productsList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        image: data.image,
+        slug: data.slug,
+        format: data.format,
+        pages: data.pages,
+        href: data.href,
+      };
+    });
+    return productsList;
+  } catch (error) {
+    console.error("Failed to fetch course:", error);
+    return null;
+  }
+}
+
+async function getWorkshops(): Promise<WorkshopProps[] | null> {
+  try {
+    const workshopsCollection = collection(db, "workshops");
+    const querySnapshot = await getDocs(workshopsCollection);
+    const workshopsList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        image: data.image,
+        slug: data.slug,
+      };
+    });
+    return workshopsList;
   } catch (error) {
     console.error("Failed to fetch course:", error);
     return null;
@@ -93,9 +142,11 @@ async function getCourses(): Promise<CourseProps[] | null> {
 
 export default async function Home() {
   const courses = await getCourses();
+  const products = await getProducts();
+  const workshops = await getWorkshops();
   return (
     <>
-      <main className="pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="pb-16 px-4 sm:px-6 lg:px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
@@ -109,6 +160,36 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses?.map((course, index) => (
               <CourseCard key={index} {...course} />
+            ))}
+          </div>
+
+          <div className="text-center my-12">
+            <h1 className="text-4xl font-bold text-white/90 mb-4">
+              Guías de estudio para ti
+            </h1>
+            <p className="text-xl text-white/60 max-w-2xl mx-auto">
+              Material enfocado en ayudarte a optimizar todo lo necesario para
+              la búsqueda laboral y mejora de skills
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products?.map((product, index) => (
+              <Product key={index} {...product} />
+            ))}
+          </div>
+
+          <div className="text-center my-12">
+            <h1 className="text-4xl font-bold text-white/90 mb-4">
+              Workshops y training
+            </h1>
+            <p className="text-xl text-white/60 max-w-2xl mx-auto">
+              Talleres pensados no solo en habilidades técnicas sino también en
+              habilidades blandas
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {workshops?.map((workshop, index) => (
+              <Workshop key={index} {...workshop} />
             ))}
           </div>
         </div>

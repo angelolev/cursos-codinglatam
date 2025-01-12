@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "vz-fefbc3dc-ab2.b-cdn.net",
       },
+      {
+        protocol: "https",
+        hostname: "c10.patreonusercontent.com",
+      },
     ],
   },
 };
