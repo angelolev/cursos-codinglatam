@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import { notFound } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { ArrowLeft, Clock, BookOpen, Award } from "lucide-react";
@@ -10,7 +8,8 @@ import { CourseReviews } from "@/components/CourseReviews";
 import { AddCourseReview } from "@/components/AddCourseReview";
 import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
 import { VideoProps } from "@/types/video";
-import ActionButton from "@/components/DownloadButton";
+import ActionButton from "@/components/ActionButton";
+import WatchButton from "@/components/WatchButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -80,13 +79,14 @@ export default async function CoursePage({ params }: { params: Params }) {
     }
   );
   const { items } = await data.json();
-
   const filteredClases = items?.filter(
-    (item) => item.collectionId === courseCollections[slug].collectionId
+    (item: { collectionId: string }) =>
+      item.collectionId ===
+      courseCollections[slug as keyof typeof courseCollections].collectionId
   );
 
   const clases =
-    filteredClases.length > 0 ? orderVideosByTitle(filteredClases) : null;
+    filteredClases?.length > 0 ? orderVideosByTitle(filteredClases) : null;
 
   return (
     <div className="container max-w-7xl mx-auto px-0 pt-0 pb-8">
@@ -167,7 +167,39 @@ export default async function CoursePage({ params }: { params: Params }) {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  {clases ? (
+                  {clases && (
+                    <ActionButton
+                      href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
+                      label="Empezar curso"
+                    />
+                  )}
+
+                  {!clases && (
+                    // <div className="flex flex-col text-center gap-2">
+                    //   <RegisterButton />
+                    //   <span>o</span>
+                    //   <LoginButton />
+                    // </div>
+                    <WatchButton
+                      isAvailable={course.available}
+                      clases={clases}
+                    />
+                  )}
+
+                  {/* {clases && (
+                    <WatchButton
+                      href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
+                      isAvailable={course.available}
+                      classes={clases}
+                    />
+                  )}
+                  {!clases && (
+                    <p className="text-primary-300 font-semibold text-xl text-center">
+                      Próximamente
+                    </p>
+                  )} */}
+
+                  {/* {clases ? (
                     <ActionButton
                       href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
                       label="Empezar curso"
@@ -176,7 +208,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                     <p className="text-primary-300 font-semibold text-xl text-center">
                       Próximamente
                     </p>
-                  )}
+                  )} */}
                 </div>
                 <div className="mt-6 text-center text-sm text-gray-500">
                   Disponible mientras tu suscripción esté activa

@@ -5,7 +5,7 @@ import { getProductBySlug } from "@/utils/common";
 import Link from "next/link";
 import { ArrowLeft, Book } from "lucide-react";
 import Image from "next/image";
-import ActionButton from "@/components/DownloadButton";
+import ActionButton from "@/components/ActionButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -70,11 +70,16 @@ export default async function ProductPage({ params }: { params: Params }) {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 Sobre el autor
               </h2>
+              <p className="text-gray-600 mb-6">
+                ¡Hola! Soy ingeniero de software con más de 9 años de
+                experiencia en el mundo tech. He pasado por consultoras,
+                startups y empresas tradicionales, acumulando un montón de
+                aprendizajes en el camino.
+              </p>
               <p className="text-gray-600">
-                Soy Ingeniero de software con más de 9 años de experiencia. He
-                trabajado en consultoras, startups y empresas de software
-                tradicionales durante mi carrera. Puedo ayudarte a mejorar tus
-                skills y conseguir ese trabajo que estás buscando.
+                Ahora quiero compartir todo eso contigo para ayudarte a mejorar
+                tus habilidades y conseguir ese trabajo que siempre has soñado.
+                🚀 ¿Listo para dar el siguiente paso en tu carrera? 💼✨
               </p>
             </div>
           </div>
