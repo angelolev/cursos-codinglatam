@@ -10,5 +10,6 @@ export interface CourseProps {
   duration: string;
   image: string;
   level: string;
+  releaseDate: string;
   topics: string[];
 }

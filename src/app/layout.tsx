@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import AuthProviderWrapper from "@/app/auth/auth-provider";
 import { Fira_Code } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
+import WhastappButton from "@/components/WhastappButton";
 import "./globals.css";
 
 const firaCode = Fira_Code({ subsets: ["latin"] });
@@ -9,6 +10,20 @@ const firaCode = Fira_Code({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Cursos | Coding Latam",
   description: "Aprende HACIENDO proyectos REALES",
+  openGraph: {
+    title: "Cursos | Coding Latam",
+    description: "Aprende HACIENDO proyectos REALES",
+    url: "https://cursos.codinglatam.dev",
+    siteName: "Coding Latam",
+    images: [
+      {
+        url: "https://codinglatam.dev/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Coding Latam og image",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -18,10 +33,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`bg-light-black ${firaCode.className}`}>
+      <body className={`bg-light-black ${firaCode.className} relative`}>
         <AuthProviderWrapper>
           <Navbar />
-          <main className="pt-24 mx-auto max-w-7xl px-4 lg:px-0">{children}</main>
+          <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
+            {children}
+          </main>
+          <div className="bg-white rounded-full p-2 max-w-20 fixed w-full bottom-5 right-4">
+            <WhastappButton />
+          </div>
         </AuthProviderWrapper>
       </body>
     </html>

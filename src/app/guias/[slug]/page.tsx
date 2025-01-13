@@ -5,7 +5,7 @@ import { getProductBySlug } from "@/utils/common";
 import Link from "next/link";
 import { ArrowLeft, Book } from "lucide-react";
 import Image from "next/image";
-import DownloadButton from "@/components/DownloadButton";
+import ActionButton from "@/components/DownloadButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -32,7 +32,7 @@ export default async function ProductPage({ params }: { params: Params }) {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-0">
       <div className="max-w-7xl mx-auto">
         <Link
           href="/"
@@ -102,7 +102,7 @@ export default async function ProductPage({ params }: { params: Params }) {
                 </div>
               </div>
               <div className="space-y-4">
-                <DownloadButton href={product.href} />
+                <ActionButton href={product.href} label="Descargar" />
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">
                 Descarga digital inmediata

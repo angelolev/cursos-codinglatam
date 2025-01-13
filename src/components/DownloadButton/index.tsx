@@ -4,11 +4,12 @@ import { Download } from "lucide-react";
 import Link from "next/link";
 import RegisterButton from "../RegisterButton";
 
-interface DownloadButtonProps {
+interface ActionButtonProps {
   href: string;
+  label: string;
 }
 
-export default function DownloadButton({ href }: DownloadButtonProps) {
+export default function ActionButton({ href, label }: ActionButtonProps) {
   const { user } = useAuth();
 
   if (!user) {
@@ -22,7 +23,7 @@ export default function DownloadButton({ href }: DownloadButtonProps) {
       className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
     >
       <Download className="h-5 w-5 mr-2" />
-      Descargar
+      {label}
     </Link>
   );
 }
