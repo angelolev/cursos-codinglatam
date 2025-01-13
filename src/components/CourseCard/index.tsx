@@ -2,8 +2,10 @@ import { CourseProps } from "@/types/course";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { AverageRating } from "../AverageRating";
+import { getCourseBySlug } from "@/utils/common";
 
-export function CourseCard({
+export async function CourseCard({
   title,
   shortDescription,
   image,
@@ -13,6 +15,8 @@ export function CourseCard({
   available,
   releaseDate,
 }: CourseProps) {
+  const course = await getCourseBySlug(slug);
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative">
       <div className="absolute right-0 z-20">
@@ -34,6 +38,7 @@ export function CourseCard({
         <Link href={`cursos/${slug}`}>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
         </Link>
+        {course && <AverageRating reviewId={course.id} />}
         <p className="text-gray-600 mb-4">{shortDescription}</p>
         <div className="flex justify-between items-center text-sm text-gray-500">
           <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">

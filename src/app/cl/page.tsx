@@ -13,7 +13,7 @@ export default function RegisterPage() {
     e.preventDefault();
     try {
       await signUp(email, password);
-      router.push("/dashboard");
+      router.push("/perfil");
     } catch (error) {
       console.log(error);
     }

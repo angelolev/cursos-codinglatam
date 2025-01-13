@@ -1,19 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+
+interface FormData {
+  name: string;
+  lastName: string;
+  github: string;
+  email: string;
+}
 
 export default function CompleteProfile() {
   const { user } = useAuth();
-  const [formData, setFormData] = useState({
+  const router = useRouter();
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     lastName: "",
     github: "",
+    email: user?.email || "",
   });
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+      return;
+    }
+
+    const fetchUserData = async () => {
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          setFormData({
+            name: userData.name || "",
+            lastName: userData.lastName || "",
+            github: userData.github || "",
+            email: user?.email || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        Swal.fire({
+          icon: "error",
+          text: "Error al cargar los datos del usuario",
+        });
+      } finally {
+      }
+    };
+
+    fetchUserData();
+  }, [user, router]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -41,16 +83,12 @@ export default function CompleteProfile() {
     }
 
     try {
-      await setDoc(doc(db, "users", user.uid), {
-        name: formData.name,
-        lastName: formData.lastName,
-        github: formData.github,
-      });
-      Swal.fire({
+      await setDoc(doc(db, "users", user.uid), formData);
+      await Swal.fire({
         icon: "success",
         text: "Perfil actualizado correctamente",
       });
-      redirect("/");
+      router.push("/");
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -58,8 +96,6 @@ export default function CompleteProfile() {
       });
       console.error("Error updating profile: ", error);
     }
-
-    setFormData({ name: "", lastName: "", github: "" });
   };
 
   return (
