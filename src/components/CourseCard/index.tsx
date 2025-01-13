@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { CourseProps } from "@/types/course";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -11,16 +11,24 @@ export function CourseCard({
   duration,
   slug,
   available,
+  releaseDate,
 }: CourseProps) {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative">
-      <div className="absolute right-0">
+      <div className="absolute right-0 z-20">
         {!available ? (
-          <span className=" bg-red-500 px-2 py-1 text-white">Febrero 2025</span>
+          <span className=" bg-red-500 px-2 py-1 text-white">
+            {releaseDate}
+          </span>
         ) : null}
       </div>
-      <div className="h-48 w-full overflow-hidden">
-        <img className="w-full h-full object-cover" src={image} alt={title} />
+      <div className="h-48 w-full overflow-hidden relative">
+        <Image
+          className="w-full h-full object-cover"
+          src={image}
+          alt={title}
+          fill
+        />
       </div>
       <div className="p-6">
         <Link href={`cursos/${slug}`}>

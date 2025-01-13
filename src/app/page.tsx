@@ -1,152 +1,16 @@
 import { CourseCard } from "@/components/CourseCard";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/utils/firebase";
-import { CourseProps } from "@/types/course";
 import Product from "@/components/ProductCard";
-import { ProductProps } from "@/types/product";
 import Workshop from "@/components/WorkshopCard";
-import { WorkshopProps } from "@/types/workshop";
-
-async function getCourses(): Promise<CourseProps[] | null> {
-  try {
-    const coursesCollection = collection(db, "courses");
-    const querySnapshot = await getDocs(coursesCollection);
-    const coursesList = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        guid: data.guid,
-        title: data.title,
-        description: data.description,
-        shortDescription: data.shortDescription,
-        buyLink: data.buyLink,
-        available: data.available,
-        slug: data.slug,
-        duration: data.duration,
-        image: data.image,
-        level: data.level,
-        topics: data.topics || [],
-      };
-    });
-    return coursesList;
-  } catch (error) {
-    console.error("Failed to fetch course:", error);
-    return null;
-  }
-}
-
-async function getProducts(): Promise<ProductProps[] | null> {
-  try {
-    const productsCollection = collection(db, "products");
-    const querySnapshot = await getDocs(productsCollection);
-    const productsList = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        title: data.title,
-        description: data.description,
-        image: data.image,
-        slug: data.slug,
-        format: data.format,
-        pages: data.pages,
-        href: data.href,
-      };
-    });
-    return productsList;
-  } catch (error) {
-    console.error("Failed to fetch course:", error);
-    return null;
-  }
-}
-
-async function getWorkshops(): Promise<WorkshopProps[] | null> {
-  try {
-    const workshopsCollection = collection(db, "workshops");
-    const querySnapshot = await getDocs(workshopsCollection);
-    const workshopsList = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        title: data.title,
-        description: data.description,
-        image: data.image,
-        slug: data.slug,
-      };
-    });
-    return workshopsList;
-  } catch (error) {
-    console.error("Failed to fetch course:", error);
-    return null;
-  }
-}
-
-// const courses = [
-//   {
-//     title: "Modern React Development",
-//     description:
-//       "Master React 18 with hooks, context, and modern best practices",
-//     image:
-//       "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=800",
-//     level: "Intermediate",
-//     duration: "8 weeks",
-//     slug: "javascript",
-//   },
-//   {
-//     title: "TypeScript Fundamentals",
-//     description:
-//       "Build type-safe applications with TypeScript and modern tooling",
-//     image:
-//       "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800",
-//     level: "Beginner",
-//     duration: "6 weeks",
-//     slug: "javascript",
-//   },
-//   {
-//     title: "Advanced CSS & Tailwind",
-//     description: "Create stunning user interfaces with modern CSS and Tailwind",
-//     image:
-//       "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?auto=format&fit=crop&q=80&w=800",
-//     level: "Advanced",
-//     duration: "10 weeks",
-//     slug: "javascript",
-//   },
-//   {
-//     title: "JavaScript Performance",
-//     description:
-//       "Optimize your JavaScript applications for maximum performance",
-//     image:
-//       "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=800",
-//     level: "Advanced",
-//     duration: "8 weeks",
-//     slug: "javascript",
-//   },
-//   {
-//     title: "Web Accessibility",
-//     description: "Learn to build inclusive web applications for all users",
-//     image:
-//       "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&q=80&w=800",
-//     level: "Intermediate",
-//     duration: "4 weeks",
-//     slug: "javascript",
-//   },
-//   {
-//     title: "Next.js & Full Stack",
-//     description: "Build full-stack applications with Next.js and modern APIs",
-//     image:
-//       "https://images.unsplash.com/photo-1561736778-92e52a7769ef?auto=format&fit=crop&q=80&w=800",
-//     level: "Advanced",
-//     duration: "12 weeks",
-//     slug: "javascript",
-//   },
-// ];
+import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 
 export default async function Home() {
   const courses = await getCourses();
   const products = await getProducts();
   const workshops = await getWorkshops();
+
   return (
     <>
-      <main className="pb-16 px-4 sm:px-6 lg:px-4">
+      <main className="pb-16 px-4 sm:px-0">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-white/90 mb-4">

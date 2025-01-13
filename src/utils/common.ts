@@ -111,3 +111,77 @@ export async function getWorkshopByslug(
     return null;
   }
 }
+
+export async function getCourses(): Promise<CourseProps[] | null> {
+  try {
+    const coursesCollection = collection(db, "courses");
+    const querySnapshot = await getDocs(coursesCollection);
+    const coursesList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        guid: data.guid,
+        title: data.title,
+        description: data.description,
+        shortDescription: data.shortDescription,
+        buyLink: data.buyLink,
+        available: data.available,
+        slug: data.slug,
+        duration: data.duration,
+        image: data.image,
+        level: data.level,
+        releaseDate: data.releaseDate,
+        topics: data.topics || [],
+      };
+    });
+    return coursesList;
+  } catch (error) {
+    console.error("Failed to fetch course:", error);
+    return null;
+  }
+}
+
+export async function getProducts(): Promise<ProductProps[] | null> {
+  try {
+    const productsCollection = collection(db, "products");
+    const querySnapshot = await getDocs(productsCollection);
+    const productsList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        image: data.image,
+        slug: data.slug,
+        format: data.format,
+        pages: data.pages,
+        href: data.href,
+      };
+    });
+    return productsList;
+  } catch (error) {
+    console.error("Failed to fetch course:", error);
+    return null;
+  }
+}
+
+export async function getWorkshops(): Promise<WorkshopProps[] | null> {
+  try {
+    const workshopsCollection = collection(db, "workshops");
+    const querySnapshot = await getDocs(workshopsCollection);
+    const workshopsList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        image: data.image,
+        slug: data.slug,
+      };
+    });
+    return workshopsList;
+  } catch (error) {
+    console.error("Failed to fetch course:", error);
+    return null;
+  }
+}

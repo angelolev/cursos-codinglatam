@@ -21,5 +21,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/cursos/javascript/clases/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/cursos/javascript/clases/:path*",
+    "/workshops/portafolios-que-contratan/videos/:path*",
+  ],
 };

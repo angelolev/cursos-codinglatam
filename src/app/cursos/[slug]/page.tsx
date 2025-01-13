@@ -10,6 +10,7 @@ import { CourseReviews } from "@/components/CourseReviews";
 import { AddCourseReview } from "@/components/AddCourseReview";
 import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
 import { VideoProps } from "@/types/video";
+import ActionButton from "@/components/DownloadButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -42,6 +43,7 @@ export async function generateMetadata({ params }: { params: Params }) {
     openGraph: {
       title: course.title,
       description: course.shortDescription,
+      images: [course.image],
     },
   };
 }
@@ -108,11 +110,18 @@ export default async function CoursePage({ params }: { params: Params }) {
                   fill
                 />
               </div>
-              <h1 className="text-4xl font-bold text-white/90 mb-4">
-                {course.title}
-              </h1>
-              <p className="text-xl text-white/80 mb-8">{course.description}</p>
+              <div className="flex items-center mb-4 gap-6">
+                <h1 className="text-4xl font-bold text-white/90 ">
+                  {course.title}
+                </h1>
+                {!course.available && (
+                  <span className="bg-red-400 px-2 py-1 text-white/90">
+                    {course.releaseDate}
+                  </span>
+                )}
+              </div>
 
+              <p className="text-xl text-white/80 mb-8">{course.description}</p>
               <div className="bg-white rounded-xl shadow-md p-6 mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Clases
@@ -145,7 +154,6 @@ export default async function CoursePage({ params }: { params: Params }) {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
                 <div className="text-3xl font-bold text-gray-900 mb-6">
-                  {/* ${course.price} */}
                   {course.title}
                 </div>
                 <div className="space-y-4 mb-6">
@@ -160,14 +168,12 @@ export default async function CoursePage({ params }: { params: Params }) {
                 </div>
                 <div className="space-y-4">
                   {clases ? (
-                    <Link
+                    <ActionButton
                       href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
-                      className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors inline-block text-center"
-                    >
-                      Empezar curso
-                    </Link>
+                      label="Empezar curso"
+                    />
                   ) : (
-                    <p className="text-2xl text-center text-primary-300 font-bold">
+                    <p className="text-primary-300 font-semibold text-xl text-center">
                       Próximamente
                     </p>
                   )}
