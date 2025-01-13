@@ -5,7 +5,7 @@ import { getWorkshopByslug } from "@/utils/common";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import ActionButton from "@/components/DownloadButton";
+import ActionButton from "@/components/ActionButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -103,7 +103,43 @@ export default async function WorkshopPage({ params }: { params: Params }) {
                 <p className="text-xl text-white/90 mb-4">
                   {workshop.description}
                 </p>
+                {!workshop.available && (
+                  <p className="bg-red-400 px-2 py-1 w-fit">
+                    {workshop.releaseDate}
+                  </p>
+                )}
               </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Sobre los Workshops
+              </h2>
+              <p className="text-gray-600 mb-6">
+                En Coding Latam, creemos que ser un gran desarrollador va mucho
+                más allá de escribir código. Por eso, nuestros workshops están
+                diseñados para impulsarte en todos los aspectos que necesitas
+                para triunfar en tu carrera.
+              </p>
+              <p className="text-gray-600 mb-6">
+                💡 No solo abordamos temas técnicos, como dominar frameworks y
+                herramientas, sino que también nos enfocamos en desarrollar
+                habilidades blandas que son clave en la industria.
+              </p>
+              <p className="text-gray-600 mb-6">
+                Hablamos de comunicación efectiva, asertividad, negociación
+                salarial, cómo destacar en entrevistas de trabajo y estrategias
+                para recibir promociones y crecer profesionalmente. Sabemos que
+                el éxito no solo está en el teclado, sino también en cómo te
+                presentas, conectas y comunicas tu valor.
+              </p>
+              <p className="text-gray-600 mb-6">
+                Cada workshop es una oportunidad para aprender de expertos,
+                compartir experiencias y llevar tu carrera al siguiente nivel.
+                🚀 En Coding Latam no solo formamos programadores, formamos
+                profesionales completos. ¿Estás listo para construir un futuro
+                más brillante? 💼✨
+              </p>
             </div>
           </div>
 
@@ -114,17 +150,17 @@ export default async function WorkshopPage({ params }: { params: Params }) {
               </div>
 
               <div className="space-y-4">
-                {/* <Link
-                  href={`/workshops/${slug}/videos/${filteredVideo[0].guid}`}
-                  className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
-                >
-                  <Video className="h-5 w-5 mr-2" />
-                  Ver ahora
-                </Link> */}
-                <ActionButton
-                  href={`/workshops/${slug}/videos/${filteredVideo[0].guid}`}
-                  label="Ver ahora"
-                />
+                {!workshop.available && (
+                  <p className="text-xl font-semibold text-primary-300 text-center">
+                    Próximamente
+                  </p>
+                )}
+                {workshop.available && (
+                  <ActionButton
+                    href={`/workshops/${slug}/videos/${filteredVideo[0].guid}`}
+                    label="Ver ahora"
+                  />
+                )}
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">
                 Disponible mientras tu suscripción esté activa.

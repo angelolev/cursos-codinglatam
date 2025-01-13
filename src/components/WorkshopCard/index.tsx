@@ -7,9 +7,18 @@ export default function Workshop({
   title,
   slug,
   description,
+  available,
+  releaseDate,
 }: WorkshopProps) {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative">
+      <div className="absolute right-0 z-20">
+        {!available ? (
+          <span className=" bg-red-500 px-2 py-1 text-white">
+            {releaseDate}
+          </span>
+        ) : null}
+      </div>
       <div className="h-48 w-full overflow-hidden relative">
         <Image
           className="w-full h-full object-cover"

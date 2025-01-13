@@ -56,7 +56,7 @@ export default function RootLayout({
           <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
             {children}
           </main>
-          <div className="bg-white rounded-full p-2 max-w-20 fixed w-full bottom-5 right-4">
+          <div className="bg-white rounded-full max-w-20 fixed w-full bottom-5 right-4">
             <WhastappButton />
           </div>
         </AuthProviderWrapper>
