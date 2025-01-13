@@ -3,6 +3,7 @@ import AuthProviderWrapper from "@/app/auth/auth-provider";
 import { Fira_Code } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import WhastappButton from "@/components/WhastappButton";
+import Script from "next/script";
 import "./globals.css";
 
 const firaCode = Fira_Code({ subsets: ["latin"] });
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     siteName: "Coding Latam",
     images: [
       {
-        url: "https://codinglatam.dev/og.png",
+        url: "https://cursos.codinglatam.dev/og.png",
         width: 1200,
         height: 630,
         alt: "Coding Latam og image",
@@ -33,6 +34,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=G-3WYMKRCHYH`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-3WYMKRCHYH', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+      </head>
       <body className={`bg-light-black ${firaCode.className} relative`}>
         <AuthProviderWrapper>
           <Navbar />
