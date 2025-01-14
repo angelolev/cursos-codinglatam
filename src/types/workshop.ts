@@ -6,4 +6,5 @@ export interface WorkshopProps {
   description: string;
   available: boolean;
   releaseDate: string;
+  isFree: boolean;
 }

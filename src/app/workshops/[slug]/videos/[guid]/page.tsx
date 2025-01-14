@@ -1,4 +1,4 @@
-import LikeIcon from "@/components/LikeIcon";
+import LikeMaterial from "@/components/LikeMaterial";
 import Resources from "@/components/Resources";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -73,10 +73,8 @@ export default async function Page({ params }: { params: Params }) {
             <h1 className="text-2xl font-bold text-primary-300">
               {video.title}
             </h1>
-            <div className="like flex items-center gap-2">
-              <span className="text-white/90">¿Te gustó este workshop?</span>
-              <LikeIcon classId={guid} />
-            </div>
+
+            <LikeMaterial guid={guid} label="¿Te gustó este workshop?" />
           </div>
 
           {video.metaTags.map((item: IMetatag) => (

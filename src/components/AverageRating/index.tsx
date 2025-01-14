@@ -46,6 +46,10 @@ export async function AverageRating({ reviewId }: AverageRatingProps) {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
 
+  if (totalRatings === 0) {
+    return null;
+  }
+
   return (
     <div className="flex items-center gap-2 mb-3">
       <div className="flex items-center gap-1">

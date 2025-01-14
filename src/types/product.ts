@@ -7,4 +7,5 @@ export interface ProductProps {
   format: string[];
   pages: number;
   href: string;
+  isFree: boolean;
 }

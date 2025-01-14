@@ -24,7 +24,11 @@ export async function CourseCard({
           <span className=" bg-red-500 px-2 py-1 text-white">
             {releaseDate}
           </span>
-        ) : null}
+        ) : (
+          <span className=" bg-green-500 px-2 py-1 text-white">
+            Primeras clases gratis
+          </span>
+        )}
       </div>
       <div className="h-48 w-full overflow-hidden relative">
         <Image

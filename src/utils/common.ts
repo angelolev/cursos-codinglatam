@@ -106,6 +106,7 @@ export async function getWorkshopByslug(
       description: data.description,
       available: data.available,
       releaseDate: data.releaseDate,
+      isFree: data.isFree,
       ...data,
     } as WorkshopProps;
   } catch (error) {
@@ -158,6 +159,7 @@ export async function getProducts(): Promise<ProductProps[] | null> {
         format: data.format,
         pages: data.pages,
         href: data.href,
+        isFree: data.isFree,
       };
     });
     return productsList;
@@ -181,6 +183,7 @@ export async function getWorkshops(): Promise<WorkshopProps[] | null> {
         slug: data.slug,
         available: data.available,
         releaseDate: data.releaseDate,
+        isFree: data.isFree,
       };
     });
     return workshopsList;

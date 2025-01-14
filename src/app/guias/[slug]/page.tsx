@@ -3,7 +3,7 @@ import { db } from "@/utils/firebase";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/utils/common";
 import Link from "next/link";
-import { ArrowLeft, Book } from "lucide-react";
+import { ArrowLeft, Book, Play } from "lucide-react";
 import Image from "next/image";
 import ActionButton from "@/components/ActionButton";
 import { AddReview } from "@/components/AddReview";
@@ -109,7 +109,18 @@ export default async function ProductPage({ params }: { params: Params }) {
                 </div>
               </div>
               <div className="space-y-4">
-                <ActionButton href={product.href} label="Descargar" />
+                {product.isFree ? (
+                  <Link
+                    href={product.href}
+                    target="_blank"
+                    className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
+                  >
+                    <Play className="h-5 w-5 mr-2" />
+                    Descargar
+                  </Link>
+                ) : (
+                  <ActionButton href={product.href} label="Descargar" />
+                )}
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">
                 Descarga digital inmediata
@@ -117,7 +128,7 @@ export default async function ProductPage({ params }: { params: Params }) {
             </div>
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 pb-24">
             <AddReview reviewId={product.id} />
             <Reviews reviewId={product.id} />
           </div>

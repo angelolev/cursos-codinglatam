@@ -3,6 +3,7 @@ import Product from "@/components/ProductCard";
 import Workshop from "@/components/WorkshopCard";
 import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { BookOpen, Code2, Rocket, Users } from "lucide-react";
+import Link from "next/link";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -17,7 +18,7 @@ export default async function Home() {
             <div className="px-8 py-16 sm:px-16 sm:py-24">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                  <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+                  <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6">
                     Transforma tu carrera en desarrollo web
                   </h1>
                   <p className="text-xl text-indigo-100 mb-8">
@@ -25,10 +26,14 @@ export default async function Home() {
                     nuestros cursos, proyectos prácticos y guías escritos por
                     expertos.
                   </p>
-                  <div className="flex flex-wrap gap-4">
-                    <button className="bg-primary-300 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors">
+                  <div className="flex gap-4">
+                    <Link
+                      href="https://www.patreon.com/c/codinglatam/membership"
+                      target="_blank"
+                      className="bg-primary-300 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-400 transition-colors"
+                    >
                       Unirme
-                    </button>
+                    </Link>
                     {/* <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors">
                       Unirme
                     </button> */}
