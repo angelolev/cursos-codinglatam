@@ -15,7 +15,7 @@ import Logo from "../Logo";
 import { useAuth } from "@/app/auth/auth-context";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { DocumentData } from "firebase/firestore";
 
@@ -39,20 +39,19 @@ export function Navbar() {
 
   useEffect(() => {
     if (user) {
-      const fetchData = async () => {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setProfileData(docSnap.data());
+      const docRef = doc(db, "users", user.uid);
+      const unsubscribe = onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+          setProfileData(doc.data());
         } else {
           console.log("No such document!");
         }
-      };
+      });
 
-      fetchData();
+      // Cleanup subscription on unmount
+      return () => unsubscribe();
     }
-  }, [user, profileData]);
+  }, [user]);
 
   return (
     <nav className="bg-slate-800 shadow-sm fixed w-full z-10">

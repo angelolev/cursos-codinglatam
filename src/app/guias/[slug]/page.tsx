@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ArrowLeft, Book } from "lucide-react";
 import Image from "next/image";
 import ActionButton from "@/components/ActionButton";
+import { AddReview } from "@/components/AddReview";
+import { Reviews } from "@/components/Reviews";
 
 type Params = Promise<{ slug: string }>;
 
@@ -113,6 +115,11 @@ export default async function ProductPage({ params }: { params: Params }) {
                 Descarga digital inmediata
               </div>
             </div>
+          </div>
+
+          <div className="lg:col-span-2">
+            <AddReview reviewId={product.id} />
+            <Reviews reviewId={product.id} />
           </div>
         </div>
       </div>

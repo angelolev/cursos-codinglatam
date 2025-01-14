@@ -5,6 +5,7 @@ import { Star } from "lucide-react";
 import { useAuth } from "@/app/auth/auth-context";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
+import Swal from "sweetalert2";
 
 function StarRating({
   rating,
@@ -42,8 +43,8 @@ function StarRating({
   );
 }
 
-interface CourseReviewsProps {
-  courseId: string;
+interface ReviewsProps {
+  reviewId: string;
 }
 
 interface CommentProps {
@@ -53,7 +54,7 @@ interface CommentProps {
   date: string;
 }
 
-export function AddCourseReview({ courseId }: CourseReviewsProps) {
+export function AddReview({ reviewId }: ReviewsProps) {
   const [newComment, setNewComment] = useState<CommentProps>({
     name: "",
     rating: 0,
@@ -66,7 +67,7 @@ export function AddCourseReview({ courseId }: CourseReviewsProps) {
   useEffect(() => {
     if (user) {
       const checkIfCommented = async () => {
-        const reviewRef = doc(db, "reviews", `${courseId}-${user.uid}`);
+        const reviewRef = doc(db, "reviews", `${reviewId}-${user.uid}`);
         const reviewSnap = await getDoc(reviewRef);
 
         if (reviewSnap.exists()) {
@@ -108,14 +109,15 @@ export function AddCourseReview({ courseId }: CourseReviewsProps) {
 
     if (!newComment.comment.trim()) {
       setHasCommented(false);
-      alert(
-        "El comentario no puede estar vacío o contener solo espacios en blanco."
-      );
+      Swal.fire({
+        icon: "warning",
+        text: "Debes escribir un comentario",
+      });
       return;
     }
 
     try {
-      await setDoc(doc(db, "reviews", `${courseId}-${user.uid}`), {
+      await setDoc(doc(db, "reviews", `${reviewId}-${user.uid}`), {
         ...newComment,
         date: new Date().toISOString(),
       });
@@ -132,8 +134,8 @@ export function AddCourseReview({ courseId }: CourseReviewsProps) {
 
   return (
     <>
-      {!hasCommented && (
-        <div className="mt-16">
+      {user && !hasCommented && (
+        <div className="mt-8">
           <h2 className="text-2xl font-bold text-white/90 mb-8">
             ¿Qué te pareció el curso?
           </h2>
@@ -164,6 +166,8 @@ export function AddCourseReview({ courseId }: CourseReviewsProps) {
                   }
                   className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-black"
                   rows={4}
+                  maxLength={250}
+                  placeholder="Escribe tu comentario..."
                   required
                 />
               </div>

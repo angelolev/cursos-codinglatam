@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import ActionButton from "@/components/ActionButton";
+import { AddReview } from "@/components/AddReview";
+import { Reviews } from "@/components/Reviews";
 
 type Params = Promise<{ slug: string }>;
 
@@ -166,6 +168,11 @@ export default async function WorkshopPage({ params }: { params: Params }) {
                 Disponible mientras tu suscripción esté activa.
               </div>
             </div>
+          </div>
+
+          <div className="lg:col-span-2">
+            <AddReview reviewId={workshop.id} />
+            <Reviews reviewId={workshop.id} />
           </div>
         </div>
       </div>

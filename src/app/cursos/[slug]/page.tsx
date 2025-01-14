@@ -4,8 +4,8 @@ import { ArrowLeft, Clock, BookOpen, Award } from "lucide-react";
 import { db } from "@/utils/firebase";
 import Image from "next/image";
 import Link from "next/link";
-import { CourseReviews } from "@/components/CourseReviews";
-import { AddCourseReview } from "@/components/AddCourseReview";
+import { Reviews } from "@/components/Reviews";
+import { AddReview } from "@/components/AddReview";
 import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
 import { VideoProps } from "@/types/video";
 import ActionButton from "@/components/ActionButton";
@@ -122,7 +122,7 @@ export default async function CoursePage({ params }: { params: Params }) {
               </div>
 
               <p className="text-xl text-white/80 mb-8">{course.description}</p>
-              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+              <div className="bg-white rounded-xl shadow-md p-6 mb-16">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Clases
                 </h2>
@@ -147,8 +147,8 @@ export default async function CoursePage({ params }: { params: Params }) {
                     ))}
                 </ul>
               </div>
-              <AddCourseReview courseId={course.id} />
-              <CourseReviews courseId={course.id} />
+              <AddReview reviewId={course.id} />
+              <Reviews reviewId={course.id} />
             </div>
 
             <div className="lg:col-span-1">
