@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../auth/auth-context";
 import LogoDark from "@/components/LogoDark";
 import Loading from "./loading";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/utils/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export default function LoginPage() {
-  const [userAuth, setUserAuth] = useState<null | User>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<null | string>(null);
@@ -20,8 +19,6 @@ export default function LoginPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUserAuth(user);
-
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
 
@@ -41,8 +38,6 @@ export default function LoginPage() {
           await setDoc(doc(db, "users", user.uid), userData);
           router.push("/perfil");
         }
-      } else {
-        setUserAuth(null);
       }
       setIsLoading(false);
     });

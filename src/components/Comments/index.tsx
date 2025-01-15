@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Star } from "lucide-react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
