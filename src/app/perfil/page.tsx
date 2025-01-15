@@ -1,17 +1,14 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import {
   collection,
   doc,
-  documentId,
   getDoc,
   getDocs,
-  query,
   setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
