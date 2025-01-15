@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../auth/auth-context";
 import LogoDark from "@/components/LogoDark";
 import Loading from "./loading";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "@/utils/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -14,26 +17,40 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        if (user) {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
           router.push("/");
-          router.refresh();
+        } else {
+          const userData = {
+            name: "",
+            lastName: "",
+            github: "",
+            email: user.email || "",
+            isPremium: false,
+            premiumSince: null,
+            updatedAt: null,
+          };
+
+          await setDoc(doc(db, "users", user.uid), userData);
+          router.push("/perfil");
         }
-      } finally {
-        setIsLoading(false);
       }
-    };
+      setIsLoading(false);
+    });
 
-    checkAuth();
-  }, [user, router]);
-
-  if (user) {
-    return null;
-  }
+    return () => unsubscribe();
+  }, [router]);
 
   if (isLoading) {
     return <Loading />;
+  }
+
+  if (user) {
+    return null;
   }
 
   const handleEmailLogin = async (e: React.FormEvent) => {
@@ -52,7 +69,6 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
-      router.push("/perfil");
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +77,7 @@ export default function LoginPage() {
   const handleGithubLogin = async () => {
     try {
       await signInWithGithub();
-      router.push("/pefil");
+      router.push("/perfil");
     } catch (error) {
       console.log(error);
     }
