@@ -160,7 +160,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                     <div className="aspect-video">
                       <iframe
                         className="w-full h-full"
-                        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                        src={course.testimonialVideo}
                         title="Student Testimonial 1"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen

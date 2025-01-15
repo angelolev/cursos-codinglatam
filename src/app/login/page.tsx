@@ -7,11 +7,12 @@ import Loading from "./loading";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/utils/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import GoogleIcon from "@/components/GoogleIcon";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<null | string>(null);
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { signIn, signInWithGithub, signInWithGoogle, user } = useAuth();
   const router = useRouter();
@@ -53,18 +54,18 @@ export default function LoginPage() {
     return null;
   }
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      await signIn(email, password);
-      router.push("/perfil");
-    } catch (error) {
-      setError("Hubo un error al iniciar sesión");
-      console.log(error);
-      setIsLoading(false);
-    }
-  };
+  // const handleEmailLogin = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   try {
+  //     await signIn(email, password);
+  //     router.push("/perfil");
+  //   } catch (error) {
+  //     setError("Hubo un error al iniciar sesión");
+  //     console.log(error);
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleGoogleLogin = async () => {
     try {
@@ -74,14 +75,14 @@ export default function LoginPage() {
     }
   };
 
-  const handleGithubLogin = async () => {
-    try {
-      await signInWithGithub();
-      router.push("/perfil");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleGithubLogin = async () => {
+  //   try {
+  //     await signInWithGithub();
+  //     router.push("/perfil");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="flex items-center justify-center pt-48">
@@ -89,7 +90,7 @@ export default function LoginPage() {
         <div className="flex justify-center pb-6">
           <LogoDark />
         </div>
-        <form onSubmit={handleEmailLogin}>
+        {/* <form onSubmit={handleEmailLogin}>
           <input
             type="email"
             placeholder="Email"
@@ -113,21 +114,24 @@ export default function LoginPage() {
             Ingresar
           </button>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-        </form>
+        </form> */}
 
         <div className="mt-4 space-y-2">
           <button
             onClick={handleGoogleLogin}
-            className="w-full bg-red-500 text-white p-2 rounded"
+            className="w-full bg-blue-500 text-white p-4 rounded flex items-center gap-4 justify-center"
           >
-            Login with Google
+            <div className="max-w-8">
+              <GoogleIcon />
+            </div>
+            Login con Google
           </button>
-          <button
+          {/* <button
             onClick={handleGithubLogin}
             className="w-full bg-gray-800 text-white p-2 rounded"
           >
             Login with GitHub
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

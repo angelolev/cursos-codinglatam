@@ -1,7 +1,6 @@
 import { AddComment } from "@/components/AddComment";
 import { Comments } from "@/components/Comments";
 import LikeMaterial from "@/components/LikeMaterial";
-import Resources from "@/components/Resources";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -72,7 +71,7 @@ export default async function Page({ params }: { params: Params }) {
         </div>
         <div className="class-information">
           <div className="w-full flex-wrap gap-6 flex items-center justify-between mb-8">
-            <h1 className="text-2xl font-bold text-primary-300">
+            <h1 className="text-2xl font-bold text-primary-300 max-w-xl">
               {video.title}
             </h1>
 
@@ -96,14 +95,8 @@ export default async function Page({ params }: { params: Params }) {
         </div>
       </div>
       <div className="w-full lg:max-w-[350px]">
-        <div>
-          <h2 className="text-2xl mb-4 font-bold">Recursos de la clase</h2>
-          <ul>
-            <Resources classId={guid} />
-          </ul>
-        </div>
-        <div className="max-h-96 mt-10">
-          <h2 className="text-2xl mb-4 font-bold">Comentarios de la clase</h2>
+        <div className="max-h-96">
+          <h2 className="text-2xl mb-4 font-bold">Comentarios del workshop</h2>
           <AddComment commentId={guid} />
           <ul>
             <Comments commentId={guid} />

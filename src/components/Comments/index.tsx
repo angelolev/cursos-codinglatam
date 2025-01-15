@@ -40,7 +40,7 @@ export function Comments({ commentId }: CommentsProps) {
 
   return (
     <div className="space-y-8">
-      {!(comments.length > 0) && <p>Aun no hay opiniones</p>}
+      {!(comments.length > 0) && <p>Aun no hay comentarios</p>}
       {comments.map((review) => (
         <div key={review.date} className="bg-[#1A1A1A] p-4 rounded-lg">
           <div className="flex flex-col w-full">
