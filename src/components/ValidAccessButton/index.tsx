@@ -2,22 +2,40 @@
 import { useAuth } from "@/app/auth/auth-context";
 import { Play } from "lucide-react";
 import Link from "next/link";
-import RegisterButton from "../RegisterButton";
 import LoginButton from "../LoginButton";
 
-interface ActionButtonProps {
+interface ValidAccessButtonProps {
   href: string;
   label: string;
 }
 
-export default function ActionButton({ href, label }: ActionButtonProps) {
-  const { user } = useAuth();
+export default function ValidAccessButton({
+  href,
+  label,
+}: ValidAccessButtonProps) {
+  const { user, isPremium } = useAuth();
 
   if (!user) {
     return (
       <div className="flex flex-col text-center gap-2">
         <LoginButton />
       </div>
+    );
+  }
+
+  if (!isPremium) {
+    return (
+      <p className="text-indigo-500 text-center">
+        Necesitas ser{" "}
+        <Link
+          href="https://www.patreon.com/c/codinglatam/membership"
+          target="_blank"
+          className="font-semibold underline "
+        >
+          PRO
+        </Link>{" "}
+        para acceder a este contenido
+      </p>
     );
   }
 

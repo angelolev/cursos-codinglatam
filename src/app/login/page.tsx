@@ -1,44 +1,71 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../auth/auth-context";
 import LogoDark from "@/components/LogoDark";
+import Loading from "./loading";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<null | string>(null);
-  const { signIn } = useAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { signIn, signInWithGithub, signInWithGoogle, user } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        if (user) {
+          router.push("/");
+          router.refresh();
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [user, router]);
+
+  if (user) {
+    return null;
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await signIn(email, password);
       router.push("/");
     } catch (error) {
       setError("Hubo un error al iniciar sesión");
       console.log(error);
+      setIsLoading(false);
     }
   };
 
-  // const handleGoogleLogin = async () => {
-  //   try {
-  //     await signInWithGoogle();
-  //     router.push("/dashboard");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithGoogle();
+      router.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // const handleGithubLogin = async () => {
-  //   try {
-  //     await signInWithGithub();
-  //     router.push("/dashboard");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleGithubLogin = async () => {
+    try {
+      await signInWithGithub();
+      router.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center pt-48">
@@ -72,7 +99,7 @@ export default function LoginPage() {
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </form>
 
-        {/* <div className="mt-4 space-y-2">
+        <div className="mt-4 space-y-2">
           <button
             onClick={handleGoogleLogin}
             className="w-full bg-red-500 text-white p-2 rounded"
@@ -85,7 +112,7 @@ export default function LoginPage() {
           >
             Login with GitHub
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

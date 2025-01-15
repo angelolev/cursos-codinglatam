@@ -137,7 +137,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
       {user && !hasCommented && (
         <div className="mt-8">
           <h2 className="text-2xl font-bold text-white/90 mb-8">
-            ¿Qué te pareció el curso?
+            ¿Te gustó el contenido?
           </h2>
           <div className="bg-white rounded-lg p-6">
             <form onSubmit={handleSubmit}>
@@ -173,7 +173,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
               </div>
               <button
                 type="submit"
-                className="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-400 transition-colors font-semibold"
+                className="bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors font-semibold"
               >
                 Comentar
               </button>

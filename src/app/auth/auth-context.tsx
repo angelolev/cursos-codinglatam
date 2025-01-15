@@ -10,6 +10,7 @@ import {
   GithubAuthProvider,
   signOut,
   onAuthStateChanged,
+  onIdTokenChanged,
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
@@ -20,6 +21,7 @@ import { auth } from "@/utils/firebase";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isPremium: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -35,6 +37,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  isPremium: false,
   signIn: async () => {},
   signUp: async () => {},
   signInWithGoogle: async () => {},
@@ -47,6 +50,22 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
+      setUser(user);
+      if (user) {
+        // Get fresh token to check premium status
+        const token = await user.getIdTokenResult(true);
+        setIsPremium(!!token.claims.isPremium);
+      } else {
+        setIsPremium(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     // Listen for authentication state changes
@@ -166,6 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     user,
     loading,
+    isPremium,
     signIn,
     signUp,
     signInWithGoogle,

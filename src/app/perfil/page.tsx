@@ -6,6 +6,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface FormData {
   name: string;
@@ -15,7 +16,7 @@ interface FormData {
 }
 
 export default function CompleteProfile() {
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -100,9 +101,28 @@ export default function CompleteProfile() {
 
   return (
     <div className="p-8 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Completar Perfil</h1>
+      <h1 className="text-2xl font-bold mb-6">Mi Perfil</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-sm text-gray-400">Suscripción:</span>
+            <span
+              className={
+                isPremium
+                  ? "bg-blue-500 text-white px-2 py-1 rounded-lg"
+                  : "bg-green-500 text-white px-2 py-1 rounded-lg"
+              }
+            >
+              {isPremium ? "Pro" : "Gratuita"}
+            </span>
+            <Link
+              href="https://www.patreon.com/c/codinglatam/membership"
+              target="_blank"
+              className="text-indigo-500 underline underline-offset-4"
+            >
+              Ser Pro
+            </Link>
+          </div>
           <label className="block text-sm font-medium text-gray-400 mb-2">
             Nombres
           </label>
@@ -140,7 +160,7 @@ export default function CompleteProfile() {
         </div>
         <button
           type="submit"
-          className="w-full bg-yellow-500 text-black font-semibold py-2 px-4 rounded-lg hover:bg-yellow-400 transition-colors"
+          className="w-full bg-primary-300 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-400 transition-colors"
         >
           Guardar Perfil
         </button>

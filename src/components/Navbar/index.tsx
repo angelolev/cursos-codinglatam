@@ -18,6 +18,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { DocumentData } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,8 +29,20 @@ export function Navbar() {
   const searchParams = useSearchParams();
 
   const handleLogout = () => {
-    setIsMenuOpen(!isMenuOpen);
-    logout();
+    Swal.fire({
+      title: "¿Realmente deseas salir?",
+      text: "Tu sesión será cerrada",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, quiero salir",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsMenuOpen(!isMenuOpen);
+        logout();
+      }
+    });
   };
 
   useEffect(() => {
@@ -43,8 +56,6 @@ export function Navbar() {
       const unsubscribe = onSnapshot(docRef, (doc) => {
         if (doc.exists()) {
           setProfileData(doc.data());
-        } else {
-          console.log("No such document!");
         }
       });
 
@@ -54,7 +65,7 @@ export function Navbar() {
   }, [user]);
 
   return (
-    <nav className="bg-slate-800 shadow-sm fixed w-full z-10">
+    <nav className="bg-slate-800 shadow-sm fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         <div className="flex justify-between items-center h-16">
           <Link href="/">

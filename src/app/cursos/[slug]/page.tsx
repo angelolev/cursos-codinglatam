@@ -147,7 +147,8 @@ export default async function CoursePage({ params }: { params: Params }) {
                     ))}
                 </ul>
               </div>
-              <AddReview reviewId={course.id} />
+              {course.available && <AddReview reviewId={course.id} />}
+
               <Reviews reviewId={course.id} />
             </div>
 
@@ -175,40 +176,11 @@ export default async function CoursePage({ params }: { params: Params }) {
                   )}
 
                   {!clases && (
-                    // <div className="flex flex-col text-center gap-2">
-                    //   <RegisterButton />
-                    //   <span>o</span>
-                    //   <LoginButton />
-                    // </div>
                     <WatchButton
                       isAvailable={course.available}
                       clases={clases}
                     />
                   )}
-
-                  {/* {clases && (
-                    <WatchButton
-                      href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
-                      isAvailable={course.available}
-                      classes={clases}
-                    />
-                  )}
-                  {!clases && (
-                    <p className="text-primary-300 font-semibold text-xl text-center">
-                      Próximamente
-                    </p>
-                  )} */}
-
-                  {/* {clases ? (
-                    <ActionButton
-                      href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
-                      label="Empezar curso"
-                    />
-                  ) : (
-                    <p className="text-primary-300 font-semibold text-xl text-center">
-                      Próximamente
-                    </p>
-                  )} */}
                 </div>
                 <div className="mt-6 text-center text-sm text-gray-500">
                   Disponible mientras tu suscripción esté activa

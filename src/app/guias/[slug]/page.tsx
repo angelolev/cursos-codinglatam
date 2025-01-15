@@ -5,9 +5,9 @@ import { getProductBySlug } from "@/utils/common";
 import Link from "next/link";
 import { ArrowLeft, Book, Play } from "lucide-react";
 import Image from "next/image";
-import ActionButton from "@/components/ActionButton";
 import { AddReview } from "@/components/AddReview";
 import { Reviews } from "@/components/Reviews";
+import ValidAccessButton from "@/components/ValidAccessButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -119,7 +119,8 @@ export default async function ProductPage({ params }: { params: Params }) {
                     Descargar
                   </Link>
                 ) : (
-                  <ActionButton href={product.href} label="Descargar" />
+                  // <ActionButton href={product.href} label="Descargar" />
+                  <ValidAccessButton href={product.href} label="Descargar" />
                 )}
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">

@@ -9,7 +9,7 @@ import "./globals.css";
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cursos | Coding Latam",
+  title: "Aprende a programar HACIENDO proyectos | Coding Latam",
   description: "Aprende HACIENDO proyectos REALES",
   openGraph: {
     title: "Cursos | Coding Latam",
@@ -56,7 +56,7 @@ export default function RootLayout({
           <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
             {children}
           </main>
-          <div className="bg-white rounded-full max-w-20 fixed w-full bottom-5 right-4">
+          <div className="bg-white rounded-full max-w-16 fixed w-full bottom-5 right-4">
             <WhastappButton />
           </div>
         </AuthProviderWrapper>
