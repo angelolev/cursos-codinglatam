@@ -41,7 +41,7 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await signIn(email, password);
-      router.push("/");
+      router.push("/perfil");
     } catch (error) {
       setError("Hubo un error al iniciar sesión");
       console.log(error);
@@ -52,7 +52,7 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
-      router.push("/dashboard");
+      router.push("/perfil");
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +61,7 @@ export default function LoginPage() {
   const handleGithubLogin = async () => {
     try {
       await signInWithGithub();
-      router.push("/dashboard");
+      router.push("/pefil");
     } catch (error) {
       console.log(error);
     }

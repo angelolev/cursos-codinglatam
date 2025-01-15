@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
 import { useRouter } from "next/navigation";
@@ -13,6 +20,9 @@ interface FormData {
   lastName: string;
   github: string;
   email: string;
+  isPremium: boolean;
+  premiumSince: Date | null;
+  updatedAt: Date | null;
 }
 
 export default function CompleteProfile() {
@@ -23,6 +33,9 @@ export default function CompleteProfile() {
     lastName: "",
     github: "",
     email: user?.email || "",
+    isPremium: false,
+    premiumSince: null,
+    updatedAt: null,
   });
 
   useEffect(() => {
@@ -30,6 +43,24 @@ export default function CompleteProfile() {
       router.push("/");
       return;
     }
+
+    const RegisterUser = async () => {
+      const userData = {
+        name: "",
+        lastName: "",
+        github: "",
+        email: user.email || "",
+        isPremium: false,
+        premiumSince: null,
+        updatedAt: null,
+      };
+
+      try {
+        await setDoc(doc(db, "users", user.uid), userData);
+      } catch (error) {
+        console.error("Error saving user data:", error);
+      }
+    };
 
     const fetchUserData = async () => {
       try {
@@ -43,7 +74,12 @@ export default function CompleteProfile() {
             lastName: userData.lastName || "",
             github: userData.github || "",
             email: user?.email || "",
+            isPremium: userData.isPremium || false,
+            premiumSince: userData.premiumSince || null,
+            updatedAt: userData.updatedAt || null,
           });
+        } else {
+          await RegisterUser();
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -51,7 +87,6 @@ export default function CompleteProfile() {
           icon: "error",
           text: "Error al cargar los datos del usuario",
         });
-      } finally {
       }
     };
 
@@ -67,12 +102,45 @@ export default function CompleteProfile() {
     });
   };
 
+  const updateReviewName = async (userUid: string, name: string) => {
+    const reviewsRef = collection(db, "reviews");
+
+    try {
+      const querySnapshot = await getDocs(reviewsRef);
+      const updatePromises = querySnapshot.docs
+        .filter((doc) => doc.id.includes(userUid))
+        .map(async (docSnapshot) => {
+          const docRef = doc(db, "reviews", docSnapshot.id);
+          try {
+            await updateDoc(docRef, {
+              name: name,
+            });
+          } catch (updateError) {
+            console.error(
+              `Error actualizando documento ${docSnapshot.id}:`,
+              updateError
+            );
+          }
+        });
+      await Promise.all(updatePromises);
+    } catch (error) {
+      console.error("Error en la operación:", error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
-    const isFormValid = Object.values(formData).every(
-      (value) => value.trim() !== ""
+    const requiredStringFields = {
+      name: formData.name,
+      lastName: formData.lastName,
+      github: formData.github,
+      email: formData.email,
+    };
+
+    const isFormValid = Object.values(requiredStringFields).every(
+      (value) => value && value.trim() !== ""
     );
 
     if (!isFormValid) {
@@ -85,6 +153,7 @@ export default function CompleteProfile() {
 
     try {
       await setDoc(doc(db, "users", user.uid), formData);
+      await updateReviewName(user.uid, `${formData.name} ${formData.lastName}`);
       await Swal.fire({
         icon: "success",
         text: "Perfil actualizado correctamente",
