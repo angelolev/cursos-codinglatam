@@ -1,3 +1,5 @@
+import { AddComment } from "@/components/AddComment";
+import { Comments } from "@/components/Comments";
 import LikeMaterial from "@/components/LikeMaterial";
 import Resources from "@/components/Resources";
 import { ArrowLeft } from "lucide-react";
@@ -94,10 +96,19 @@ export default async function Page({ params }: { params: Params }) {
         </div>
       </div>
       <div className="w-full lg:max-w-[350px]">
-        <h2 className="text-2xl mb-4 font-bold">Recursos de la clase</h2>
-        <ul>
-          <Resources classId={guid} />
-        </ul>
+        <div>
+          <h2 className="text-2xl mb-4 font-bold">Recursos de la clase</h2>
+          <ul>
+            <Resources classId={guid} />
+          </ul>
+        </div>
+        <div className="max-h-96 mt-10">
+          <h2 className="text-2xl mb-4 font-bold">Comentarios de la clase</h2>
+          <AddComment commentId={guid} />
+          <ul>
+            <Comments commentId={guid} />
+          </ul>
+        </div>
       </div>
     </div>
   );

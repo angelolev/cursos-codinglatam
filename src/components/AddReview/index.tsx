@@ -83,16 +83,17 @@ export function AddReview({ reviewId }: ReviewsProps) {
 
         if (docSnap.exists()) {
           const { name, lastName } = docSnap.data();
-          setNewComment((prevComment) => ({
-            ...prevComment,
-            name: `${name} ${lastName}`,
-          }));
-        } else {
-          const email = await user.email;
-          setNewComment((prevComment) => ({
-            ...prevComment,
-            name: email,
-          }));
+          if (name && lastName !== "") {
+            setNewComment((prevComment) => ({
+              ...prevComment,
+              name: `${name} ${lastName}`,
+            }));
+          } else {
+            setNewComment((prevComment) => ({
+              ...prevComment,
+              name: user.email,
+            }));
+          }
         }
       };
 

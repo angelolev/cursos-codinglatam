@@ -28,6 +28,7 @@ interface FormData {
 export default function CompleteProfile() {
   const { user, isPremium } = useAuth();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     lastName: "",
@@ -40,27 +41,9 @@ export default function CompleteProfile() {
 
   useEffect(() => {
     if (!user) {
-      router.push("/");
+      router.push("/login");
       return;
     }
-
-    const RegisterUser = async () => {
-      const userData = {
-        name: "",
-        lastName: "",
-        github: "",
-        email: user.email || "",
-        isPremium: false,
-        premiumSince: null,
-        updatedAt: null,
-      };
-
-      try {
-        await setDoc(doc(db, "users", user.uid), userData);
-      } catch (error) {
-        console.error("Error saving user data:", error);
-      }
-    };
 
     const fetchUserData = async () => {
       try {
@@ -78,8 +61,6 @@ export default function CompleteProfile() {
             premiumSince: userData.premiumSince || null,
             updatedAt: userData.updatedAt || null,
           });
-        } else {
-          await RegisterUser();
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -91,7 +72,7 @@ export default function CompleteProfile() {
     };
 
     fetchUserData();
-  }, [user, router]);
+  }, [user]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -111,6 +92,32 @@ export default function CompleteProfile() {
         .filter((doc) => doc.id.includes(userUid))
         .map(async (docSnapshot) => {
           const docRef = doc(db, "reviews", docSnapshot.id);
+          try {
+            await updateDoc(docRef, {
+              name: name,
+            });
+          } catch (updateError) {
+            console.error(
+              `Error actualizando documento ${docSnapshot.id}:`,
+              updateError
+            );
+          }
+        });
+      await Promise.all(updatePromises);
+    } catch (error) {
+      console.error("Error en la operación:", error);
+    }
+  };
+
+  const updateCommetsName = async (userUid: string, name: string) => {
+    const commentsRef = collection(db, "comments");
+
+    try {
+      const querySnapshot = await getDocs(commentsRef);
+      const updatePromises = querySnapshot.docs
+        .filter((doc) => doc.id.includes(userUid))
+        .map(async (docSnapshot) => {
+          const docRef = doc(db, "comments", docSnapshot.id);
           try {
             await updateDoc(docRef, {
               name: name,
@@ -152,8 +159,13 @@ export default function CompleteProfile() {
     }
 
     try {
+      setLoading(true);
       await setDoc(doc(db, "users", user.uid), formData);
       await updateReviewName(user.uid, `${formData.name} ${formData.lastName}`);
+      await updateCommetsName(
+        user.uid,
+        `${formData.name} ${formData.lastName}`
+      );
       await Swal.fire({
         icon: "success",
         text: "Perfil actualizado correctamente",
@@ -165,8 +177,20 @@ export default function CompleteProfile() {
         text: "Ocurrió un error al actualizar el perfil",
       });
       console.error("Error updating profile: ", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-t-4 border-primary-300 border-solid rounded-full animate-spin"></div>
+          <p className="text-white text-lg">Cargando...</p>
+        </div>
+      </div>
+    );
 
   return (
     <div className="p-8 max-w-md mx-auto">
@@ -198,6 +222,7 @@ export default function CompleteProfile() {
           <input
             type="text"
             name="name"
+            maxLength={50}
             value={formData.name}
             onChange={handleChange}
             className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
@@ -210,6 +235,7 @@ export default function CompleteProfile() {
           <input
             type="text"
             name="lastName"
+            maxLength={50}
             value={formData.lastName}
             onChange={handleChange}
             className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
@@ -222,6 +248,7 @@ export default function CompleteProfile() {
           <input
             type="url"
             name="github"
+            maxLength={100}
             value={formData.github}
             onChange={handleChange}
             className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
