@@ -7,11 +7,13 @@ import LoginButton from "../LoginButton";
 interface ValidAccessButtonProps {
   href: string;
   label: string;
+  isFree: boolean;
 }
 
 export default function ValidAccessButton({
   href,
   label,
+  isFree,
 }: ValidAccessButtonProps) {
   const { user, isPremium } = useAuth();
 
@@ -20,6 +22,19 @@ export default function ValidAccessButton({
       <div className="flex flex-col text-center gap-2">
         <LoginButton />
       </div>
+    );
+  }
+
+  if (user && isFree) {
+    return (
+      <Link
+        href={href}
+        target="_blank"
+        className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
+      >
+        <Play className="h-5 w-5 mr-2" />
+        {label}
+      </Link>
     );
   }
 

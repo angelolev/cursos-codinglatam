@@ -2,7 +2,6 @@
 import { useAuth } from "@/app/auth/auth-context";
 import { Play } from "lucide-react";
 import Link from "next/link";
-import RegisterButton from "../RegisterButton";
 import LoginButton from "../LoginButton";
 
 interface ActionButtonProps {

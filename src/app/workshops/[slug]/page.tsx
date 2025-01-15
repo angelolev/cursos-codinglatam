@@ -3,11 +3,11 @@ import { db } from "@/utils/firebase";
 import { notFound } from "next/navigation";
 import { getWorkshopByslug } from "@/utils/common";
 import Link from "next/link";
-import { ArrowLeft, Play } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import ActionButton from "@/components/ActionButton";
 import { AddReview } from "@/components/AddReview";
 import { Reviews } from "@/components/Reviews";
+import ValidAccessButton from "@/components/ValidAccessButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -157,20 +157,11 @@ export default async function WorkshopPage({ params }: { params: Params }) {
                     Próximamente
                   </p>
                 )}
-                {workshop.isFree && workshop.available && (
-                  <Link
-                    href={`/workshops/${slug}/videos/${filteredVideo[0].guid}`}
-                    target="_blank"
-                    className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
-                  >
-                    <Play className="h-5 w-5 mr-2" />
-                    Ver ahora
-                  </Link>
-                )}
-                {workshop.available && !workshop.isFree && (
-                  <ActionButton
+                {workshop.available && (
+                  <ValidAccessButton
                     href={`/workshops/${slug}/videos/${filteredVideo[0].guid}`}
                     label="Ver ahora"
+                    isFree={workshop.isFree}
                   />
                 )}
               </div>

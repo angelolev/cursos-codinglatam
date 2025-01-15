@@ -2,8 +2,8 @@
 import { useAuth } from "@/app/auth/auth-context";
 import { Play } from "lucide-react";
 import Link from "next/link";
-import RegisterButton from "../RegisterButton";
 import { CourseProps } from "@/types/course";
+import LoginButton from "../LoginButton";
 
 interface WatchButtonProps {
   href?: string;
@@ -19,7 +19,7 @@ export default function WatchButton({
   const { user } = useAuth();
 
   if (!user) {
-    return <RegisterButton />;
+    return <LoginButton />;
   }
 
   if ((user && !isAvailable) || (user && !clases)) {

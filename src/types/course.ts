@@ -11,5 +11,6 @@ export interface CourseProps {
   image: string;
   level: string;
   releaseDate: string;
+  testimonialVideo: string;
   topics: string[];
 }

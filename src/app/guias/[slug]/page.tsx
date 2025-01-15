@@ -3,7 +3,7 @@ import { db } from "@/utils/firebase";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/utils/common";
 import Link from "next/link";
-import { ArrowLeft, Book, Play } from "lucide-react";
+import { ArrowLeft, Book } from "lucide-react";
 import Image from "next/image";
 import { AddReview } from "@/components/AddReview";
 import { Reviews } from "@/components/Reviews";
@@ -109,7 +109,12 @@ export default async function ProductPage({ params }: { params: Params }) {
                 </div>
               </div>
               <div className="space-y-4">
-                {product.isFree ? (
+                <ValidAccessButton
+                  href={product.href}
+                  label="Descargar"
+                  isFree={product.isFree}
+                />
+                {/* {product.isFree ? (
                   <Link
                     href={product.href}
                     target="_blank"
@@ -121,7 +126,7 @@ export default async function ProductPage({ params }: { params: Params }) {
                 ) : (
                   // <ActionButton href={product.href} label="Descargar" />
                   <ValidAccessButton href={product.href} label="Descargar" />
-                )}
+                )} */}
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">
                 Descarga digital inmediata

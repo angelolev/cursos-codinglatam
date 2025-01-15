@@ -150,6 +150,31 @@ export default async function CoursePage({ params }: { params: Params }) {
               {course.available && <AddReview reviewId={course.id} />}
 
               <Reviews reviewId={course.id} />
+
+              <div className="mt-16">
+                <h2 className="text-2xl font-bold text-white/90 mb-8">
+                  Testimonios de los estudiantes
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div className="aspect-video">
+                      <iframe
+                        className="w-full h-full"
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                        title="Student Testimonial 1"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-gray-900">
+                        Conoce la experiencia de otros desarrolladores
+                      </h3>
+                      <p className="text-gray-600 text-sm"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="lg:col-span-1">

@@ -134,6 +134,7 @@ export async function getCourses(): Promise<CourseProps[] | null> {
         image: data.image,
         level: data.level,
         releaseDate: data.releaseDate,
+        testimonialVideo: data.testimonialVideo,
         topics: data.topics || [],
       };
     });

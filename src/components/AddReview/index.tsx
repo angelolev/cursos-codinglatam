@@ -62,7 +62,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
     date: new Date().toISOString(),
   });
   const [hasCommented, setHasCommented] = useState(false);
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -134,7 +134,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
 
   return (
     <>
-      {user && !hasCommented && (
+      {user && isPremium && !hasCommented && (
         <div className="mt-8">
           <h2 className="text-2xl font-bold text-white/90 mb-8">
             ¿Te gustó el contenido?

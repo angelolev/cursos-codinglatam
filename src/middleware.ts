@@ -42,7 +42,7 @@ export const config = {
     "/admin/:path*",
     "/dashboard/:path*",
     // "/cursos/:path*",
-    "/cursos/javascript/clases/4cb5503f-f301-451e-8685-ff9f71fba360",
+    // "/cursos/javascript/clases/4cb5503f-f301-451e-8685-ff9f71fba360",
     "/cursos/javascript/clases/fc471469-809d-408d-8458-2101fce22325",
     "/cursos/javascript/clases/3d144ef7-8b64-4a62-84d2-98d5c88d5e4a",
     "/cursos/javascript/clases/b8d507ef-3959-4792-9b0b-6265fb0eb8c9",
