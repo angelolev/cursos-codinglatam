@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/app/auth/auth-context";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 
 interface AddCommentProps {
   commentId: string;
@@ -23,12 +23,16 @@ export function AddComment({ commentId }: AddCommentProps) {
     date: new Date().toISOString(),
   });
   const [hasCommented, setHasCommented] = useState(false);
-  const { user, isPremium } = useAuth();
+  const { data: session } = useSession();
 
   useEffect(() => {
-    if (user) {
+    if (session) {
       const checkIfCommented = async () => {
-        const commentRef = doc(db, "comments", `${commentId}-${user.uid}`);
+        const commentRef = doc(
+          db,
+          "comments",
+          `${commentId}-${session?.user?.aud}`
+        );
         const commentSnap = await getDoc(commentRef);
 
         if (commentSnap.exists()) {
@@ -39,20 +43,20 @@ export function AddComment({ commentId }: AddCommentProps) {
       };
 
       const fetchData = async () => {
-        const docRef = doc(db, "users", user.uid);
+        const docRef = doc(db, "users", session?.user?.aud);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const { name, lastName } = docSnap.data();
-          if (name && lastName !== "") {
+          const { name } = docSnap.data();
+          if (name !== "") {
             setNewComment((prevComment) => ({
               ...prevComment,
-              name: `${name} ${lastName}`,
+              name: name,
             }));
           } else {
             setNewComment((prevComment) => ({
               ...prevComment,
-              name: user.email,
+              name: session?.user?.email || "",
             }));
           }
         }
@@ -61,13 +65,13 @@ export function AddComment({ commentId }: AddCommentProps) {
       checkIfCommented();
       fetchData();
     }
-  }, [user, hasCommented]);
+  }, [session, hasCommented]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setHasCommented(true);
 
-    if (!user) return;
+    if (!session) return;
 
     if (!newComment.comment.trim()) {
       setHasCommented(false);
@@ -79,7 +83,7 @@ export function AddComment({ commentId }: AddCommentProps) {
     }
 
     try {
-      await setDoc(doc(db, "comments", `${commentId}-${user.uid}`), {
+      await setDoc(doc(db, "comments", `${commentId}-${session?.user?.aud}`), {
         ...newComment,
         date: new Date().toISOString(),
       });
@@ -96,7 +100,7 @@ export function AddComment({ commentId }: AddCommentProps) {
 
   return (
     <>
-      {user && isPremium && !hasCommented && (
+      {session && session?.user?.isPremium && !hasCommented && (
         <form onSubmit={handleSubmit} className="mb-6">
           <textarea
             value={newComment.comment}

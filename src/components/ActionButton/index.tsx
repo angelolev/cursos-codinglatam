@@ -11,11 +11,8 @@ interface ActionButtonProps {
 
 export default function ActionButton({ href, label }: ActionButtonProps) {
   const { data: session } = useSession();
-  const user = session?.user;
 
-  console.log(user, "action user");
-
-  if (!user) {
+  if (!session) {
     return (
       <div className="flex flex-col text-center gap-2">
         <LoginButton />

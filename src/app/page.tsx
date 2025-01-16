@@ -10,7 +10,6 @@ export default async function Home() {
   const courses = await getCourses();
   const products = await getProducts();
   const workshops = await getWorkshops();
-
   const session = await auth();
 
   console.log(session, "user landing");
