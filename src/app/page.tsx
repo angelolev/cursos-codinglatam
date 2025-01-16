@@ -4,11 +4,16 @@ import Workshop from "@/components/WorkshopCard";
 import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { BookOpen, Code2, Rocket, Users } from "lucide-react";
 import Link from "next/link";
+import { auth } from "./auth";
 
 export default async function Home() {
   const courses = await getCourses();
   const products = await getProducts();
   const workshops = await getWorkshops();
+
+  const session = await auth();
+
+  console.log(session, "user");
 
   return (
     <>

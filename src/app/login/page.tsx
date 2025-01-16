@@ -8,13 +8,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/utils/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import GoogleIcon from "@/components/GoogleIcon";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   // const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { signIn, signInWithGithub, signInWithGoogle, user } = useAuth();
+  // const { signIn, signInWithGithub, signInWithGoogle, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -50,9 +51,9 @@ export default function LoginPage() {
     return <Loading />;
   }
 
-  if (user) {
-    return null;
-  }
+  // if (user) {
+  //   return null;
+  // }
 
   // const handleEmailLogin = async (e: React.FormEvent) => {
   //   e.preventDefault();
@@ -69,7 +70,7 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithGoogle();
+      signIn("github");
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +119,7 @@ export default function LoginPage() {
 
         <div className="mt-4 space-y-2">
           <button
-            onClick={handleGoogleLogin}
+            onClick={() => signIn("github", { redirectTo: "/" })}
             className="w-full bg-blue-500 text-white p-4 rounded flex items-center gap-4 justify-center"
           >
             <div className="max-w-8">
