@@ -8,47 +8,46 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: true,
   providers: [GitHub, Google],
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user, profile }) {
       if (user) {
-        // User is available during sign-in
         token.id = user.id;
+        token.profile = profile?.sub;
       }
       return token;
     },
-    session({ session, token }) {
-      session.user.id = token.id as string;
-      return session;
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string,
+          aud: token.profile as string,
+        },
+      };
     },
-    async signIn({ user }) {
-      if (user?.id) {
-        // Run your function here
-        /*  await yourFunction(user.id); */
-
-        await addUserFirebase(user);
+    async signIn({ profile }) {
+      if (profile?.aud) {
+        await addUserFirebase(profile);
       }
       return true;
     },
   },
 });
 
-const addUserFirebase = async (user) => {
-  console.log("inicio fire", user);
-  const userDocRef = doc(db, "users", user.id || "");
+const addUserFirebase = async (profile) => {
+  const userDocRef = doc(db, "users", profile.sub || "");
   const userDoc = await getDoc(userDocRef);
 
-  if (userDoc.exists()) {
-    console.log("docu exist");
-  } else {
-    console.log("else");
+  if (!userDoc.exists()) {
     const userData = {
-      name: user.name,
+      name: profile.name,
       github: "",
-      email: user?.email || "",
+      email: profile?.email || "",
       isPremium: false,
       premiumSince: null,
       updatedAt: null,
     };
 
-    await setDoc(doc(db, "users", user?.id || ""), userData);
+    await setDoc(userDocRef, userData);
   }
 };
