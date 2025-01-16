@@ -14,7 +14,7 @@ export default function LoginPage() {
   // const [password, setPassword] = useState("");
   // const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { signIn, signInWithGithub, signInWithGoogle, user } = useAuth();
+  const { signInWithGoogle, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
