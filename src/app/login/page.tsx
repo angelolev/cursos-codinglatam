@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth/auth-context";
 import LogoDark from "@/components/LogoDark";
@@ -16,36 +16,6 @@ export default function LoginPage() {
   // const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // const { signIn, signInWithGithub, signInWithGoogle, user } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-
-        if (userDoc.exists()) {
-          router.push("/");
-        } else {
-          const userData = {
-            name: "",
-            lastName: "",
-            github: "",
-            email: user.email || "",
-            isPremium: false,
-            premiumSince: null,
-            updatedAt: null,
-          };
-
-          await setDoc(doc(db, "users", user.uid), userData);
-          router.push("/perfil");
-        }
-      }
-      setIsLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [router]);
 
   if (isLoading) {
     return <Loading />;
@@ -85,6 +55,16 @@ export default function LoginPage() {
   //   }
   // };
 
+  const handleLogin = async () => {
+    try {
+      console.log("ini");
+      await signIn("google", {});
+      redirect("/");
+    } catch (error) {
+      console.error("Sign in failed:", error);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center pt-48">
       <div className="bg-white p-8 rounded shadow-md w-96">
@@ -119,7 +99,7 @@ export default function LoginPage() {
 
         <div className="mt-4 space-y-2">
           <button
-            onClick={() => signIn("github", { redirectTo: "/" })}
+            onClick={handleLogin}
             className="w-full bg-blue-500 text-white p-4 rounded flex items-center gap-4 justify-center"
           >
             <div className="max-w-8">

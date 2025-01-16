@@ -11,9 +11,9 @@ export default async function Home() {
   const products = await getProducts();
   const workshops = await getWorkshops();
 
-  const session = await auth();
+  /* const session = await auth();
 
-  console.log(session, "user");
+  console.log(session, "user"); */
 
   return (
     <>
