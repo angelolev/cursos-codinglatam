@@ -50,8 +50,8 @@ export function Navbar() {
 
   useEffect(() => {
     if (session?.user) {
-      if (session?.user?.id) {
-        const docRef = doc(db, "users", session.user.id);
+      if (session?.user?.aud) {
+        const docRef = doc(db, "users", session?.user?.aud);
         const unsubscribe = onSnapshot(docRef, (doc) => {
           if (doc.exists()) {
             setProfileData(doc.data());
@@ -80,7 +80,7 @@ export function Navbar() {
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
                 >
-                  {profileData?.name ? profileData.name : session?.user?.email}
+                  {profileData?.name ? profileData?.name : session?.user?.email}
                   <ChevronDown
                     size={16}
                     className={`transform transition-transform ${

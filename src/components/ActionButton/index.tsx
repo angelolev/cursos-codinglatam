@@ -1,8 +1,8 @@
 "use client";
-import { useAuth } from "@/app/auth/auth-context";
 import { Play } from "lucide-react";
 import Link from "next/link";
 import LoginButton from "../LoginButton";
+import { useSession } from "next-auth/react";
 
 interface ActionButtonProps {
   href: string;
@@ -10,9 +10,9 @@ interface ActionButtonProps {
 }
 
 export default function ActionButton({ href, label }: ActionButtonProps) {
-  const { user } = useAuth();
+  const { data: session } = useSession();
 
-  if (!user) {
+  if (!session) {
     return (
       <div className="flex flex-col text-center gap-2">
         <LoginButton />

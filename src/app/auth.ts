@@ -12,6 +12,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.profile = profile?.sub;
+        token.isPremium = profile?.sub
+          ? await fecthIsPremiumFirebase(profile.sub)
+          : false;
       }
       return token;
     },
@@ -22,6 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           ...session.user,
           id: token.id as string,
           aud: token.profile as string,
+          isPremium: token.isPremium as boolean,
         },
       };
     },
@@ -50,4 +54,10 @@ const addUserFirebase = async (profile) => {
 
     await setDoc(userDocRef, userData);
   }
+};
+
+const fecthIsPremiumFirebase = async (userId: string) => {
+  const userDocRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userDocRef);
+  return userDoc.data()?.isPremium;
 };

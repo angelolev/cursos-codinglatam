@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import { useAuth } from "@/app/auth/auth-context";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 
 function StarRating({
   rating,
@@ -62,12 +62,16 @@ export function AddReview({ reviewId }: ReviewsProps) {
     date: new Date().toISOString(),
   });
   const [hasCommented, setHasCommented] = useState(false);
-  const { user, isPremium } = useAuth();
+  const { data: session } = useSession();
 
   useEffect(() => {
-    if (user) {
+    if (session) {
       const checkIfCommented = async () => {
-        const reviewRef = doc(db, "reviews", `${reviewId}-${user.uid}`);
+        const reviewRef = doc(
+          db,
+          "reviews",
+          `${reviewId}-${session?.user?.aud}`
+        );
         const reviewSnap = await getDoc(reviewRef);
 
         if (reviewSnap.exists()) {
@@ -78,20 +82,20 @@ export function AddReview({ reviewId }: ReviewsProps) {
       };
 
       const fetchData = async () => {
-        const docRef = doc(db, "users", user.uid);
+        const docRef = doc(db, "users", session?.user?.aud);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const { name, lastName } = docSnap.data();
-          if (name && lastName !== "") {
+          const { name } = docSnap.data();
+          if (name !== "") {
             setNewComment((prevComment) => ({
               ...prevComment,
-              name: `${name} ${lastName}`,
+              name: name,
             }));
           } else {
             setNewComment((prevComment) => ({
               ...prevComment,
-              name: user.email,
+              name: session?.user?.email || "",
             }));
           }
         }
@@ -100,13 +104,13 @@ export function AddReview({ reviewId }: ReviewsProps) {
       checkIfCommented();
       fetchData();
     }
-  }, [user, hasCommented]);
+  }, [session, hasCommented]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setHasCommented(true);
 
-    if (!user) return;
+    if (!session) return;
 
     if (!newComment.comment.trim()) {
       setHasCommented(false);
@@ -118,7 +122,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
     }
 
     try {
-      await setDoc(doc(db, "reviews", `${reviewId}-${user.uid}`), {
+      await setDoc(doc(db, "reviews", `${reviewId}-${session?.user?.aud}`), {
         ...newComment,
         date: new Date().toISOString(),
       });
@@ -135,7 +139,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
 
   return (
     <>
-      {user && isPremium && !hasCommented && (
+      {session && session?.user?.isPremium && !hasCommented && (
         <div className="mt-8">
           <h2 className="text-2xl font-bold text-white/90 mb-8">
             ¿Te gustó el contenido?

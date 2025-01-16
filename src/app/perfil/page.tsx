@@ -10,7 +10,6 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -26,19 +25,17 @@ interface FormData {
 }
 
 export default function CompleteProfile() {
-  const { user, isPremium } = useAuth();
   const router = useRouter();
+  const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     github: "",
-    email: user?.email || "",
+    email: session?.user?.email || "",
     isPremium: false,
     premiumSince: null,
     updatedAt: null,
   });
-
-  const { data: session } = useSession();
 
   console.log(session, "user perfil");
 
@@ -50,10 +47,11 @@ export default function CompleteProfile() {
 
     const fetchUserData = async () => {
       try {
-        if (!session?.user?.id) {
+        if (!session?.user?.aud) {
           throw new Error("User ID is undefined");
         }
-        const docRef = doc(db, "users", session.user.id);
+
+        const docRef = doc(db, "users", session.user.aud);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -61,7 +59,7 @@ export default function CompleteProfile() {
           setFormData({
             name: userData.name || "",
             github: userData.github || "",
-            email: user?.email || "",
+            email: session.user.email || "",
             isPremium: userData.isPremium || false,
             premiumSince: userData.premiumSince || null,
             updatedAt: userData.updatedAt || null,
@@ -77,7 +75,7 @@ export default function CompleteProfile() {
     };
 
     fetchUserData();
-  }, [session?.user, user?.email]);
+  }, [session?.user]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -147,7 +145,6 @@ export default function CompleteProfile() {
     const requiredStringFields = {
       name: formData.name,
       github: formData.github,
-      email: formData.email,
     };
 
     const isFormValid = Object.values(requiredStringFields).every(
@@ -164,13 +161,13 @@ export default function CompleteProfile() {
 
     try {
       setLoading(true);
-      if (session?.user?.id) {
-        await setDoc(doc(db, "users", session.user.id), formData);
+      if (session?.user?.aud) {
+        await setDoc(doc(db, "users", session.user.aud), formData);
       } else {
         throw new Error("User ID is undefined");
       }
-      await updateReviewName(session?.user?.id, `${formData.name}`);
-      await updateCommetsName(session?.user?.id, `${formData.name}`);
+      await updateReviewName(session?.user?.aud, `${formData.name}`);
+      await updateCommetsName(session?.user?.aud, `${formData.name}`);
       await Swal.fire({
         icon: "success",
         text: "Perfil actualizado correctamente",
@@ -206,12 +203,12 @@ export default function CompleteProfile() {
             <span className="text-sm text-gray-400">Suscripción:</span>
             <span
               className={
-                isPremium
+                session?.user?.isPremium
                   ? "bg-blue-500 text-white px-2 py-1 rounded-lg"
                   : "bg-green-500 text-white px-2 py-1 rounded-lg"
               }
             >
-              {isPremium ? "Pro" : "Gratuita"}
+              {session?.user?.isPremium ? "Pro" : "Gratuita"}
             </span>
             <Link
               href="https://www.patreon.com/c/codinglatam/membership"
