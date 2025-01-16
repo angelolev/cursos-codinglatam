@@ -114,19 +114,6 @@ export default async function ProductPage({ params }: { params: Params }) {
                   label="Descargar"
                   isFree={product.isFree}
                 />
-                {/* {product.isFree ? (
-                  <Link
-                    href={product.href}
-                    target="_blank"
-                    className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
-                  >
-                    <Play className="h-5 w-5 mr-2" />
-                    Descargar
-                  </Link>
-                ) : (
-                  // <ActionButton href={product.href} label="Descargar" />
-                  <ValidAccessButton href={product.href} label="Descargar" />
-                )} */}
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">
                 Descarga digital inmediata

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import AuthProviderWrapper from "@/app/auth/auth-provider";
 import { Fira_Code } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import WhastappButton from "@/components/WhastappButton";
@@ -52,18 +51,16 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`bg-light-black ${firaCode.className} relative`}>
-        <AuthProviderWrapper>
-          <SessionProvider>
-            <Navbar />
+        <SessionProvider>
+          <Navbar />
 
-            <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
-              {children}
-            </main>
-          </SessionProvider>
-          <div className="bg-white rounded-full max-w-16 fixed w-full bottom-5 right-4">
-            <WhastappButton />
-          </div>
-        </AuthProviderWrapper>
+          <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
+            {children}
+          </main>
+        </SessionProvider>
+        <div className="bg-white rounded-full max-w-16 fixed w-full bottom-5 right-4">
+          <WhastappButton />
+        </div>
       </body>
     </html>
   );

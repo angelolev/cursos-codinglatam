@@ -13,7 +13,7 @@ export default async function Home() {
 
   const session = await auth();
 
-  console.log(session, "user");
+  console.log(session, "user landing");
 
   return (
     <>

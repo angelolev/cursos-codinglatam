@@ -1,8 +1,8 @@
 "use client";
-import { useAuth } from "@/app/auth/auth-context";
 import { Play } from "lucide-react";
 import Link from "next/link";
 import LoginButton from "../LoginButton";
+import { useSession } from "next-auth/react";
 
 interface ValidAccessButtonProps {
   href: string;
@@ -15,7 +15,10 @@ export default function ValidAccessButton({
   label,
   isFree,
 }: ValidAccessButtonProps) {
-  const { user, isPremium } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  console.log(user, "valid access user");
 
   if (!user) {
     return (
@@ -38,21 +41,21 @@ export default function ValidAccessButton({
     );
   }
 
-  if (!isPremium) {
-    return (
-      <p className="text-indigo-500 text-center">
-        Necesitas ser{" "}
-        <Link
-          href="https://www.patreon.com/c/codinglatam/membership"
-          target="_blank"
-          className="font-semibold underline "
-        >
-          PRO
-        </Link>{" "}
-        para acceder a este contenido
-      </p>
-    );
-  }
+  // if (!isPremium) {
+  //   return (
+  //     <p className="text-indigo-500 text-center">
+  //       Necesitas ser{" "}
+  //       <Link
+  //         href="https://www.patreon.com/c/codinglatam/membership"
+  //         target="_blank"
+  //         className="font-semibold underline "
+  //       >
+  //         PRO
+  //       </Link>{" "}
+  //       para acceder a este contenido
+  //     </p>
+  //   );
+  // }
 
   return (
     <Link
