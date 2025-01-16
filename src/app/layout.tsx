@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import WhastappButton from "@/components/WhastappButton";
 import Script from "next/script";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
@@ -52,10 +53,13 @@ export default function RootLayout({
       </head>
       <body className={`bg-light-black ${firaCode.className} relative`}>
         <AuthProviderWrapper>
-          <Navbar />
-          <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
-            {children}
-          </main>
+          <SessionProvider>
+            <Navbar />
+
+            <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
+              {children}
+            </main>
+          </SessionProvider>
           <div className="bg-white rounded-full max-w-16 fixed w-full bottom-5 right-4">
             <WhastappButton />
           </div>

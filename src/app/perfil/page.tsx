@@ -14,10 +14,10 @@ import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface FormData {
   name: string;
-  lastName: string;
   github: string;
   email: string;
   isPremium: boolean;
@@ -31,7 +31,6 @@ export default function CompleteProfile() {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    lastName: "",
     github: "",
     email: user?.email || "",
     isPremium: false,
@@ -39,22 +38,28 @@ export default function CompleteProfile() {
     updatedAt: null,
   });
 
+  const { data: session } = useSession();
+
+  console.log(session, "user perfil");
+
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
+    // if (!user) {
+    //   router.push("/login");
+    //   return;
+    // }
 
     const fetchUserData = async () => {
       try {
-        const docRef = doc(db, "users", user.uid);
+        if (!session?.user?.id) {
+          throw new Error("User ID is undefined");
+        }
+        const docRef = doc(db, "users", session.user.id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const userData = docSnap.data();
           setFormData({
             name: userData.name || "",
-            lastName: userData.lastName || "",
             github: userData.github || "",
             email: user?.email || "",
             isPremium: userData.isPremium || false,
@@ -72,7 +77,7 @@ export default function CompleteProfile() {
     };
 
     fetchUserData();
-  }, [user]);
+  }, [session?.user, user?.email]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -137,11 +142,10 @@ export default function CompleteProfile() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!session?.user) return;
 
     const requiredStringFields = {
       name: formData.name,
-      lastName: formData.lastName,
       github: formData.github,
       email: formData.email,
     };
@@ -160,12 +164,13 @@ export default function CompleteProfile() {
 
     try {
       setLoading(true);
-      await setDoc(doc(db, "users", user.uid), formData);
-      await updateReviewName(user.uid, `${formData.name} ${formData.lastName}`);
-      await updateCommetsName(
-        user.uid,
-        `${formData.name} ${formData.lastName}`
-      );
+      if (session?.user?.id) {
+        await setDoc(doc(db, "users", session.user.id), formData);
+      } else {
+        throw new Error("User ID is undefined");
+      }
+      await updateReviewName(session?.user?.id, `${formData.name}`);
+      await updateCommetsName(session?.user?.id, `${formData.name}`);
       await Swal.fire({
         icon: "success",
         text: "Perfil actualizado correctamente",
@@ -217,26 +222,13 @@ export default function CompleteProfile() {
             </Link>
           </div>
           <label className="block text-sm font-medium text-gray-400 mb-2">
-            Nombres
+            Nombre
           </label>
           <input
             type="text"
             name="name"
             maxLength={50}
             value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">
-            Apellidos
-          </label>
-          <input
-            type="text"
-            name="lastName"
-            maxLength={50}
-            value={formData.lastName}
             onChange={handleChange}
             className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
           />
