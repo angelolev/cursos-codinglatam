@@ -24,15 +24,12 @@ export function AddComment({ commentId }: AddCommentProps) {
   });
   const [hasCommented, setHasCommented] = useState(false);
   const { data: session } = useSession();
+  const user = session?.user;
 
   useEffect(() => {
     if (session) {
       const checkIfCommented = async () => {
-        const commentRef = doc(
-          db,
-          "comments",
-          `${commentId}-${session?.user?.aud}`
-        );
+        const commentRef = doc(db, "comments", `${commentId}-${user?.aud}`);
         const commentSnap = await getDoc(commentRef);
 
         if (commentSnap.exists()) {
@@ -43,7 +40,7 @@ export function AddComment({ commentId }: AddCommentProps) {
       };
 
       const fetchData = async () => {
-        const docRef = doc(db, "users", session?.user?.aud);
+        const docRef = doc(db, "users", user?.aud || "");
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -56,7 +53,7 @@ export function AddComment({ commentId }: AddCommentProps) {
           } else {
             setNewComment((prevComment) => ({
               ...prevComment,
-              name: session?.user?.email || "",
+              name: user?.email || "",
             }));
           }
         }
@@ -83,7 +80,7 @@ export function AddComment({ commentId }: AddCommentProps) {
     }
 
     try {
-      await setDoc(doc(db, "comments", `${commentId}-${session?.user?.aud}`), {
+      await setDoc(doc(db, "comments", `${commentId}-${user?.aud}`), {
         ...newComment,
         date: new Date().toISOString(),
       });
@@ -100,7 +97,7 @@ export function AddComment({ commentId }: AddCommentProps) {
 
   return (
     <>
-      {session && session?.user?.isPremium && !hasCommented && (
+      {session && user?.isPremium && !hasCommented && (
         <form onSubmit={handleSubmit} className="mb-6">
           <textarea
             value={newComment.comment}
@@ -111,13 +108,13 @@ export function AddComment({ commentId }: AddCommentProps) {
               }))
             }
             maxLength={150}
-            placeholder="Escribe tu comentario..."
-            className="w-full p-3 rounded-lg bg-[#1A1A1A] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none"
+            placeholder="Escribe un comentario..."
+            className="w-full p-3 rounded-lg bg-white/90 text-black/70 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none"
             rows={3}
           />
           <button
             type="submit"
-            className="mt-2 px-4 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-400 transition-colors w-full font-medium"
+            className="mt-2 px-6 py-4 bg-primary-300 text-white rounded-lg hover:bg-primary-400 transition-colors w-full font-medium"
           >
             Comentar
           </button>

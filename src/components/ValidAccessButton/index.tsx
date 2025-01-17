@@ -18,8 +18,6 @@ export default function ValidAccessButton({
   const { data: session } = useSession();
   const user = session?.user;
 
-  console.log(user, "valid access user");
-
   if (!user) {
     return (
       <div className="flex flex-col text-center gap-2">
@@ -41,21 +39,21 @@ export default function ValidAccessButton({
     );
   }
 
-  // if (!isPremium) {
-  //   return (
-  //     <p className="text-indigo-500 text-center">
-  //       Necesitas ser{" "}
-  //       <Link
-  //         href="https://www.patreon.com/c/codinglatam/membership"
-  //         target="_blank"
-  //         className="font-semibold underline "
-  //       >
-  //         PRO
-  //       </Link>{" "}
-  //       para acceder a este contenido
-  //     </p>
-  //   );
-  // }
+  if (!user.isPremium) {
+    return (
+      <p className="text-indigo-500 text-center">
+        Necesitas ser{" "}
+        <Link
+          href="https://www.patreon.com/c/codinglatam/membership"
+          target="_blank"
+          className="font-semibold underline "
+        >
+          PRO
+        </Link>{" "}
+        para acceder a este contenido
+      </p>
+    );
+  }
 
   return (
     <Link

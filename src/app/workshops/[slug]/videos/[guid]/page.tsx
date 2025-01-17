@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Params }) {
           <div className="mt-6">
             <Link
               href={`/workshops/${slug}`}
-              className="inline-flex items-center text-white/90 hover:text-white mb-8"
+              className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver
