@@ -15,7 +15,13 @@ export default auth((req) => {
       return null;
     }
     // Redirect to login for all other protected routes
+
     return Response.redirect(new URL("/login", req.nextUrl.origin));
+  } else {
+    if (!req.auth?.user?.isPremium) {
+      // Redirect non-premium users to upgrade page or show premium required message
+      return Response.redirect(new URL("/pro", req.nextUrl.origin));
+    }
   }
 
   // Second check: Special handling for admin routes
