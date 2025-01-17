@@ -1,7 +1,7 @@
 "use client";
 import LogoDark from "@/components/LogoDark";
 import GoogleIcon from "@/components/GoogleIcon";
-import { Github } from "lucide-react";
+/* import { Github } from "lucide-react"; */
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
