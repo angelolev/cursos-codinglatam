@@ -14,7 +14,7 @@ export default auth((req) => {
     // Check if user's email matches the admin email
     if (!req.auth?.user?.email || req.auth.user.email !== ADMIN_EMAIL) {
       // Return 403 for unauthorized access
-      const newUrl = new URL("/login", req.nextUrl.origin);
+      const newUrl = new URL("/", req.nextUrl.origin);
       return Response.redirect(newUrl);
       // return new Response("Unauthorized", { status: 403 });
       // Alternative: redirect to homepage
