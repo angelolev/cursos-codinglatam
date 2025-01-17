@@ -94,7 +94,7 @@ export default async function CoursePage({ params }: { params: Params }) {
         <div className="max-w-7xl mx-auto">
           <Link
             href="/"
-            className="inline-flex items-center text-white/90 hover:text-white mb-8"
+            className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a los cursos
@@ -110,7 +110,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                   fill
                 />
               </div>
-              <div className="flex items-center mb-4 gap-6">
+              <div className="flex flex-col items-start sm:flex-row sm:items-center mb-4 gap-6">
                 <h1 className="text-4xl font-bold text-white/90 ">
                   {course.title}
                 </h1>
@@ -132,16 +132,19 @@ export default async function CoursePage({ params }: { params: Params }) {
                       <Link
                         key={item.guid}
                         href={`/cursos/${course.slug}/clases/${item.guid}`}
-                        className="flex items-center"
+                        className="grid grid-cols-[20px_minmax(300px,_1fr)] gap-2 items-center"
                       >
-                        <BookOpen className="h-5 w-5 text-indigo-600 mr-3 mt-1" />
+                        <BookOpen size={20} className="text-indigo-600" />
                         <span>{item.title}</span>
                       </Link>
                     ))}
                   {!clases &&
                     course?.topics?.map((item) => (
-                      <div className="flex items-center" key={item}>
-                        <BookOpen className="h-5 w-5 text-indigo-600 mr-3 mt-1" />
+                      <div
+                        className="grid grid-cols-[20px_minmax(300px,_1fr)] gap-2 items-center"
+                        key={item}
+                      >
+                        <BookOpen size={20} className="text-indigo-600" />
                         <p className="text-black/70">{item}</p>
                       </div>
                     ))}

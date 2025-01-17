@@ -1,7 +1,8 @@
-import { auth } from "./app/auth";
-
-export default auth;
+export { auth as middleware } from "./app/auth";
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/admin/:path*",
+  ],
 };

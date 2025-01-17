@@ -29,14 +29,7 @@ export default async function Home() {
                     expertos.
                   </p>
                   <div className="flex gap-4">
-                    {session && !session.user ? (
-                      <Link
-                        href="/login"
-                        className="bg-primary-300 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-400 transition-colors"
-                      >
-                        Empieza GRATIS hoy!
-                      </Link>
-                    ) : (
+                    {session?.user?.isPremium ? null : (
                       <Link
                         href="https://www.patreon.com/c/codinglatam/membership"
                         target="_blank"
@@ -45,10 +38,6 @@ export default async function Home() {
                         Conviértete en Pro
                       </Link>
                     )}
-
-                    {/* <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors">
-                      Unirme
-                    </button> */}
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

@@ -30,13 +30,6 @@ export default function AdminDashboard() {
   const { data: session } = useSession();
 
   useEffect(() => {
-    const ADMIN_EMAILS = ["angelokta7@gmail.com", "sebberrios99@gmail.com"];
-    // Check if user is admin
-    if (!session || !ADMIN_EMAILS.includes(session?.user?.email || "")) {
-      /* router.push("/"); */
-      /*  return; */
-    }
-
     fetchUsers();
   }, [session, router]);
 

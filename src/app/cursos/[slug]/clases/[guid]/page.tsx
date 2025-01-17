@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Params }) {
           <div className="mt-6">
             <Link
               href={`/cursos/${slug}`}
-              className="inline-flex items-center text-white/90 hover:text-white mb-8"
+              className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver al curso
@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Params }) {
             <Resources classId={guid} />
           </ul>
         </div>
-        <div className="max-h-96 mt-10">
+        <div className="max-h-96 mt-10 mb-20">
           <h2 className="text-2xl mb-4 font-bold">Comentarios de la clase</h2>
           <AddComment commentId={guid} />
           <ul>

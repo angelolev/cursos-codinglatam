@@ -42,10 +42,10 @@ export function Comments({ commentId }: CommentsProps) {
     <div className="space-y-8">
       {!(comments.length > 0) && <p>Aun no hay comentarios</p>}
       {comments.map((review) => (
-        <div key={review.date} className="bg-[#1A1A1A] p-4 rounded-lg">
+        <div key={review.date} className="bg-white p-4 rounded-lg">
           <div className="flex flex-col w-full">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-white">{review.name}</h3>
+              <h3 className="font-semibold text-black/70">{review.name}</h3>
               <span className="text-sm text-gray-500">
                 {new Date(review.date).toLocaleDateString()}
               </span>

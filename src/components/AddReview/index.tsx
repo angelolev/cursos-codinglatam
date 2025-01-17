@@ -63,15 +63,12 @@ export function AddReview({ reviewId }: ReviewsProps) {
   });
   const [hasCommented, setHasCommented] = useState(false);
   const { data: session } = useSession();
+  const user = session?.user;
 
   useEffect(() => {
     if (session) {
       const checkIfCommented = async () => {
-        const reviewRef = doc(
-          db,
-          "reviews",
-          `${reviewId}-${session?.user?.aud}`
-        );
+        const reviewRef = doc(db, "reviews", `${reviewId}-${user?.aud}`);
         const reviewSnap = await getDoc(reviewRef);
 
         if (reviewSnap.exists()) {
@@ -82,7 +79,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
       };
 
       const fetchData = async () => {
-        const docRef = doc(db, "users", session?.user?.aud);
+        const docRef = doc(db, "users", user?.aud || "");
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -95,7 +92,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
           } else {
             setNewComment((prevComment) => ({
               ...prevComment,
-              name: session?.user?.email || "",
+              name: user?.email || "",
             }));
           }
         }
@@ -122,7 +119,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
     }
 
     try {
-      await setDoc(doc(db, "reviews", `${reviewId}-${session?.user?.aud}`), {
+      await setDoc(doc(db, "reviews", `${reviewId}-${user?.aud}`), {
         ...newComment,
         date: new Date().toISOString(),
       });
@@ -139,7 +136,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
 
   return (
     <>
-      {session && session?.user?.isPremium && !hasCommented && (
+      {session && user?.isPremium && !hasCommented && (
         <div className="mt-8">
           <h2 className="text-2xl font-bold text-white/90 mb-8">
             ¿Te gustó el contenido?

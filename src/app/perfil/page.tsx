@@ -208,13 +208,15 @@ export default function CompleteProfile() {
             >
               {session?.user?.isPremium ? "Pro" : "Gratuita"}
             </span>
-            <Link
-              href="https://www.patreon.com/c/codinglatam/membership"
-              target="_blank"
-              className="text-indigo-500 underline underline-offset-4"
-            >
-              Ser Pro
-            </Link>
+            {!session?.user?.isPremium && (
+              <Link
+                href="https://www.patreon.com/c/codinglatam/membership"
+                target="_blank"
+                className="text-indigo-500 underline underline-offset-4"
+              >
+                Ser Pro
+              </Link>
+            )}
           </div>
           <label className="block text-sm font-medium text-gray-400 mb-2">
             Nombre
