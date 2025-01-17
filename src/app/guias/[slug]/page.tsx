@@ -38,7 +38,7 @@ export default async function ProductPage({ params }: { params: Params }) {
       <div className="max-w-7xl mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center text-white hover:text-white mb-8"
+          className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Volver
@@ -73,10 +73,10 @@ export default async function ProductPage({ params }: { params: Params }) {
                 Sobre el autor
               </h2>
               <p className="text-gray-600 mb-6">
-                ¡Hola! Soy ingeniero de software con más de 9 años de
-                experiencia en el mundo tech. He pasado por consultoras,
-                startups y empresas tradicionales, acumulando un montón de
-                aprendizajes en el camino.
+                ¡Hola! Mi nombre es Angelo Leva. Soy ingeniero de software con
+                más de 9 años de experiencia en el mundo tech. He pasado por
+                consultoras, startups y empresas tradicionales, acumulando un
+                montón de aprendizajes en el camino.
               </p>
               <p className="text-gray-600">
                 Ahora quiero compartir todo eso contigo para ayudarte a mejorar
@@ -114,19 +114,6 @@ export default async function ProductPage({ params }: { params: Params }) {
                   label="Descargar"
                   isFree={product.isFree}
                 />
-                {/* {product.isFree ? (
-                  <Link
-                    href={product.href}
-                    target="_blank"
-                    className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
-                  >
-                    <Play className="h-5 w-5 mr-2" />
-                    Descargar
-                  </Link>
-                ) : (
-                  // <ActionButton href={product.href} label="Descargar" />
-                  <ValidAccessButton href={product.href} label="Descargar" />
-                )} */}
               </div>
               <div className="mt-6 text-center text-sm text-gray-500">
                 Descarga digital inmediata

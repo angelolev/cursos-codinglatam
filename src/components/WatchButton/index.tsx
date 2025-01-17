@@ -1,9 +1,9 @@
 "use client";
-import { useAuth } from "@/app/auth/auth-context";
 import { Play } from "lucide-react";
 import Link from "next/link";
 import { CourseProps } from "@/types/course";
 import LoginButton from "../LoginButton";
+import { useSession } from "next-auth/react";
 
 interface WatchButtonProps {
   href?: string;
@@ -16,13 +16,13 @@ export default function WatchButton({
   isAvailable,
   clases,
 }: WatchButtonProps) {
-  const { user } = useAuth();
+  const { data: session } = useSession();
 
-  if (!user) {
+  if (!session) {
     return <LoginButton />;
   }
 
-  if ((user && !isAvailable) || (user && !clases)) {
+  if ((session && !isAvailable) || (session && !clases)) {
     return (
       <p className="text-primary-300 font-semibold text-xl text-center">
         Próximamente

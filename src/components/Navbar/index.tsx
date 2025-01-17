@@ -5,28 +5,25 @@ import {
   X,
   LogOut,
   LogIn,
-  /*   Home,
-  BookOpen, */
   Settings,
   User,
   ChevronDown,
 } from "lucide-react";
 import Logo from "../Logo";
-import { useAuth } from "@/app/auth/auth-context";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { DocumentData } from "firebase/firestore";
 import Swal from "sweetalert2";
+import { signOut, useSession } from "next-auth/react";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [profileData, setProfileData] = useState<DocumentData | null>(null);
-  const { user, logout } = useAuth();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { data: session } = useSession();
 
   const handleLogout = () => {
     Swal.fire({
@@ -40,7 +37,7 @@ export function Navbar() {
     }).then((result) => {
       if (result.isConfirmed) {
         setIsMenuOpen(!isMenuOpen);
-        logout();
+        signOut({ redirectTo: "/login" });
       }
     });
   };
@@ -48,21 +45,23 @@ export function Navbar() {
   useEffect(() => {
     setIsMenuOpen(false);
     setIsSettingsOpen(false);
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   useEffect(() => {
-    if (user) {
-      const docRef = doc(db, "users", user.uid);
-      const unsubscribe = onSnapshot(docRef, (doc) => {
-        if (doc.exists()) {
-          setProfileData(doc.data());
-        }
-      });
+    if (session?.user) {
+      if (session?.user?.aud) {
+        const docRef = doc(db, "users", session?.user?.aud);
+        const unsubscribe = onSnapshot(docRef, (doc) => {
+          if (doc.exists()) {
+            setProfileData(doc.data());
+          }
+        });
 
-      // Cleanup subscription on unmount
-      return () => unsubscribe();
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+      }
     }
-  }, [user]);
+  }, [session?.user]);
 
   return (
     <nav className="bg-slate-800 shadow-sm fixed w-full z-50">
@@ -73,14 +72,14 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Menu */}
-          {user ? (
+          {session?.user ? (
             <div className="hidden md:flex items-center gap-4">
               <div className="relative">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
                 >
-                  {profileData?.name ? profileData.name : user?.email}
+                  {profileData?.name ? profileData?.name : session?.user?.email}
                   <ChevronDown
                     size={16}
                     className={`transform transition-transform ${
@@ -91,63 +90,13 @@ export function Navbar() {
 
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50">
-                    {/* <Link
-                      href="/"
+                    <Link
+                      href="/perfil"
                       className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
-                      onClick={() => setIsMenuOpen(false)}
                     >
-                      <Home size={20} />
-                      <span>Inicio</span>
-                    </Link> */}
-                    {/* <Link
-                      href="/"
-                      className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <BookOpen size={20} />
-                      <span>Mis cursos</span>
-                    </Link> */}
-                    <button
-                      className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
-                      onClick={() => {
-                        setIsSettingsOpen(!isSettingsOpen);
-                      }}
-                    >
-                      <User size={20} />
+                      <Settings className="h-4 w-4 inline" />
                       Mi perfil
-                      <ChevronDown
-                        size={16}
-                        className={`ml-2 transform transition-transform ${
-                          isSettingsOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    {isSettingsOpen && (
-                      <div className="bg-white py-1">
-                        <Link
-                          href="/perfil"
-                          className="w-full flex items-center gap-3 px-7 py-2 hover:bg-gray-50 transition-colors"
-                        >
-                          <Settings className="h-4 w-4 inline ml-3" />
-                          Completar perfil
-                        </Link>
-                        {/* <Link
-                          href="/social-media"
-                          className="w-full flex items-center gap-3 px-7 py-2 hover:bg-gray-50 transition-colors"
-                        >
-                          <Settings className="h-4 w-4 inline ml-3" />
-                          Redes sociales
-                        </Link> */}
-                        <Link
-                          href="/dashboard"
-                          className="w-full flex items-center gap-3 px-7 py-2 hover:bg-gray-50 transition-colors"
-                        >
-                          <Settings className="h-4 w-4 inline ml-3" />
-                          Cambiar password
-                        </Link>
-                      </div>
-                    )}
+                    </Link>
 
                     <button
                       className="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-gray-50 transition-colors"
@@ -171,7 +120,7 @@ export function Navbar() {
           )}
 
           {/* Mobile Menu Button */}
-          {user && (
+          {session?.user && (
             <button
               className="md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -187,30 +136,16 @@ export function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      {user && isMenuOpen && (
+      {session?.user && isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
-            {user && (
+            {session?.user && (
               <div className="px-3 py-2 text-gray-700 border-b">
                 <User className="h-4 w-4 inline mr-2" />
-                {user?.email}
+                {session?.user?.email}
               </div>
             )}
 
-            {/* <Link
-              href="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
-            >
-              <Home className="h-4 w-4 inline mr-2" />
-              Inicio
-            </Link> */}
-            {/* <Link
-              href="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
-            >
-              <BookOpen className="h-4 w-4 inline mr-2" />
-              Mis cursos
-            </Link> */}
             <button
               className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
               onClick={() => {
@@ -234,20 +169,6 @@ export function Navbar() {
                 >
                   <Settings className="h-4 w-4 inline mx-3" />
                   Completar perfil
-                </Link>
-                {/* <Link
-                  href="/social-media"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
-                >
-                  <Settings className="h-4 w-4 inline mx-3" />
-                  Redes sociales
-                </Link> */}
-                <Link
-                  href="/dashboard"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
-                >
-                  <Settings className="h-4 w-4 inline mx-3" />
-                  Cambiar password
                 </Link>
               </div>
             )}

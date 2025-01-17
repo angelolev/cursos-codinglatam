@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/app/auth/auth-context";
+import { useSession } from "next-auth/react";
 import LikeIcon from "../LikeIcon";
 
 interface LikeMaterialProps {
@@ -8,9 +8,9 @@ interface LikeMaterialProps {
 }
 
 export default function LikeMaterial({ guid, label }: LikeMaterialProps) {
-  const { user } = useAuth();
+  const { data: session } = useSession();
 
-  if (!user) {
+  if (!session?.user) {
     return null;
   }
 

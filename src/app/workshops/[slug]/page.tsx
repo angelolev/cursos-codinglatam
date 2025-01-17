@@ -82,7 +82,7 @@ export default async function WorkshopPage({ params }: { params: Params }) {
       <div className="max-w-7xl mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center text-white hover:text-white mb-8"
+          className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Volver

@@ -1,5 +1,4 @@
 "use client";
-import { useAuth } from "@/app/auth/auth-context";
 import { db } from "@/utils/firebase";
 import {
   collection,
@@ -12,6 +11,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { useEffect, useOptimistic, useState, useTransition } from "react";
+import { useSession } from "next-auth/react";
 
 interface LikeIconProps {
   classId: string;
@@ -19,11 +19,11 @@ interface LikeIconProps {
 
 const LikeIcon = ({ classId }: LikeIconProps) => {
   const [isPending, startTransition] = useTransition();
-  const { user } = useAuth();
   const [liked, setLiked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [likeDocId, setLikeDocId] = useState<null | string>(null);
   const [likesCount, setLikesCount] = useState<number>(0);
+  const { data: session } = useSession();
 
   const [optimisticState, addOptimisticState] = useOptimistic(
     { liked, likesCount },
@@ -45,7 +45,7 @@ const LikeIcon = ({ classId }: LikeIconProps) => {
         // Check if user has liked
         const userLikeQuery = query(
           likesRef,
-          where("userId", "==", user?.uid),
+          where("userId", "==", session?.user?.aud),
           where("classId", "==", classId)
         );
 
@@ -61,10 +61,10 @@ const LikeIcon = ({ classId }: LikeIconProps) => {
       }
     };
 
-    if (user?.uid && classId) {
+    if (session?.user?.aud && classId) {
       initializeLikeState();
     }
-  }, [user?.uid, classId]);
+  }, [session?.user?.aud, classId]);
 
   const handleLike = async () => {
     if (isLoading || isPending) return;
@@ -82,7 +82,7 @@ const LikeIcon = ({ classId }: LikeIconProps) => {
         if (!liked) {
           const docRef = await addDoc(collection(db, "likes"), {
             classId,
-            userId: user?.uid,
+            userId: session?.user?.aud,
             createdAt: serverTimestamp(),
           });
           setLikeDocId(docRef.id);

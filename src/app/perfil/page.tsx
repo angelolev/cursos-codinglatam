@@ -10,14 +10,13 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useAuth } from "../auth/auth-context";
 import { db } from "../../utils/firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface FormData {
   name: string;
-  lastName: string;
   github: string;
   email: string;
   isPremium: boolean;
@@ -26,37 +25,39 @@ interface FormData {
 }
 
 export default function CompleteProfile() {
-  const { user, isPremium } = useAuth();
   const router = useRouter();
+  const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    lastName: "",
     github: "",
-    email: user?.email || "",
+    email: session?.user?.email || "",
     isPremium: false,
     premiumSince: null,
     updatedAt: null,
   });
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
+    // if (!user) {
+    //   router.push("/login");
+    //   return;
+    // }
 
     const fetchUserData = async () => {
       try {
-        const docRef = doc(db, "users", user.uid);
+        if (!session?.user?.aud) {
+          throw new Error("User ID is undefined");
+        }
+
+        const docRef = doc(db, "users", session.user.aud);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const userData = docSnap.data();
           setFormData({
             name: userData.name || "",
-            lastName: userData.lastName || "",
             github: userData.github || "",
-            email: user?.email || "",
+            email: session.user.email || "",
             isPremium: userData.isPremium || false,
             premiumSince: userData.premiumSince || null,
             updatedAt: userData.updatedAt || null,
@@ -72,7 +73,7 @@ export default function CompleteProfile() {
     };
 
     fetchUserData();
-  }, [user]);
+  }, [session?.user]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -137,13 +138,10 @@ export default function CompleteProfile() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!session?.user) return;
 
     const requiredStringFields = {
       name: formData.name,
-      lastName: formData.lastName,
-      github: formData.github,
-      email: formData.email,
     };
 
     const isFormValid = Object.values(requiredStringFields).every(
@@ -160,12 +158,13 @@ export default function CompleteProfile() {
 
     try {
       setLoading(true);
-      await setDoc(doc(db, "users", user.uid), formData);
-      await updateReviewName(user.uid, `${formData.name} ${formData.lastName}`);
-      await updateCommetsName(
-        user.uid,
-        `${formData.name} ${formData.lastName}`
-      );
+      if (session?.user?.aud) {
+        await setDoc(doc(db, "users", session.user.aud), formData);
+      } else {
+        throw new Error("User ID is undefined");
+      }
+      await updateReviewName(session?.user?.aud, `${formData.name}`);
+      await updateCommetsName(session?.user?.aud, `${formData.name}`);
       await Swal.fire({
         icon: "success",
         text: "Perfil actualizado correctamente",
@@ -201,42 +200,31 @@ export default function CompleteProfile() {
             <span className="text-sm text-gray-400">Suscripción:</span>
             <span
               className={
-                isPremium
+                session?.user?.isPremium
                   ? "bg-blue-500 text-white px-2 py-1 rounded-lg"
                   : "bg-green-500 text-white px-2 py-1 rounded-lg"
               }
             >
-              {isPremium ? "Pro" : "Gratuita"}
+              {session?.user?.isPremium ? "Pro" : "Gratuita"}
             </span>
-            <Link
-              href="https://www.patreon.com/c/codinglatam/membership"
-              target="_blank"
-              className="text-indigo-500 underline underline-offset-4"
-            >
-              Ser Pro
-            </Link>
+            {!session?.user?.isPremium && (
+              <Link
+                href="https://www.patreon.com/c/codinglatam/membership"
+                target="_blank"
+                className="text-indigo-500 underline underline-offset-4"
+              >
+                Ser Pro
+              </Link>
+            )}
           </div>
           <label className="block text-sm font-medium text-gray-400 mb-2">
-            Nombres
+            Nombre
           </label>
           <input
             type="text"
             name="name"
             maxLength={50}
             value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">
-            Apellidos
-          </label>
-          <input
-            type="text"
-            name="lastName"
-            maxLength={50}
-            value={formData.lastName}
             onChange={handleChange}
             className="w-full px-3 py-2 text-white bg-[#3a3f45] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
           />
