@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Logo from "../Logo";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { DocumentData } from "firebase/firestore";
@@ -23,7 +23,6 @@ export function Navbar() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [profileData, setProfileData] = useState<DocumentData | null>(null);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { data: session } = useSession();
 
   const handleLogout = () => {
@@ -46,7 +45,7 @@ export function Navbar() {
   useEffect(() => {
     setIsMenuOpen(false);
     setIsSettingsOpen(false);
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   useEffect(() => {
     if (session?.user) {
