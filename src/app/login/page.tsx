@@ -32,7 +32,7 @@ export default function LoginPage() {
             </div>
             Login con Google
           </button>
-          <button
+          {/* <button
             onClick={() => handleLogin("github")}
             className="w-full bg-indigo-600 text-white p-4 rounded flex items-center gap-4 justify-center"
           >
@@ -40,7 +40,7 @@ export default function LoginPage() {
               <Github />
             </div>
             Login con Github
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
