@@ -142,7 +142,6 @@ export default function CompleteProfile() {
 
     const requiredStringFields = {
       name: formData.name,
-      github: formData.github,
     };
 
     const isFormValid = Object.values(requiredStringFields).every(
