@@ -37,8 +37,6 @@ export default function CompleteProfile() {
     updatedAt: null,
   });
 
-  console.log(session, "user perfil");
-
   useEffect(() => {
     // if (!user) {
     //   router.push("/login");

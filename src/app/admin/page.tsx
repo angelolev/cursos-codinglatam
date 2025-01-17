@@ -1,47 +1,58 @@
 // app/admin/users/page.tsx
 "use client";
 import { useState, useEffect } from "react";
-import { useAuth } from "../auth/auth-context";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useSession } from "next-auth/react";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "@/utils/firebase";
 
 interface User {
-  uid: string;
+  aud: string;
   email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
+  github: string | null;
   isPremium: boolean;
-  createdAt: string;
+  name: string | null;
+  premiumSince: Date | null;
+  updatedAt: Date | null;
 }
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
   const router = useRouter();
-
-  // Add your admin emails here
+  const { data: session } = useSession();
 
   useEffect(() => {
-    const ADMIN_EMAILS = ["angelokta7@gmail.com"];
+    const ADMIN_EMAILS = ["angelokta7@gmail.com", "sebberrios99@gmail.com"];
     // Check if user is admin
-    if (!user || !ADMIN_EMAILS.includes(user.email || "")) {
-      router.push("/");
-      return;
+    if (!session || !ADMIN_EMAILS.includes(session?.user?.email || "")) {
+      /* router.push("/"); */
+      /*  return; */
     }
 
     fetchUsers();
-  }, [user, router]);
+  }, [session, router]);
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("/api/admin/users");
-      const data = await response.json();
+      const usersCollection = collection(db, "users");
+      const usersCollectionDocs = await getDocs(usersCollection);
+      const data: User[] = [];
 
-      if (!response.ok) throw new Error(data.error);
+      usersCollectionDocs.forEach((doc) => {
+        const docData = doc.data() as User;
+        docData.aud = doc.id;
+        data.push(docData);
+      });
 
-      setUsers(data.users);
+      setUsers(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch users");
     } finally {
@@ -49,27 +60,20 @@ export default function AdminDashboard() {
     }
   };
 
-  const togglePremiumStatus = async (uid: string, currentStatus: boolean) => {
+  const togglePremiumStatus = async (aud: string, currentStatus: boolean) => {
     try {
-      const response = await fetch("/api/admin/users", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          uid,
-          isPremium: !currentStatus,
-        }),
-      });
+      const docRef = doc(db, "users", aud);
+      const docSnap = await getDoc(docRef);
 
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.error);
-
-      // Update local state
-      setUsers(
-        users.map((user) =>
-          user.uid === uid ? { ...user, isPremium: !currentStatus } : user
-        )
-      );
+      if (docSnap.exists()) {
+        const newDate = new Date();
+        const currentIsPremium = docSnap.data().isPremium;
+        await updateDoc(docRef, {
+          isPremium: !currentIsPremium,
+          premiumSince: newDate.setMonth(newDate.getMonth()),
+          updatedAt: newDate.setMonth(newDate.getMonth() + 1),
+        });
+      }
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to update premium status"
@@ -104,7 +108,10 @@ export default function AdminDashboard() {
                 Email
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Created At
+                Premium Since
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Update At
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Premium Status
@@ -116,28 +123,35 @@ export default function AdminDashboard() {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map((user) => (
-              <tr key={user.uid}>
+              <tr key={user.aud}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <div className="relative h-8 w-8">
-                      {user.photoURL && (
+                      {/* {user.photoURL && (
                         <Image
                           className="h-8 w-8 rounded-full mr-3"
                           src={user.photoURL}
                           alt=""
                           fill
                         />
-                      )}
+                      )} */}
                     </div>
 
-                    <div>{user.displayName || "No name"}</div>
+                    <div>{user.name || "No name"}</div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {user.email || "No email"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {new Date(user.createdAt).toLocaleDateString()}
+                  {user.premiumSince
+                    ? new Date(user.premiumSince).toLocaleDateString()
+                    : "No date"}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.updatedAt
+                    ? new Date(user.updatedAt).toLocaleDateString()
+                    : "No date"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
@@ -153,7 +167,7 @@ export default function AdminDashboard() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
                     onClick={() =>
-                      togglePremiumStatus(user.uid, user.isPremium)
+                      togglePremiumStatus(user.aud, user.isPremium)
                     }
                     className={`px-3 py-1 rounded text-sm font-medium ${
                       user.isPremium
