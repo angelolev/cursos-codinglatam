@@ -1,17 +1,12 @@
 import { db } from "@/utils/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import NextAuth from "next-auth";
+import NextAuth, { Profile } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  debug: true,
   providers: [GitHub, Google],
   callbacks: {
-    // authorized: async ({ auth }) => {
-    //   // Logged in users are authenticated, otherwise redirect to login page
-    //   return !!auth;
-    // },
     async jwt({ token, user, profile }) {
       if (user) {
         token.id = user.id;
@@ -42,7 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 });
 
-const addUserFirebase = async (profile) => {
+const addUserFirebase = async (profile: Profile) => {
   const userDocRef = doc(db, "users", profile.sub || "");
   const userDoc = await getDoc(userDocRef);
 

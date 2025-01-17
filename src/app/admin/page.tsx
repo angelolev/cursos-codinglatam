@@ -53,7 +53,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const togglePremiumStatus = async (aud: string, currentStatus: boolean) => {
+  const togglePremiumStatus = async (aud: string) => {
     try {
       const docRef = doc(db, "users", aud);
       const docSnap = await getDoc(docRef);
@@ -159,9 +159,7 @@ export default function AdminDashboard() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={() =>
-                      togglePremiumStatus(user.aud, user.isPremium)
-                    }
+                    onClick={() => togglePremiumStatus(user.aud)}
                     className={`px-3 py-1 rounded text-sm font-medium ${
                       user.isPremium
                         ? "bg-red-100 text-red-700 hover:bg-red-200"
