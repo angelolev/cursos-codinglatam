@@ -8,10 +8,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: true,
   providers: [GitHub, Google],
   callbacks: {
-    /*  authorized: async ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
-    }, */
+    // authorized: async ({ auth }) => {
+    //   // Logged in users are authenticated, otherwise redirect to login page
+    //   return !!auth;
+    // },
     async jwt({ token, user, profile }) {
       if (user) {
         token.id = user.id;
