@@ -105,10 +105,12 @@ export default async function WorkshopPage({ params }: { params: Params }) {
                 <p className="text-xl text-white/90 mb-4">
                   {workshop.description}
                 </p>
-                {!workshop.available && (
+                {!workshop.available ? (
                   <p className="bg-red-400 px-2 py-1 w-fit">
                     {workshop.releaseDate}
                   </p>
+                ) : (
+                  <p className="bg-green-400 px-2 py-1 w-fit">Disponible</p>
                 )}
               </div>
             </div>

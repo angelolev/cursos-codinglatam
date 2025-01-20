@@ -5,6 +5,7 @@ import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { BookOpen, Code2, Rocket, Users } from "lucide-react";
 import Link from "next/link";
 import { auth } from "./auth";
+import { MonthlyEvents } from "@/components/Event";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -86,6 +87,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
+
           <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
               Nuestros cursos
@@ -99,6 +101,20 @@ export default async function Home() {
             {courses?.map((course, index) => (
               <CourseCard key={index} {...course} />
             ))}
+          </div>
+          <p className="text-center mt-10 text-xl">
+            ¿Buscas cursos con <b>CLASES EN VIVO</b>?<br />
+            <Link
+              href="https://www.codinglatam.dev/cursos"
+              target="_blank"
+              className="text-indigo-400 underline"
+            >
+              Inscríbete aquí
+            </Link>
+          </p>
+
+          <div className="my-24">
+            <MonthlyEvents />
           </div>
 
           <div className="text-center my-24">

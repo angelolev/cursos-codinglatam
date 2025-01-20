@@ -21,7 +21,11 @@ export default async function Workshop({
             <span className=" bg-red-500 px-2 py-1 text-white">
               {releaseDate}
             </span>
-          ) : null}
+          ) : (
+            <span className=" bg-green-500 px-2 py-1 text-white">
+              Disponible
+            </span>
+          )}
         </div>
         <div className="h-48 w-full overflow-hidden relative">
           <Image
