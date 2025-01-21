@@ -8,6 +8,7 @@ import Image from "next/image";
 import { AddReview } from "@/components/AddReview";
 import { Reviews } from "@/components/Reviews";
 import ValidAccessButton from "@/components/ValidAccessButton";
+import { WorkshopProps } from "@/types/workshop";
 
 type Params = Promise<{ slug: string }>;
 
@@ -72,9 +73,13 @@ export default async function WorkshopPage({ params }: { params: Params }) {
   );
   const { items } = await data.json();
 
-  const filteredVideo = items?.filter(
+  const filteredVideos = items?.filter(
     (item: { collectionId: string }) =>
       item.collectionId === workshopsCollections.workshops.collectionId
+  );
+
+  const currentWorkshop = filteredVideos.filter(
+    (item: WorkshopProps) => item.title === workshop.title
   );
 
   return (
@@ -161,7 +166,7 @@ export default async function WorkshopPage({ params }: { params: Params }) {
                 )}
                 {workshop.available && (
                   <ValidAccessButton
-                    href={`/workshops/${slug}/videos/${filteredVideo[0].guid}`}
+                    href={`/workshops/${slug}/videos/${currentWorkshop[0].guid}`}
                     label="Ver ahora"
                     isFree={workshop.isFree}
                   />
