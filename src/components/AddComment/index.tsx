@@ -97,7 +97,7 @@ export function AddComment({ commentId }: AddCommentProps) {
 
   return (
     <>
-      {session && user?.isPremium && !hasCommented && (
+      {session && user && !hasCommented && (
         <form onSubmit={handleSubmit} className="mb-6">
           <textarea
             value={newComment.comment}

@@ -136,7 +136,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
 
   return (
     <>
-      {session && user?.isPremium && !hasCommented && (
+      {session && user && !hasCommented && (
         <div className="mt-8">
           <h2 className="text-2xl font-bold text-white/90 mb-8">
             ¿Te gustó el contenido?
