@@ -97,13 +97,17 @@ export default async function Page({ params }: { params: Params }) {
 
       <div className="w-full lg:max-w-[350px]">
         <div>
-          <h2 className="text-2xl mb-4 font-bold">Recursos de la clase</h2>
+          <h2 className="text-2xl mb-4 font-bold text-white/90">
+            Recursos de la clase
+          </h2>
           <ul>
             <Resources classId={guid} />
           </ul>
         </div>
         <div className="max-h-96 mt-10 mb-20">
-          <h2 className="text-2xl mb-4 font-bold">Comentarios de la clase</h2>
+          <h2 className="text-2xl mb-4 font-bold text-white/90">
+            Comentarios de la clase
+          </h2>
           <AddComment commentId={guid} />
           <ul>
             <Comments commentId={guid} />

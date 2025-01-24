@@ -47,7 +47,9 @@ export function Reviews({ reviewId }: ReviewsProps) {
         Opiniones de los estudiantes
       </h2>
       <div className="space-y-8">
-        {!(courseReviews.length > 0) && <p>Aún no hay opiniones</p>}
+        {!(courseReviews.length > 0) && (
+          <p className="text-white/90">Aún no hay opiniones</p>
+        )}
         {courseReviews.map((review) => (
           <div key={review.date} className="bg-white rounded-xl shadow-md p-6">
             <div className="flex flex-col w-full">

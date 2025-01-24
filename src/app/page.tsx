@@ -102,7 +102,7 @@ export default async function Home() {
               <CourseCard key={index} {...course} />
             ))}
           </div>
-          <p className="text-center mt-10 text-xl">
+          <p className="text-center text-white/90 mt-10 text-xl">
             ¿Buscas cursos con <b>CLASES EN VIVO</b>?<br />
             <Link
               href="https://www.codinglatam.dev/cursos"
