@@ -96,7 +96,9 @@ export default async function Page({ params }: { params: Params }) {
       </div>
       <div className="w-full lg:max-w-[350px]">
         <div className="max-h-96">
-          <h2 className="text-2xl mb-4 font-bold">Comentarios del workshop</h2>
+          <h2 className="text-2xl mb-4 font-bold text-white/90">
+            Comentarios del workshop
+          </h2>
           <AddComment commentId={guid} />
           <ul>
             <Comments commentId={guid} />
