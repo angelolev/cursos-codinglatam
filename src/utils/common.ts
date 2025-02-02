@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { CourseProps } from "@/types/course";
 import { db } from "@/utils/firebase";
 import { ProductProps } from "@/types/product";
@@ -173,23 +173,55 @@ export async function getProducts(): Promise<ProductProps[] | null> {
 export async function getWorkshops(): Promise<WorkshopProps[] | null> {
   try {
     const workshopsCollection = collection(db, "workshops");
-    const querySnapshot = await getDocs(workshopsCollection);
-    const workshopsList = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        title: data.title,
-        description: data.description,
-        image: data.image,
-        slug: data.slug,
-        available: data.available,
-        releaseDate: data.releaseDate,
-        isFree: data.isFree,
-      };
-    });
-    return workshopsList;
+
+    // First, get available workshops
+    const availableQuery = query(
+      workshopsCollection,
+      where("available", "==", true),
+      orderBy("releaseDate", "desc")
+    );
+
+    // Then, get non-available workshops
+    const nonAvailableQuery = query(
+      workshopsCollection,
+      where("available", "==", false),
+      orderBy("releaseDate", "desc")
+    );
+
+    // Execute both queries
+    const [availableSnapshot, nonAvailableSnapshot] = await Promise.all([
+      getDocs(availableQuery),
+      getDocs(nonAvailableQuery),
+    ]);
+
+    // Map available workshops
+    const availableWorkshops = availableSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      title: doc.data().title,
+      description: doc.data().description,
+      image: doc.data().image,
+      slug: doc.data().slug,
+      available: doc.data().available,
+      releaseDate: doc.data().releaseDate,
+      isFree: doc.data().isFree,
+    }));
+
+    // Map non-available workshops
+    const nonAvailableWorkshops = nonAvailableSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      title: doc.data().title,
+      description: doc.data().description,
+      image: doc.data().image,
+      slug: doc.data().slug,
+      available: doc.data().available,
+      releaseDate: doc.data().releaseDate,
+      isFree: doc.data().isFree,
+    }));
+
+    // Combine both arrays, available workshops will be first
+    return [...availableWorkshops, ...nonAvailableWorkshops];
   } catch (error) {
-    console.error("Failed to fetch course:", error);
+    console.error("Failed to fetch workshops:", error);
     return null;
   }
 }

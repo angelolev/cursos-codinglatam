@@ -193,7 +193,7 @@ export default function CompleteProfile() {
 
   return (
     <div className="p-8 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Mi Perfil</h1>
+      <h1 className="text-2xl font-bold mb-6 text-white/90">Mi Perfil</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <div className="flex items-center gap-4 mb-6">

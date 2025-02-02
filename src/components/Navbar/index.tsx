@@ -17,6 +17,7 @@ import { db } from "../../utils/firebase";
 import { DocumentData } from "firebase/firestore";
 import Swal from "sweetalert2";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,7 +65,7 @@ export function Navbar() {
   }, [session?.user]);
 
   return (
-    <nav className="bg-slate-800 shadow-sm fixed w-full z-50">
+    <nav className="bg-slate-800 shadow-sm fixed w-full z-50 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         <div className="flex justify-between items-center h-16">
           <Link href="/">
@@ -73,12 +74,25 @@ export function Navbar() {
 
           {/* Desktop Menu */}
           {session?.user ? (
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4 ">
               <div className="relative">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
                 >
+                  <div className="relative">
+                    <Image
+                      src={session?.user?.image || "/default-avatar.png"}
+                      alt={
+                        profileData?.name
+                          ? profileData?.name
+                          : session?.user?.email
+                      }
+                      width={36}
+                      height={36}
+                      className="rounded-full"
+                    />
+                  </div>
                   {profileData?.name ? profileData?.name : session?.user?.email}
                   <ChevronDown
                     size={16}
@@ -140,9 +154,21 @@ export function Navbar() {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
             {session?.user && (
-              <div className="px-3 py-2 text-gray-700 border-b">
-                <User className="h-4 w-4 inline mr-2" />
-                {session?.user?.email}
+              <div className="px-3 py-2 text-gray-700 border-b flex items-center gap-2">
+                <div className="relative">
+                  <Image
+                    src={session?.user?.image || "/default-avatar.png"}
+                    alt={
+                      profileData?.name
+                        ? profileData?.name
+                        : session?.user?.email
+                    }
+                    width={36}
+                    height={36}
+                    className="rounded-full"
+                  />
+                </div>
+                {profileData?.name ? profileData?.name : session?.user?.email}
               </div>
             )}
 

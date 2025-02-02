@@ -10,22 +10,22 @@ interface Event {
 }
 
 const currentEvents: Event[] = [
-  {
-    id: "1",
-    title: "Core Web Vitals: El Secreto del Rendimiento Web",
-    description:
-      "Descubre cómo optimizar los Core Web Vitals para lograr sitios más rápidos, estables y efectivos.",
-    date: "25 Ene",
-    href: "https://cursos.codinglatam.dev/workshops/core-web-vitals",
-  },
-  {
-    id: "2",
-    title: "Tailwind CSS en aplicaciones web modernas",
-    description:
-      "Domina Tailwind CSS y revoluciona tu forma de construir interfaces modernas.",
-    date: "01 Feb",
-    href: "https://cursos.codinglatam.dev/workshops/tailwind-en-aplicaciones-web",
-  },
+  // {
+  //   id: "1",
+  //   title: "Core Web Vitals: El Secreto del Rendimiento Web",
+  //   description:
+  //     "Descubre cómo optimizar los Core Web Vitals para lograr sitios más rápidos, estables y efectivos.",
+  //   date: "25 Ene",
+  //   href: "https://cursos.codinglatam.dev/workshops/core-web-vitals",
+  // },
+  // {
+  //   id: "2",
+  //   title: "Tailwind CSS en aplicaciones web modernas",
+  //   description:
+  //     "Domina Tailwind CSS y revoluciona tu forma de construir interfaces modernas.",
+  //   date: "01 Feb",
+  //   href: "https://cursos.codinglatam.dev/workshops/tailwind-en-aplicaciones-web",
+  // },
 
   {
     id: "3",
