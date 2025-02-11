@@ -53,7 +53,7 @@ export function Comments({ commentId }: CommentsProps) {
               </span>
             </div>
             <div className="w-full">
-              <p className="text-gray-600 whitespace-normal break-words">
+              <p className="text-gray-600 text-[13px] whitespace-normal break-words">
                 {review.comment}
               </p>
             </div>

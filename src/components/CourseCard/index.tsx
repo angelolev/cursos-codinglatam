@@ -14,23 +14,32 @@ export async function CourseCard({
   slug,
   available,
   releaseDate,
+  hasAllClassesAvailable,
 }: CourseProps) {
   const course = await getCourseBySlug(slug);
+
+  const renderStatus = () => {
+    if (available && hasAllClassesAvailable) {
+      return (
+        <span className=" bg-green-500 px-2 py-1 text-white">Disponible</span>
+      );
+    } else if (available && !hasAllClassesAvailable) {
+      return (
+        <span className=" bg-green-500 px-2 py-1 text-white">
+          Primeras clases disponibles
+        </span>
+      );
+    } else {
+      return (
+        <span className=" bg-red-500 px-2 py-1 text-white">{releaseDate}</span>
+      );
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative">
       <Link href={`cursos/${slug}`}>
-        <div className="absolute right-0 z-20">
-          {!available ? (
-            <span className=" bg-red-500 px-2 py-1 text-white">
-              {releaseDate}
-            </span>
-          ) : (
-            <span className=" bg-green-500 px-2 py-1 text-white">
-              Primeras clases gratis
-            </span>
-          )}
-        </div>
+        <div className="absolute right-0 z-20">{renderStatus()}</div>
         <div className="h-48 w-full overflow-hidden relative">
           <Image
             className="w-full h-full object-cover"
