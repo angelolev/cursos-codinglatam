@@ -5,7 +5,6 @@ import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { BookOpen, Code2, Rocket, Users } from "lucide-react";
 import Link from "next/link";
 import { auth } from "./auth";
-import { MonthlyEvents } from "@/components/Event";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -112,10 +111,6 @@ export default async function Home() {
               Inscríbete aquí
             </Link>
           </p>
-
-          <div className="my-24">
-            <MonthlyEvents />
-          </div>
 
           <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">

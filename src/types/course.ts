@@ -13,4 +13,5 @@ export interface CourseProps {
   releaseDate: string;
   testimonialVideo: string;
   topics: string[];
+  hasAllClassesAvailable: boolean;
 }
