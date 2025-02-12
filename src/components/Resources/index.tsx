@@ -47,6 +47,12 @@ async function getClassResources(
 export default async function Resources({ classId }: ResourcesProps) {
   const resources = await getClassResources(classId);
 
+  if (resources?.length === 0) {
+    return (
+      <p className="text-white/90">Pronto agregaremos recursos para ti!</p>
+    );
+  }
+
   return (
     <>
       {resources?.map((item) => (
