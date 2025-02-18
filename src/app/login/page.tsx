@@ -32,15 +32,13 @@ export default function LoginPage() {
             </div>
             Login con Google
           </button>
-          {/* <button
-            onClick={() => handleLogin("github")}
+          <button
+            onClick={() => handleLogin("patreon")}
             className="w-full bg-indigo-600 text-white p-4 rounded flex items-center gap-4 justify-center"
           >
-            <div className="max-w-8">
-              <Github />
-            </div>
-            Login con Github
-          </button> */}
+            <div className="max-w-8">{/* <Github /> */}</div>
+            Login con Patreon
+          </button>
         </div>
       </div>
     </div>
