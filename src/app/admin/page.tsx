@@ -87,40 +87,43 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">User Management Dashboard</h1>
+    <div className="container mx-auto">
+      <h1 className="text-2xl font-bold mb-6 text-white/90">
+        User Management Dashboard
+      </h1>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                User
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Premium Since
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Update At
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Premium Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
-              <tr key={user.aud}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-2">
-                    <div className="relative h-8 w-8">
-                      {/* {user.photoURL && (
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  User
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Premium Since
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Update At
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Premium Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {users.map((user) => (
+                <tr key={user.aud}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <div className="relative h-8 w-8">
+                        {/* {user.photoURL && (
                         <Image
                           className="h-8 w-8 rounded-full mr-3"
                           src={user.photoURL}
@@ -128,51 +131,52 @@ export default function AdminDashboard() {
                           fill
                         />
                       )} */}
-                    </div>
+                      </div>
 
-                    <div>{user.name || "No name"}</div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {user.email || "No email"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {user.premiumSince
-                    ? new Date(user.premiumSince).toLocaleDateString()
-                    : "No date"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {user.updatedAt
-                    ? new Date(user.updatedAt).toLocaleDateString()
-                    : "No date"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      user.isPremium
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {user.isPremium ? "Premium" : "Free"}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => togglePremiumStatus(user.aud)}
-                    className={`px-3 py-1 rounded text-sm font-medium ${
-                      user.isPremium
-                        ? "bg-red-100 text-red-700 hover:bg-red-200"
-                        : "bg-green-100 text-green-700 hover:bg-green-200"
-                    }`}
-                  >
-                    {user.isPremium ? "Remove Premium" : "Make Premium"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                      <div>{user.name || "No name"}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {user.email || "No email"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {user.premiumSince
+                      ? new Date(user.premiumSince).toLocaleDateString()
+                      : "No date"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {user.updatedAt
+                      ? new Date(user.updatedAt).toLocaleDateString()
+                      : "No date"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        user.isPremium
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {user.isPremium ? "Premium" : "Free"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => togglePremiumStatus(user.aud)}
+                      className={`px-3 py-1 rounded text-sm font-medium ${
+                        user.isPremium
+                          ? "bg-red-100 text-red-700 hover:bg-red-200"
+                          : "bg-green-100 text-green-700 hover:bg-green-200"
+                      }`}
+                    >
+                      {user.isPremium ? "Remove Premium" : "Make Premium"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

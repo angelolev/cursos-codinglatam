@@ -100,6 +100,9 @@ export default async function Home() {
             {courses?.map((course, index) => (
               <CourseCard key={index} {...course} />
             ))}
+            {workshops?.map((workshop, index) => (
+              <Workshop key={index} {...workshop} />
+            ))}
           </div>
           <p className="text-center text-white/90 mt-10 text-xl">
             ¿Buscas cursos con <b>CLASES EN VIVO</b>?<br />
@@ -112,7 +115,7 @@ export default async function Home() {
             </Link>
           </p>
 
-          <div className="text-center my-24">
+          {/* <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
               Workshops y training
             </h1>
@@ -125,7 +128,7 @@ export default async function Home() {
             {workshops?.map((workshop, index) => (
               <Workshop key={index} {...workshop} />
             ))}
-          </div>
+          </div> */}
 
           <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
