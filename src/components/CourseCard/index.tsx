@@ -45,7 +45,8 @@ export async function CourseCard({
             className="w-full h-full object-cover"
             src={image}
             alt={title}
-            fill
+            width={420}
+            height={193}
           />
         </div>
         <div className="p-6">

@@ -32,7 +32,8 @@ export default async function Workshop({
             className="w-full h-full object-cover"
             src={image}
             alt={title}
-            fill
+            width={420}
+            height={193}
           />
         </div>
         <div className="p-6">
