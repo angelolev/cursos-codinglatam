@@ -226,3 +226,40 @@ export async function getWorkshops(): Promise<WorkshopProps[] | null> {
     return null;
   }
 }
+
+export const getVideosFromCollection = async (collectionId: string) => {
+  const courseCollections = {
+    react: {
+      collectionId: "ec89bb8c-a703-444c-8f00-70a6f138dfe7",
+    },
+    javascript: {
+      collectionId: "50efd55f-c061-4c22-a2ee-032ad92b2f6c",
+    },
+    web: {
+      collectionId: "80e121f4-0083-444c-bb22-10b89383114d",
+    },
+  };
+
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
+    {
+      headers: {
+        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const { items } = await data.json();
+  const filteredClases = items?.filter(
+    (item: { collectionId: string }) =>
+      item.collectionId ===
+      courseCollections[collectionId as keyof typeof courseCollections]
+        .collectionId
+  );
+
+  const clases =
+    filteredClases?.length > 0 ? orderVideosByTitle(filteredClases) : null;
+
+  return clases;
+};

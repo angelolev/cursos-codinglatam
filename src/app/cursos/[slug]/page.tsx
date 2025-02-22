@@ -6,24 +6,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reviews } from "@/components/Reviews";
 import { AddReview } from "@/components/AddReview";
-import { getCourseBySlug, orderVideosByTitle } from "@/utils/common";
+import { getCourseBySlug, getVideosFromCollection } from "@/utils/common";
 import { VideoProps } from "@/types/video";
 import ActionButton from "@/components/ActionButton";
 import WatchButton from "@/components/WatchButton";
 
 type Params = Promise<{ slug: string }>;
-
-const courseCollections = {
-  react: {
-    collectionId: "ec89bb8c-a703-444c-8f00-70a6f138dfe7",
-  },
-  javascript: {
-    collectionId: "50efd55f-c061-4c22-a2ee-032ad92b2f6c",
-  },
-  web: {
-    collectionId: "80e121f4-0083-444c-bb22-10b89383114d",
-  },
-};
 
 export async function generateMetadata({ params }: { params: Params }) {
   const { slug } = await params;
@@ -69,24 +57,7 @@ export default async function CoursePage({ params }: { params: Params }) {
     notFound();
   }
 
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
-    {
-      headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const { items } = await data.json();
-  const filteredClases = items?.filter(
-    (item: { collectionId: string }) =>
-      item.collectionId ===
-      courseCollections[slug as keyof typeof courseCollections].collectionId
-  );
-
-  const clases =
-    filteredClases?.length > 0 ? orderVideosByTitle(filteredClases) : null;
+  const clases = await getVideosFromCollection(slug);
 
   return (
     <div className="container max-w-7xl mx-auto px-0 pt-0 pb-8">

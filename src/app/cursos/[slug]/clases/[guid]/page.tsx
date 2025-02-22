@@ -2,7 +2,8 @@ import { AddComment } from "@/components/AddComment";
 import { Comments } from "@/components/Comments";
 import LikeMaterial from "@/components/LikeMaterial";
 import Resources from "@/components/Resources";
-import { ArrowLeft } from "lucide-react";
+import { getVideosFromCollection } from "@/utils/common";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 type Params = Promise<{ guid: string; slug: string }>;
@@ -52,6 +53,19 @@ export default async function Page({ params }: { params: Params }) {
 
   const video = await data.json();
 
+  const allVideos = await getVideosFromCollection(slug);
+
+  // Find the current video index
+  const currentIndex = allVideos?.findIndex((v: IVideo) => v.guid === guid);
+
+  // Determine the next video
+  const nextVideo =
+    allVideos &&
+    currentIndex !== undefined &&
+    currentIndex < allVideos.length - 1
+      ? allVideos[currentIndex + 1]
+      : null;
+
   return (
     <div className="flex flex-col lg:flex-row gap-6">
       <div className="w-full">
@@ -83,7 +97,7 @@ export default async function Page({ params }: { params: Params }) {
               {item.value}
             </p>
           ))}
-          <div className="mt-6">
+          <div className="mt-6 flex justify-between flex-wrap">
             <Link
               href={`/cursos/${slug}`}
               className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
@@ -91,6 +105,15 @@ export default async function Page({ params }: { params: Params }) {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver al curso
             </Link>
+            {nextVideo && (
+              <Link
+                href={`/cursos/${slug}/clases/${nextVideo?.guid}`}
+                className="inline-flex items-center border bg-indigo-400 text-white font-semibold border-indigo-400 px-4 py-3 rounded-lg hover:text-white hover:bg-indigo-500 mb-8"
+              >
+                {nextVideo?.title}
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Link>
+            )}
           </div>
         </div>
       </div>
