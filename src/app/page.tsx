@@ -31,8 +31,7 @@ export default async function Home() {
                   <div className="flex gap-4">
                     {session?.user?.isPremium ? null : (
                       <Link
-                        href="https://www.patreon.com/c/codinglatam/membership"
-                        target="_blank"
+                        href="/pro"
                         className="bg-primary-300 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-400 transition-colors"
                       >
                         Conviértete en Pro

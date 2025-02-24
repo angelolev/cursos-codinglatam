@@ -209,8 +209,7 @@ export default function CompleteProfile() {
             </span>
             {!session?.user?.isPremium && (
               <Link
-                href="https://www.patreon.com/c/codinglatam/membership"
-                target="_blank"
+                href="/pro"
                 className="text-indigo-500 underline underline-offset-4"
               >
                 Ser Pro

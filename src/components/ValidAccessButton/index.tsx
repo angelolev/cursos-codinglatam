@@ -43,11 +43,7 @@ export default function ValidAccessButton({
     return (
       <p className="text-indigo-500 text-center">
         Necesitas ser{" "}
-        <Link
-          href="https://www.patreon.com/c/codinglatam/membership"
-          target="_blank"
-          className="font-semibold underline "
-        >
+        <Link href="/pro" className="font-semibold underline ">
           PRO
         </Link>{" "}
         para acceder a este contenido
