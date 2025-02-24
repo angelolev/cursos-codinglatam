@@ -83,7 +83,7 @@ export default function ProPage() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               href="https://www.patreon.com/c/codinglatam/membership"
-              className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
             >
               <Crown className="h-5 w-5 mr-2" />
               Quiero ser Pro
@@ -138,7 +138,39 @@ export default function ProPage() {
         </div>
 
         {/* Pricing Section */}
-        <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl overflow-hidden">
+        <h2 className="text-2xl text-center font-bold text-white mb-8 md:hidden">
+          ¿Estás listo(a) para llevar tus habilidades al siguiente nivel?
+        </h2>
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg mx-auto md:hidden">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <Crown className="h-8 w-8 text-indigo-600" />
+            <h3 className="text-2xl font-bold text-gray-900 text-center">
+              Membresía Pro
+            </h3>
+          </div>
+          <div className="text-5xl font-bold text-gray-900 text-center mb-6">
+            $8<span className="text-xl text-gray-500">/mes</span>
+          </div>
+          <ul className="space-y-4 mb-8 text-left max-w-md mx-auto">
+            {benefits.map((benefit, index) => (
+              <li key={index} className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-3 mt-1" />
+                <span className="text-gray-600">{benefit.title}</span>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="https://www.patreon.com/c/codinglatam/membership"
+            className="w-full bg-indigo-600 text-white px-8 py-4 rounded-lg flex items-center text-lg font-semibold hover:bg-indigo-700 transition-colors"
+          >
+            <Crown className="h-5 w-5 mr-2" /> Quiero ser Pro
+          </Link>
+          <p className="text-sm text-gray-500 mt-8">
+            Garantía de devolución de dinero de 30 días. Sin preguntas.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl overflow-hidden hidden md:block">
           <div className="px-8 py-16 sm:px-16 sm:py-24 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">
               ¿Estás listo(a) para llevar tus habilidades al siguiente nivel?
