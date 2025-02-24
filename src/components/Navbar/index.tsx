@@ -35,6 +35,7 @@ export function Navbar() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Si, quiero salir",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
         setIsMenuOpen(!isMenuOpen);
@@ -113,7 +114,7 @@ export function Navbar() {
                     </Link>
 
                     <button
-                      className="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-gray-50 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-gray-50 transition-colors cursor-pointer"
                       onClick={handleLogout}
                     >
                       <LogOut size={20} />

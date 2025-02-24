@@ -6,7 +6,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reviews } from "@/components/Reviews";
 import { AddReview } from "@/components/AddReview";
-import { getCourseBySlug, getVideosFromCollection } from "@/utils/common";
+import {
+  formatTime,
+  getCourseBySlug,
+  getVideosFromCollection,
+} from "@/utils/common";
 import { VideoProps } from "@/types/video";
 import ActionButton from "@/components/ActionButton";
 import WatchButton from "@/components/WatchButton";
@@ -103,10 +107,13 @@ export default async function CoursePage({ params }: { params: Params }) {
                       <Link
                         key={item.guid}
                         href={`/cursos/${course.slug}/clases/${item.guid}`}
-                        className="grid grid-cols-[20px_minmax(300px,_1fr)] gap-2 items-center"
+                        className="grid grid-cols-[20px_minmax(550px,_1fr)_1fr] gap-2 items-center"
                       >
                         <BookOpen size={20} className="text-indigo-600" />
                         <span>{item.title}</span>
+                        <span className="justify-self-end text-indigo-600 ">
+                          {formatTime(item.length)}
+                        </span>
                       </Link>
                     ))}
                   {!clases &&

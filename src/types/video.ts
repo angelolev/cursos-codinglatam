@@ -5,4 +5,5 @@ export interface VideoProps {
   buyLink: string;
   available: boolean;
   slug: string;
+  length: number;
 }

@@ -137,6 +137,7 @@ export async function getCourses(): Promise<CourseProps[] | null> {
         testimonialVideo: data.testimonialVideo,
         topics: data.topics || [],
         hasAllClassesAvailable: data.hasAllClassesAvailable,
+        length: data.length,
       };
     });
     return coursesList;
@@ -262,4 +263,15 @@ export const getVideosFromCollection = async (collectionId: string) => {
     filteredClases?.length > 0 ? orderVideosByTitle(filteredClases) : null;
 
   return clases;
+};
+
+export const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  // Pad with leading zeros if needed
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+  return `${formattedMinutes}:${formattedSeconds}`;
 };
