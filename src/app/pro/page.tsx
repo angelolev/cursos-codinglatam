@@ -26,15 +26,9 @@ const benefits = [
   },
   {
     icon: <Zap className="h-6 w-6 text-indigo-600" />,
-    title: "20% de Descuento en Todos los cursos",
+    title: "Acceso a TODOS los cursos",
     description:
-      "Obtén un descuento permanente en todos los cursos y materiales educativos.",
-  },
-  {
-    icon: <Calendar className="h-6 w-6 text-indigo-600" />,
-    title: "Acceso prioritario a eventos",
-    description:
-      "Tendrás tu lugar reservado en talleres en vivo y sesiones de mentoría.",
+      "Obtén acceso permanente a todos los cursos y materiales educativos.",
   },
   {
     icon: <BookOpen className="h-6 w-6 text-indigo-600" />,
@@ -49,14 +43,20 @@ const benefits = [
       "Tendrás respuestas más rápidas de los instructores y canales de soporte dedicados.",
   },
   {
+    icon: <Calendar className="h-6 w-6 text-indigo-600" />,
+    title: "Acceso prioritario a eventos",
+    description:
+      "Tendrás tu lugar reservado en talleres en vivo y sesiones de mentoría.",
+  },
+  {
     icon: <Users className="h-6 w-6 text-indigo-600" />,
-    title: "Acceso a la comunidad Pro",
+    title: "Sé parte de la comunidad Pro",
     description:
       "Serás parte del grupo exclusivo y tendrás oportunidades de networking.",
   },
   {
     icon: <Crown className="h-6 w-6 text-indigo-600" />,
-    title: "Acceso a mentorías",
+    title: "Participación en mentorías",
     description:
       "Mentorías grupales: recibe orientación directa y mejora tus proyectos con apoyo personalizado.",
   },
@@ -108,11 +108,9 @@ export default function ProPage() {
           </div>
           <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
             <div className="text-4xl font-bold text-indigo-600 mb-2">
-              Mentorías
+              Acceso Total
             </div>
-            <div className="text-gray-600">
-              Orientación directa en tus proyectos
-            </div>
+            <div className="text-gray-600">A TODOS los cursos y workshops</div>
           </div>
         </div>
 
