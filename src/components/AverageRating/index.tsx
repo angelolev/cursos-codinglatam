@@ -52,7 +52,7 @@ export async function AverageRating({ reviewId }: AverageRatingProps) {
 
   return (
     <div className="flex items-center gap-2 mb-3">
-      <div className="flex items-center gap-1">
+      <div className="flex items-center flex-wrap gap-1">
         {[...Array(fullStars)].map((_, i) => (
           <Star key={i} size={20} className="fill-yellow-500 text-yellow-500" />
         ))}
@@ -63,7 +63,7 @@ export async function AverageRating({ reviewId }: AverageRatingProps) {
           <Star key={`empty-${i}`} size={20} className="text-gray-400" />
         ))}
       </div>
-      <span className="text-yellow-500 font-medium">{rating}</span>
+      {/* <span className="text-yellow-500 font-medium">{rating}</span> */}
       <span className="text-gray-400">
         (
         {totalRatings === 1

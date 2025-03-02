@@ -14,6 +14,7 @@ import {
 import { VideoProps } from "@/types/video";
 import ActionButton from "@/components/ActionButton";
 import WatchButton from "@/components/WatchButton";
+import { AverageRating } from "@/components/AverageRating";
 
 type Params = Promise<{ slug: string }>;
 
@@ -89,13 +90,14 @@ export default async function CoursePage({ params }: { params: Params }) {
                 <h1 className="text-4xl font-bold text-white/90 ">
                   {course.title}
                 </h1>
+
                 {!course.available && (
                   <span className="bg-red-400 px-2 py-1 text-white/90">
                     {course.releaseDate}
                   </span>
                 )}
               </div>
-
+              <AverageRating reviewId={course.id} />
               <p className="text-xl text-white/80 mb-8">{course.description}</p>
               <div className="bg-white rounded-xl shadow-md p-6 mb-16">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -107,7 +109,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                       <Link
                         key={item.guid}
                         href={`/cursos/${course.slug}/clases/${item.guid}`}
-                        className="grid grid-cols-[20px_minmax(550px,_1fr)_1fr] gap-2 items-center"
+                        className="grid grid-cols-[20px_200px_60px] md:grid-cols-[20px_minmax(550px,_1fr)_1fr] gap-2 items-center"
                       >
                         <BookOpen size={20} className="text-indigo-600" />
                         <span>{item.title}</span>
