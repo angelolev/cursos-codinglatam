@@ -8,6 +8,7 @@ interface SubscriptionPlan {
   attributes: {
     name: string;
     price: number;
+    slug: string;
   };
 }
 
@@ -39,7 +40,9 @@ export default function Suscripcion() {
         <div key={plan.id}>
           <h2>{plan.attributes.name}</h2>
           <p>${plan.attributes.price / 100} per month</p>
-          <button onClick={() => handleCheckout(plan.id)}>Subscribe</button>
+          <button onClick={() => handleCheckout(plan.attributes.slug)}>
+            Subscribe
+          </button>
         </div>
       ))}
     </div>
