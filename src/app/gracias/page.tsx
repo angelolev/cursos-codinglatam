@@ -1,10 +1,10 @@
 // app/thank-you/page.tsx
 "use client"; // Mark as a Client Component
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function ThankYouPage() {
+function ThankYou() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -24,5 +24,13 @@ export default function ThankYouPage() {
       <h1>Thank You!</h1>
       <p>Your payment was successful. Welcome to the club!</p>
     </div>
+  );
+}
+
+export default function ThankYouPage() {
+  return (
+    <Suspense>
+      <ThankYou />
+    </Suspense>
   );
 }
