@@ -16,3 +16,21 @@ export interface CourseProps {
   hasAllClassesAvailable: boolean;
   length: number;
 }
+
+export interface LiveCourseProps {
+  title: string;
+  description: string;
+  available: boolean;
+  buyLink: string;
+  days: string;
+  demo: string;
+  discountPrice: number;
+  price: number;
+  figmaLink: string;
+  schedule: string;
+  startDate: string;
+  topics: string[];
+  image: string;
+  instructor: string;
+  temario: string;
+}

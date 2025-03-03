@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
-import { CourseProps } from "@/types/course";
+import { CourseProps, LiveCourseProps } from "@/types/course";
 import { db } from "@/utils/firebase";
 import { ProductProps } from "@/types/product";
 import { WorkshopProps } from "@/types/workshop";
@@ -275,3 +275,37 @@ export const formatTime = (seconds: number) => {
 
   return `${formattedMinutes}:${formattedSeconds}`;
 };
+
+export async function getLiveCourses(): Promise<LiveCourseProps[] | null> {
+  try {
+    const coursesCollection = collection(db, "liveCourses");
+    const querySnapshot = await getDocs(coursesCollection);
+    const coursesList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        available: data.available,
+        buyLink: data.buyLink,
+        price: data.price,
+        discountPrice: data.discountPrice,
+        thumbnail: data.thumbnail,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        schedule: data.schedule,
+        days: data.days,
+        demo: data.demo,
+        figmaLink: data.figmaLink,
+        topics: data.topics,
+        image: data.image,
+        instructor: data.instructor,
+        temario: data.temario,
+      };
+    });
+    return coursesList;
+  } catch (error) {
+    console.error("Failed to fetch live courses:", error);
+    return null;
+  }
+}

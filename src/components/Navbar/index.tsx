@@ -74,79 +74,89 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Menu */}
-          {session?.user ? (
-            <div className="hidden md:flex items-center gap-4 ">
-              <div className="relative">
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
-                >
-                  <div className="relative">
-                    <Image
-                      src={session?.user?.image || "/default-avatar.png"}
-                      alt={
-                        profileData?.name
-                          ? profileData?.name
-                          : session?.user?.email
-                      }
-                      width={36}
-                      height={36}
-                      className="rounded-full"
-                    />
-                  </div>
-                  {profileData?.name ? profileData?.name : session?.user?.email}
-                  <ChevronDown
-                    size={16}
-                    className={`transform transition-transform ${
-                      isMenuOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                {isMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50">
-                    <Link
-                      href="/perfil"
-                      className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
-                    >
-                      <Settings className="h-4 w-4 inline" />
-                      Mi perfil
-                    </Link>
-
-                    <button
-                      className="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-gray-50 transition-colors cursor-pointer"
-                      onClick={handleLogout}
-                    >
-                      <LogOut size={20} />
-                      <span>Salir</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-400 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-colors"
-            >
-              <LogIn className="h-4 w-4 mr-2" />
-              Ingresar
+          <div className="menu gap-12  flex items-center">
+            {/* <Link href="/proyectos" className="text-white/90">
+              Proyectos
+            </Link> */}
+            <Link href="/en-vivo" className="hidden md:block text-white/90">
+              Cursos en vivo
             </Link>
-          )}
+            {session?.user ? (
+              <div className="hidden md:flex items-center gap-4 ">
+                <div className="relative">
+                  <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="flex items-center gap-2 text-white/90 transition-colors cursor-pointer"
+                  >
+                    <div className="relative">
+                      <Image
+                        src={session?.user?.image || "/default-avatar.png"}
+                        alt={
+                          profileData?.name
+                            ? profileData?.name
+                            : session?.user?.email
+                        }
+                        width={36}
+                        height={36}
+                        className="rounded-full"
+                      />
+                    </div>
+                    {profileData?.name
+                      ? profileData?.name
+                      : session?.user?.email}
+                    <ChevronDown
+                      size={16}
+                      className={`transform transition-transform ${
+                        isMenuOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-          {/* Mobile Menu Button */}
-          {session?.user && (
-            <button
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X size={24} className="text-white" />
-              ) : (
-                <Menu size={24} className="text-white" />
-              )}
-            </button>
-          )}
+                  {isMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50">
+                      <Link
+                        href="/perfil"
+                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
+                      >
+                        <Settings className="h-4 w-4 inline" />
+                        Mi perfil
+                      </Link>
+
+                      <button
+                        className="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-gray-50 transition-colors cursor-pointer"
+                        onClick={handleLogout}
+                      >
+                        <LogOut size={20} />
+                        <span>Salir</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-400 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-colors"
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                Ingresar
+              </Link>
+            )}
+
+            {/* Mobile Menu Button */}
+            {session?.user && (
+              <button
+                className="md:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? (
+                  <X size={24} className="text-white" />
+                ) : (
+                  <Menu size={24} className="text-white" />
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

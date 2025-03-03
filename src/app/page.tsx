@@ -105,11 +105,7 @@ export default async function Home() {
           </div>
           <p className="text-center text-white/90 mt-10 text-xl">
             ¿Buscas cursos con <b>CLASES EN VIVO</b>?<br />
-            <Link
-              href="https://www.codinglatam.dev/cursos"
-              target="_blank"
-              className="text-indigo-400 underline"
-            >
+            <Link href="/en-vivo" className="text-indigo-400 underline">
               Inscríbete aquí
             </Link>
           </p>
