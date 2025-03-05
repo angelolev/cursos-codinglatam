@@ -10,6 +10,8 @@ import {
   Users,
 } from "lucide-react";
 import SubscriptionButton from "@/components/SubscriptionButton";
+import { auth } from "../auth";
+import { redirect } from "next/navigation";
 
 const benefits = [
   {
@@ -62,7 +64,14 @@ const benefits = [
   },
 ];
 
-export default function ProPage() {
+export default async function ProPage() {
+  const session = await auth();
+  const user = session?.user;
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
     <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
