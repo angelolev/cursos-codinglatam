@@ -63,7 +63,7 @@ export default function AdminDashboard() {
         const currentIsPremium = docSnap.data().isPremium;
         await updateDoc(docRef, {
           isPremium: !currentIsPremium,
-          premiumSince: newDate.setMonth(newDate.getMonth()),
+          premiumSince: newDate.setMonth(newDate.getMonth() + 1),
           updatedAt: newDate.setMonth(newDate.getMonth() + 1),
         });
       }

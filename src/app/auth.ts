@@ -22,15 +22,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         } else {
           token.isPremium = await isActivePatron(user?.email ?? "");
         }
-
-        // if (account?.provider === "google") {
-        //   const isPremiumUser = await isActivePatron(user?.email);
-        //   token.isPremium = isPremiumUser;
-        // }
-
-        // token.isPremium = profile?.sub
-        //   ? await fecthIsPremiumFirebase(profile.sub)
-        //   : false;
       }
       return token;
     },

@@ -27,6 +27,7 @@ interface FormData {
 export default function CompleteProfile() {
   const router = useRouter();
   const { data: session } = useSession();
+  const [isPremium, setIsPremium] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -38,11 +39,6 @@ export default function CompleteProfile() {
   });
 
   useEffect(() => {
-    // if (!user) {
-    //   router.push("/login");
-    //   return;
-    // }
-
     const fetchUserData = async () => {
       try {
         if (!session?.user?.aud) {
@@ -62,6 +58,7 @@ export default function CompleteProfile() {
             premiumSince: userData.premiumSince || null,
             updatedAt: userData.updatedAt || null,
           });
+          setIsPremium(userData.isPremium);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -200,14 +197,14 @@ export default function CompleteProfile() {
             <span className="text-sm text-gray-400">Suscripción:</span>
             <span
               className={
-                session?.user?.isPremium
+                isPremium
                   ? "bg-blue-500 text-white px-2 py-1 rounded-lg"
                   : "bg-green-500 text-white px-2 py-1 rounded-lg"
               }
             >
-              {session?.user?.isPremium ? "Pro" : "Gratuita"}
+              {isPremium ? "Pro" : "Gratuita"}
             </span>
-            {!session?.user?.isPremium && (
+            {!isPremium && (
               <Link
                 href="/pro"
                 className="text-indigo-500 underline underline-offset-4"

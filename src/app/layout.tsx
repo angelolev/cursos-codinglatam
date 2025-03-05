@@ -5,6 +5,7 @@ import WhastappButton from "@/components/WhastappButton";
 import Script from "next/script";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import { auth } from "./auth";
 
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
@@ -27,11 +28,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="es">
       <head>
@@ -51,7 +54,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`bg-light-black ${firaCode.className} relative`}>
-        <SessionProvider>
+        <SessionProvider session={session}>
           <Navbar />
 
           <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">

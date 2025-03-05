@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Check,
   Star,
@@ -10,6 +9,7 @@ import {
   MessageSquare,
   Users,
 } from "lucide-react";
+import SubscriptionButton from "@/components/SubscriptionButton";
 
 const benefits = [
   {
@@ -81,16 +81,7 @@ export default function ProPage() {
             desarrollador(a)
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              href="https://www.patreon.com/c/codinglatam/membership"
-              className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
-            >
-              <Crown className="h-5 w-5 mr-2" />
-              Quiero ser Pro
-            </Link>
-            {/* <button className="inline-flex items-center px-8 py-4 border-2 border-indigo-400 text-lg font-semibold rounded-lg text-white/90 hover:border-indigo-400 hover:bg-indigo-500 transition-colors">
-              View Pro Success Stories
-            </button> */}
+            <SubscriptionButton />
           </div>
         </div>
 
@@ -157,12 +148,7 @@ export default function ProPage() {
               </li>
             ))}
           </ul>
-          <Link
-            href="https://www.patreon.com/c/codinglatam/membership"
-            className="w-full bg-indigo-600 text-white px-8 py-4 rounded-lg flex items-center text-lg font-semibold hover:bg-indigo-700 transition-colors"
-          >
-            <Crown className="h-5 w-5 mr-2" /> Quiero ser Pro
-          </Link>
+          <SubscriptionButton />
           <p className="text-sm text-gray-500 mt-8">
             Garantía de devolución de dinero de 30 días. Sin preguntas.
           </p>
@@ -195,12 +181,7 @@ export default function ProPage() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href="https://www.patreon.com/c/codinglatam/membership"
-                className="w-full bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors"
-              >
-                Convertirme en Pro
-              </Link>
+              <SubscriptionButton />
               <p className="text-sm text-gray-500 mt-8">
                 Garantía de devolución de dinero de 30 días. Sin preguntas.
               </p>

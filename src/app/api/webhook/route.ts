@@ -37,13 +37,15 @@ export async function POST(request: Request) {
       break;
     case "subscription_cancelled":
       // Handle subscription cancellation
+      await updateUserPremiumStatus(userEmail, false);
       console.log("Subscription cancelled:", payload.data);
       break;
     default:
       break;
   }
 
-  return NextResponse.json({ success: true });
+  const redirectUrl = "https://cursos.codinglatam.dev/gracias";
+  return NextResponse.redirect(redirectUrl, 303);
 }
 
 async function updateUserPremiumStatus(userEmail: string, isPremium: boolean) {

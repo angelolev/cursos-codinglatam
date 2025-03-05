@@ -103,7 +103,7 @@ export function Navbar() {
                     </div>
                     {profileData?.name
                       ? profileData?.name
-                      : session?.user?.email}
+                      : session?.user?.name}
                     <ChevronDown
                       size={16}
                       className={`transform transition-transform ${
@@ -179,7 +179,7 @@ export function Navbar() {
                     className="rounded-full"
                   />
                 </div>
-                {profileData?.name ? profileData?.name : session?.user?.email}
+                {profileData?.name ? profileData?.name : session?.user?.name}
               </div>
             )}
 
