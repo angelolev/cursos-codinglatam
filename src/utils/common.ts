@@ -3,7 +3,8 @@ import { CourseProps, LiveCourseProps } from "@/types/course";
 import { db } from "@/utils/firebase";
 import { ProductProps } from "@/types/product";
 import { WorkshopProps } from "@/types/workshop";
-import { ProjectCommentsProps, ProjectProps } from "@/types/project";
+import { ProjectProps } from "@/types/project";
+import { ProjectCommentsProps } from "@/types/project-comments";
 
 export async function getCourseBySlug(
   slug: string
