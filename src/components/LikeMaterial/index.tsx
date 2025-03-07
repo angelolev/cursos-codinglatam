@@ -4,10 +4,15 @@ import LikeIcon from "../LikeIcon";
 
 interface LikeMaterialProps {
   guid: string;
-  label: string;
+  label?: string;
+  color: string;
 }
 
-export default function LikeMaterial({ guid, label }: LikeMaterialProps) {
+export default function LikeMaterial({
+  guid,
+  label,
+  color,
+}: LikeMaterialProps) {
   const { data: session } = useSession();
 
   if (!session?.user) {
@@ -16,8 +21,8 @@ export default function LikeMaterial({ guid, label }: LikeMaterialProps) {
 
   return (
     <div className="like flex items-center gap-2">
-      <span className="text-white/90">{label}</span>
-      <LikeIcon classId={guid} />
+      {label && <span className="text-white/90">{label}</span>}
+      <LikeIcon color={color} classId={guid} />
     </div>
   );
 }

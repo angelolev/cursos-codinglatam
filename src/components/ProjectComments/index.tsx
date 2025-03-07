@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { ProjectCommentsProps } from "@/types/project-comments";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/utils/firebase";
+import LikeMaterial from "../LikeMaterial";
 
 interface ProjectComments {
   projectId: string;
@@ -133,7 +134,7 @@ export default function ProjectComments({
       <div className="space-y-8">
         {comments.map((comment) => (
           <div key={comment.id} className="bg-white rounded-xl shadow-md p-6">
-            <div className="flex items-start">
+            <div className="flex items-start gap-2">
               <Image
                 src={comment.user.image}
                 alt={comment.user.name}
@@ -161,6 +162,7 @@ export default function ProjectComments({
                   Ver en Github
                 </a>
               </div>
+              <LikeMaterial color="a5a5a5" guid={comment.id} />
             </div>
           </div>
         ))}

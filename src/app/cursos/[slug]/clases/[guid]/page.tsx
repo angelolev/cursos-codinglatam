@@ -89,7 +89,11 @@ export default async function Page({ params }: { params: Params }) {
             <h1 className="text-2xl font-bold text-primary-300">
               {video.title}
             </h1>
-            <LikeMaterial guid={guid} label="¿Te gustó esta clase?" />
+            <LikeMaterial
+              color="fff"
+              guid={guid}
+              label="¿Te gustó esta clase?"
+            />
           </div>
 
           {video.metaTags.map((item: IMetatag) => (
