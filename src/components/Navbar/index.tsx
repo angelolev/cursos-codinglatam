@@ -6,7 +6,6 @@ import {
   LogOut,
   LogIn,
   Settings,
-  User,
   ChevronDown,
   Rocket,
   Play,
@@ -23,7 +22,6 @@ import Image from "next/image";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [profileData, setProfileData] = useState<DocumentData | null>(null);
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -48,7 +46,6 @@ export function Navbar() {
 
   useEffect(() => {
     setIsMenuOpen(false);
-    setIsSettingsOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -79,7 +76,7 @@ export function Navbar() {
           <div className="menu gap-12  flex items-center">
             <Link
               href="/proyectos"
-              className="text-white/90 flex gap-2 items-center"
+              className="hidden text-white/90 md:flex gap-2 items-center"
             >
               <Rocket size={18} />
               Proyectos
@@ -174,6 +171,20 @@ export function Navbar() {
       {session?.user && isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
+            <Link
+              href="/proyectos"
+              className="text-gray-700 border-b flex py-2 px-3 gap-2 items-center"
+            >
+              <Rocket size={18} />
+              Proyectos
+            </Link>
+            <Link
+              href="/en-vivo"
+              className="text-gray-700 border-b flex py-2 px-3 items-center gap-2"
+            >
+              <Play size={18} />
+              Cursos en vivo
+            </Link>
             {session?.user && (
               <div className="px-3 py-2 text-gray-700 border-b flex items-center gap-2">
                 <div className="relative">
@@ -193,32 +204,13 @@ export function Navbar() {
               </div>
             )}
 
-            <button
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
-              onClick={() => {
-                setIsSettingsOpen(!isSettingsOpen);
-              }}
+            <Link
+              href="/perfil"
+              className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
             >
-              <User className="h-4 w-4 inline mr-2" />
-              Mi Perfil
-              <ChevronDown
-                size={16}
-                className={`ml-2 transform transition-transform ${
-                  isSettingsOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-            {isSettingsOpen && (
-              <div className="bg-white py-1">
-                <Link
-                  href="/perfil"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
-                >
-                  <Settings className="h-4 w-4 inline mx-3" />
-                  Completar perfil
-                </Link>
-              </div>
-            )}
+              <Settings className="h-4 w-4 inline" />
+              Mi perfil
+            </Link>
             <button
               className="w-full mt-2 flex items-center px-3 py-2 text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50"
               onClick={handleLogout}

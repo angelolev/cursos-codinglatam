@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Github } from "lucide-react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { ProjectCommentsProps } from "@/types/project-comments";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 
 interface ProjectComments {
   projectId: string;
@@ -12,13 +14,40 @@ interface ProjectComments {
 
 export default function ProjectComments({
   projectId,
-  comments,
+  comments: initialComments,
 }: ProjectComments) {
   const { data: session } = useSession();
   const [newComment, setNewComment] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [newGithubLink, setNewGithubLink] = useState<string>("");
+  const [comments, setComments] =
+    useState<ProjectCommentsProps[]>(initialComments);
+
+  // Listen for real-time updates
+  useEffect(() => {
+    const q = query(
+      collection(db, "communityProjects"),
+      where("projectId", "==", projectId)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const updatedComments: ProjectCommentsProps[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        updatedComments.push({
+          id: doc.id,
+          ...data,
+          timestamp: data.timestamp.toDate(), // Convert Firestore Timestamp to Date
+        } as ProjectCommentsProps);
+      });
+      setComments(updatedComments);
+    });
+
+    return () => unsubscribe(); // Cleanup on unmount
+  }, [projectId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setIsLoading(true);
     e.preventDefault();
     setNewComment("");
     setNewGithubLink("");
@@ -43,6 +72,8 @@ export default function ProjectComments({
       console.log(result);
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -92,7 +123,8 @@ export default function ProjectComments({
         </div>
         <button
           type="submit"
-          className="bg-primary-300 text-white px-4 py-2 rounded-md hover:bg-primary-400 transition-colors cursor-pointer"
+          className="bg-primary-300 text-white px-4 py-2 rounded-md hover:bg-primary-400 transition-colors cursor-pointer disabled:bg-gray-400"
+          disabled={isLoading}
         >
           Compartir proyecto
         </button>
