@@ -8,6 +8,8 @@ import {
   Settings,
   User,
   ChevronDown,
+  Rocket,
+  Play,
 } from "lucide-react";
 import Logo from "../Logo";
 import Link from "next/link";
@@ -75,10 +77,18 @@ export function Navbar() {
 
           {/* Desktop Menu */}
           <div className="menu gap-12  flex items-center">
-            {/* <Link href="/proyectos" className="text-white/90">
+            <Link
+              href="/proyectos"
+              className="text-white/90 flex gap-2 items-center"
+            >
+              <Rocket size={18} />
               Proyectos
-            </Link> */}
-            <Link href="/en-vivo" className="hidden md:block text-white/90">
+            </Link>
+            <Link
+              href="/en-vivo"
+              className="hidden text-white/90 md:flex items-center gap-2"
+            >
+              <Play size={18} />
               Cursos en vivo
             </Link>
             {session?.user ? (

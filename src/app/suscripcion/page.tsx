@@ -19,16 +19,16 @@ export default function Suscripcion() {
     const fetchPlans = async () => {
       const response = await fetch("/api/subscriptions/plans");
       const data = await response.json();
-      console.log(data, "data");
       setPlans(data.data);
     };
     fetchPlans();
   }, []);
 
   const handleCheckout = (variantId: string) => {
-    const checkoutUrl = `https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/${variantId}?redirect_url=${encodeURIComponent(
-      "https://cursos.codinglatam.dev/gracias"
-    )}`;
+    // const checkoutUrl = `https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/${variantId}
+    // )}`;
+    const checkoutUrl =
+      "https://cursoscodinglatam.lemonsqueezy.com/buy/a2879d33-3520-4515-8733-65f92fc9222a";
 
     window.location.href = checkoutUrl;
   };

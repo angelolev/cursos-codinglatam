@@ -3,6 +3,7 @@ import { CourseProps, LiveCourseProps } from "@/types/course";
 import { db } from "@/utils/firebase";
 import { ProductProps } from "@/types/product";
 import { WorkshopProps } from "@/types/workshop";
+import { ProjectCommentsProps, ProjectProps } from "@/types/project";
 
 export async function getCourseBySlug(
   slug: string
@@ -307,5 +308,89 @@ export async function getLiveCourses(): Promise<LiveCourseProps[] | null> {
   } catch (error) {
     console.error("Failed to fetch live courses:", error);
     return null;
+  }
+}
+
+export async function getProjects(): Promise<ProjectProps[] | null> {
+  try {
+    const projectsCollection = collection(db, "projects");
+    const querySnapshot = await getDocs(projectsCollection);
+    const projectsList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        image: data.image,
+        duration: data.duration,
+        difficulty: data.difficulty,
+        stack: data.stack,
+        longDescription: data.longDescription,
+        features: data.features,
+        figmaLink: data.figmaLink,
+        slug: data.slug,
+      };
+    });
+    return projectsList;
+  } catch (error) {
+    console.error("Failed to fetch live courses:", error);
+    return null;
+  }
+}
+
+export async function getProjectBySlug(
+  slug: string
+): Promise<ProjectProps | null> {
+  try {
+    // Query to find course by slug
+    const projectsRef = collection(db, "projects");
+    const q = query(projectsRef);
+
+    const querySnapshot = await getDocs(q);
+
+    // Find the course with matching slug
+    const projectDoc = querySnapshot.docs.find(
+      (doc) => doc.data().slug === slug
+    );
+
+    if (!projectDoc) return null;
+
+    return {
+      id: projectDoc.id,
+      ...projectDoc.data(),
+    } as ProjectProps;
+  } catch (error) {
+    console.error("Failed to fetch project:", error);
+    return null;
+  }
+}
+
+export async function getProjectComments(
+  projectId: string
+): Promise<ProjectCommentsProps[]> {
+  try {
+    const projectCommentsRef = collection(db, "communityProjects");
+
+    const q = query(projectCommentsRef, where("projectId", "==", projectId));
+
+    const querySnapshot = await getDocs(q);
+
+    const projectComments: ProjectCommentsProps[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      projectComments.push({
+        id: doc.id, // Include the document ID
+        comment: data.comment,
+        githubLink: data.githubLink,
+        projectId: data.projectId,
+        user: data.user,
+        timestamp: data.timestamp.toDate(), // Convert Firestore Timestamp to JavaScript Date
+      });
+    });
+
+    return projectComments;
+  } catch (error) {
+    console.error("Error fetching comments: ", error);
+    throw new Error("Failed to fetch comments");
   }
 }

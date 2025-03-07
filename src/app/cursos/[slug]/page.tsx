@@ -109,7 +109,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                       <Link
                         key={item.guid}
                         href={`/cursos/${course.slug}/clases/${item.guid}`}
-                        className="grid grid-cols-[20px_200px_60px] md:grid-cols-[20px_minmax(550px,_1fr)_1fr] gap-2 items-center"
+                        className="grid grid-cols-[20px_1fr_60px] md:grid-cols-[20px_minmax(550px,_1fr)_1fr] gap-2 items-center"
                       >
                         <BookOpen size={20} className="text-indigo-600" />
                         <span>{item.title}</span>
