@@ -370,7 +370,7 @@ export async function getProjectComments(
   projectId: string
 ): Promise<ProjectCommentsProps[]> {
   try {
-    const projectCommentsRef = collection(db, "communityProjects");
+    const projectCommentsRef = collection(db, "projectsComments");
 
     const q = query(projectCommentsRef, where("projectId", "==", projectId));
 

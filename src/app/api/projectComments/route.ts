@@ -13,12 +13,10 @@ interface RequestBody {
 
 export async function POST(request: Request) {
   try {
-    // Parse the request body
     const { projectId, user, comment, githubLink }: RequestBody =
       await request.json();
 
-    // Add a new document to the "contacts" collection
-    const docRef = await addDoc(collection(db, "communityProjects"), {
+    const docRef = await addDoc(collection(db, "projectsComments"), {
       projectId,
       user,
       comment,
@@ -26,7 +24,6 @@ export async function POST(request: Request) {
       timestamp: new Date(),
     });
 
-    // Return a success response
     return NextResponse.json(
       { id: docRef.id, message: "Document added successfully" },
       { status: 200 }
