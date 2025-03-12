@@ -68,9 +68,9 @@ export default async function ProjectDetail({ params }: { params: Params }) {
             <Image
               src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt={project.title}
-              className="w-full h-96 object-cover rounded-xl mb-8"
+              className="w-full h-80 object-cover rounded-xl mb-8"
               width={800}
-              height={300}
+              height={200}
             />
             <h1 className="text-4xl font-bold text-white/90 mb-4">
               {project.title}

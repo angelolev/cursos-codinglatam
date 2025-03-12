@@ -5,13 +5,13 @@ import LikeIcon from "../LikeIcon";
 interface LikeMaterialProps {
   guid: string;
   label?: string;
-  color: string;
+  color?: string;
 }
 
 export default function LikeMaterial({
   guid,
   label,
-  color,
+  color = "fff",
 }: LikeMaterialProps) {
   const { data: session } = useSession();
 
