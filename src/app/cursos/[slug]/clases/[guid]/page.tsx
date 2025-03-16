@@ -1,9 +1,10 @@
 import { AddComment } from "@/components/AddComment";
+import BackButton from "@/components/buttons/BackButton";
 import { Comments } from "@/components/Comments";
 import LikeMaterial from "@/components/LikeMaterial";
 import Resources from "@/components/Resources";
 import { getVideosFromCollection } from "@/utils/common";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 type Params = Promise<{ guid: string; slug: string }>;
@@ -102,13 +103,8 @@ export default async function Page({ params }: { params: Params }) {
             </p>
           ))}
           <div className="mt-6 flex justify-between flex-wrap">
-            <Link
-              href={`/cursos/${slug}`}
-              className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver al curso
-            </Link>
+            <BackButton href={`/cursos/${slug}`} label="Volver al curso" />
+
             {nextVideo && (
               <Link
                 href={`/cursos/${slug}/clases/${nextVideo?.guid}`}

@@ -2,12 +2,12 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/utils/common";
-import Link from "next/link";
-import { ArrowLeft, Book } from "lucide-react";
+import { Book } from "lucide-react";
 import Image from "next/image";
 import { AddReview } from "@/components/AddReview";
 import { Reviews } from "@/components/Reviews";
-import ValidAccessButton from "@/components/ValidAccessButton";
+import ValidAccessButton from "@/components/buttons/ValidAccessButton";
+import BackButton from "@/components/buttons/BackButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -36,13 +36,7 @@ export default async function ProductPage({ params }: { params: Params }) {
   return (
     <div className="px-4 sm:px-0">
       <div className="max-w-7xl mx-auto">
-        <Link
-          href="/"
-          className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Volver
-        </Link>
+        <BackButton />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">

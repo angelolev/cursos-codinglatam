@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
-import { ArrowLeft, Clock, BookOpen, Award } from "lucide-react";
+import { Clock, BookOpen, Award } from "lucide-react";
 import { db } from "@/utils/firebase";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,9 +12,10 @@ import {
   getVideosFromCollection,
 } from "@/utils/common";
 import { VideoProps } from "@/types/video";
-import ActionButton from "@/components/ActionButton";
-import WatchButton from "@/components/WatchButton";
+import ActionButton from "@/components/buttons/ActionButton";
+import WatchButton from "@/components/buttons/WatchButton";
 import { AverageRating } from "@/components/AverageRating";
+import BackButton from "@/components/buttons/BackButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -68,13 +69,7 @@ export default async function CoursePage({ params }: { params: Params }) {
     <div className="container max-w-7xl mx-auto px-0 pt-0 pb-8">
       <div className="pt-0">
         <div className="max-w-7xl mx-auto">
-          <Link
-            href="/"
-            className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver a los cursos
-          </Link>
+          <BackButton label="Volver a los cursos" />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">

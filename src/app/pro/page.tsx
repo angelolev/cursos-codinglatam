@@ -9,7 +9,7 @@ import {
   MessageSquare,
   Users,
 } from "lucide-react";
-import SubscriptionButton from "@/components/SubscriptionButton";
+import SubscriptionButton from "@/components/buttons/SubscriptionButton";
 import { auth } from "../auth";
 import { redirect } from "next/navigation";
 
@@ -147,7 +147,7 @@ export default async function ProPage() {
             </h3>
           </div>
           <div className="text-5xl font-bold text-gray-900 text-center mb-6">
-            $8<span className="text-xl text-gray-500">/mes</span>
+            $4.99<span className="text-xl text-gray-500">/mes</span>
           </div>
           <ul className="space-y-4 mb-8 text-left max-w-md mx-auto">
             {benefits.map((benefit, index) => (
@@ -180,7 +180,7 @@ export default async function ProPage() {
                 </h3>
               </div>
               <div className="text-5xl font-bold text-gray-900 mb-6">
-                $8<span className="text-xl text-gray-500">/mes</span>
+                $4.99<span className="text-xl text-gray-500">/mes</span>
               </div>
               <ul className="space-y-4 mb-8 text-left max-w-md mx-auto">
                 {benefits.map((benefit, index) => (

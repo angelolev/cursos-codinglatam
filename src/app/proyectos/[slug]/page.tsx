@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowLeft, Clock, Wrench, Code2, Layers } from "lucide-react";
+import { Clock, Wrench, Code2, Layers } from "lucide-react";
 import Link from "next/link";
 import { getProjectBySlug, getProjectComments } from "@/utils/common";
 import { collection, getDocs } from "firebase/firestore";
@@ -8,6 +8,7 @@ import Image from "next/image";
 import ProjectComments from "@/components/ProjectComments";
 import { auth } from "@/app/auth";
 import { redirect } from "next/navigation";
+import BackButton from "@/components/buttons/BackButton";
 
 type Params = Promise<{ slug: string }>;
 
@@ -37,15 +38,10 @@ export default async function ProjectDetail({ params }: { params: Params }) {
   if (!project) {
     return (
       <div className="pt-24 px-4 text-center">
-        <h2 className="text-2xl font-bold text-white/90">
+        <h2 className="text-2xl font-bold text-white/90 mb-6">
           Proyecto no encontrado
         </h2>
-        <Link
-          href="/proyectos"
-          className="text-indigo-400 hover:text-indigo-500 mt-4 inline-block"
-        >
-          Volver a proyectos
-        </Link>
+        <BackButton href="/proyectos" label="Volver a proyectos" />
       </div>
     );
   }
@@ -55,13 +51,7 @@ export default async function ProjectDetail({ params }: { params: Params }) {
   return (
     <div className="pb-16 px-4 sm:px-0">
       <div className="max-w-7xl mx-auto">
-        <Link
-          href="/proyectos"
-          className="inline-flex items-center text-indigo-400 hover:text-indigo-500 mb-8"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Volver a proyectos
-        </Link>
+        <BackButton href="/proyectos" label="Volver a proyectos" />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">

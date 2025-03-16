@@ -12,16 +12,18 @@ export async function getCourseBySlug(
   try {
     // Query to find course by slug
     const coursesRef = collection(db, "courses");
-    const q = query(coursesRef);
+    const q = query(coursesRef, where("slug", "==", slug));
 
     const querySnapshot = await getDocs(q);
 
-    // Find the course with matching slug
-    const courseDoc = querySnapshot.docs.find(
-      (doc) => doc.data().slug === slug
-    );
+    // Check if any course matches the slug
+    if (querySnapshot.empty) {
+      console.warn(`No course found with slug: ${slug}`);
+      return null;
+    }
 
-    if (!courseDoc) return null;
+    // Assuming slugs are unique, get the first matching document
+    const courseDoc = querySnapshot.docs[0];
 
     return {
       id: courseDoc.id,
@@ -29,6 +31,7 @@ export async function getCourseBySlug(
     } as CourseProps;
   } catch (error) {
     console.error("Failed to fetch course:", error);
+    throw new Error(`Failed to fetch course with slug: ${slug}`);
     return null;
   }
 }

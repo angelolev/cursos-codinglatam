@@ -1,8 +1,7 @@
 import { AddComment } from "@/components/AddComment";
+import BackButton from "@/components/buttons/BackButton";
 import { Comments } from "@/components/Comments";
 import LikeMaterial from "@/components/LikeMaterial";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 
 type Params = Promise<{ guid: string; slug: string }>;
 
@@ -84,13 +83,7 @@ export default async function Page({ params }: { params: Params }) {
             </p>
           ))}
           <div className="mt-6">
-            <Link
-              href={`/workshops/${slug}`}
-              className="inline-flex items-center text-indigo-400 font-bold hover:text-indigo-500 mb-8"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver
-            </Link>
+            <BackButton href={`/workshops/${slug}`} />
           </div>
         </div>
       </div>
