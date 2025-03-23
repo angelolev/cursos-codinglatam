@@ -6,7 +6,7 @@ import Script from "next/script";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "./auth";
-
+import Footer from "@/components/Footer";
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -53,13 +53,16 @@ export default async function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`bg-light-black ${firaCode.className} relative`}>
+      <body
+        className={`bg-light-black ${firaCode.className} relative min-h-screen flex flex-col`}
+      >
         <SessionProvider session={session}>
           <Navbar />
 
-          <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0">
+          <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
             {children}
           </main>
+          <Footer />
         </SessionProvider>
         <div className="bg-white rounded-full max-w-16 fixed w-full bottom-5 right-4">
           <WhastappButton />

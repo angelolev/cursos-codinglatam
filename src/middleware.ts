@@ -15,8 +15,9 @@ export default auth((req) => {
       return null;
     }
     // Redirect to login for all other protected routes
-
-    return Response.redirect(new URL("/login", req.nextUrl.origin));
+    const loginUrl = new URL("/login", req.nextUrl.origin);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return Response.redirect(loginUrl);
   } else {
     if (!req.auth?.user?.isPremium) {
       // Redirect non-premium users to upgrade page or show premium required message
