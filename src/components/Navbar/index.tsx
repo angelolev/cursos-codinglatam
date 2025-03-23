@@ -39,7 +39,7 @@ export function Navbar() {
     }).then((result) => {
       if (result.isConfirmed) {
         setIsMenuOpen(!isMenuOpen);
-        signOut({ redirectTo: "/login" });
+        signOut({ redirectTo: "/" });
       }
     });
   };
@@ -108,9 +108,12 @@ export function Navbar() {
                         className="rounded-full"
                       />
                     </div>
-                    {profileData?.name
-                      ? profileData?.name
-                      : session?.user?.name}
+                    <span className="hidden lg:block">
+                      {profileData?.name
+                        ? profileData?.name
+                        : session?.user?.name}
+                    </span>
+
                     <ChevronDown
                       size={16}
                       className={`transform transition-transform ${

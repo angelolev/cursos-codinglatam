@@ -1,14 +1,17 @@
 "use client";
 import LogoDark from "@/components/LogoDark";
 import GoogleIcon from "@/components/GoogleIcon";
-/* import { Github } from "lucide-react"; */
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const handleLogin = async (provider: string) => {
     try {
       await signIn(`${provider}`, {
-        redirectTo: "/",
+        redirectTo: callbackUrl,
       });
     } catch (error) {
       console.error("Sign in failed:", error);
