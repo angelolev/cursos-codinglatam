@@ -39,7 +39,7 @@ export default async function Pricing() {
     },
     {
       name: "Equipos",
-      price: 99,
+      price: 39.99,
       description: "Para equipos de hasta 5 desarrolladores",
       href: "https://wa.link/dnyqus",
       features: [
