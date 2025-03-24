@@ -1,9 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Calendar, Clock, FileText, Play } from "lucide-react";
+import { Calendar, Clock, FileText, Play, ChevronDown } from "lucide-react";
 import { LiveCourseProps } from "@/types/course";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  CurrencyType,
+  formatPrice,
+  RATES,
+} from "../live-courses/utils/format-price";
+import { USFlag } from "../live-courses/components/USFlag";
+import { PEFlag } from "../live-courses/components/PEFlag";
+import { MXFlag } from "../live-courses/components/MXFlag";
+import { CLFlag } from "../live-courses/components/CLFlag";
+import { COFlag } from "../live-courses/components/COFlag";
 
 interface CountdownResult {
   days: number;
@@ -62,7 +72,26 @@ export function LiveCourseCard({
   temario,
   slug,
 }: LiveCourseProps) {
+  const [currency, setCurrency] = useState<CurrencyType>("USD");
+  const [isOpen, setIsOpen] = useState(false);
   const countdown = useCountdown(startDate);
+
+  // Helper function to get flag component
+  const getFlagComponent = (curr: CurrencyType) => {
+    switch (curr) {
+      case "USD":
+        return <USFlag />;
+      case "PEN":
+        return <PEFlag />;
+      case "MXN":
+        return <MXFlag />;
+      case "CLP":
+        return <CLFlag />;
+      case "COP":
+        return <COFlag />;
+    }
+  };
+
   const startDateFormatted = new Date(startDate).toLocaleDateString("es-PE", {
     year: "numeric",
     month: "long",
@@ -151,19 +180,57 @@ export function LiveCourseCard({
           </div>
         </div>
 
-        {/* Price */}
+        {/* Price and Currency Selector */}
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <span className="text-2xl font-bold text-gray-900">
-              ${discountPrice}
-            </span>
-            {price > discountPrice && (
-              <span className="text-sm text-gray-500 line-through ml-2">
-                ${price}
+          <div className="flex flex-col">
+            <div className="mb-2">
+              <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center bg-gray-100 text-gray-800 border border-gray-200 rounded-lg px-2 py-1 text-sm"
+              >
+                {getFlagComponent(currency)}
+                <span>{currency}</span>
+                <ChevronDown
+                  className={`w-4 h-4 ml-1 transition-transform duration-200 ${
+                    isOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isOpen && (
+                <div className="absolute z-10 mt-1 w-28 bg-white rounded-lg shadow-lg overflow-hidden">
+                  {(Object.keys(RATES) as CurrencyType[]).map((curr) => (
+                    <button
+                      key={curr}
+                      type="button"
+                      onClick={() => {
+                        setCurrency(curr);
+                        setIsOpen(false);
+                      }}
+                      className="flex items-center w-full px-3 py-2 hover:bg-gray-100 text-gray-700"
+                    >
+                      {getFlagComponent(curr)}
+                      <span>{curr}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="flex flex-wrap flex-col">
+              <span className="text-3xl font-bold text-gray-900">
+                {formatPrice(discountPrice, currency)}
               </span>
-            )}
+              {price > discountPrice && (
+                <span className="text-lg text-gray-500 line-through ml-2">
+                  {formatPrice(price, currency)}
+                </span>
+              )}
+            </div>
           </div>
-          <span className="text-sm text-gray-600">Por {instructor}</span>
+          <span className="text-sm text-gray-600 hidden lg:inline">
+            Por {instructor}
+          </span>
         </div>
 
         {/* Actions */}

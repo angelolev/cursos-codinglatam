@@ -10,11 +10,11 @@ import {
   CheckCircle2,
   Code2,
   Rocket,
-  Star,
 } from "lucide-react";
 import Image from "next/image";
 import instructorImage from "@/assets/angelo.jpeg";
 import projectImage from "@/assets/project.png";
+import { Pricing } from "@/components/live-courses/components/Pricing";
 
 type Params = Promise<{ slug: string }>;
 
@@ -238,96 +238,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
         </div>
 
         {/* Pricing and Schedule */}
-        <div className="mb-24">
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl overflow-hidden">
-            <div className="px-8 py-12 sm:px-16 sm:py-16">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">
-                      Detalles del curso
-                    </h3>
-                    <div className="space-y-4 text-white">
-                      <div className="flex items-center">
-                        <Calendar className="h-5 w-5 mr-3" />
-                        <span>
-                          Inicia{" "}
-                          {new Date(course.startDate).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="h-5 w-5 mr-3" />
-                        <span>{course.schedule}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Star className="h-5 w-5 mr-3" />
-                        <span>{course.days}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-white">
-                    <div className="text-6xl font-bold mb-2">
-                      ${course.discountPrice}
-                      {course.price > course.discountPrice && (
-                        <span className="text-2xl line-through ml-3 text-white/70">
-                          ${course.price}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-white/80 mb-8">
-                      Un solo pago, acceso permanente
-                    </p>
-                    <div className="space-y-4">
-                      <a
-                        href={course.buyLink}
-                        className="block w-full bg-white text-indigo-600 text-center px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Inscribirme ahora
-                      </a>
-                      <a
-                        href={course.demo}
-                        className="block w-full border-2 border-white text-white text-center px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Ver testimonios
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                  <h3 className="text-xl font-bold text-white mb-6">
-                    Qué incluye
-                  </h3>
-                  <ul className="space-y-4">
-                    <li className="flex items-center text-white">
-                      <CheckCircle2 className="h-5 w-5 mr-3" />
-                      Sesiones interactivas en vivo
-                    </li>
-                    <li className="flex items-center text-white">
-                      <CheckCircle2 className="h-5 w-5 mr-3" />
-                      Código fuente del proyecto
-                    </li>
-                    <li className="flex items-center text-white">
-                      <CheckCircle2 className="h-5 w-5 mr-3" />
-                      Acceso privado al grupo de Whatsapp
-                    </li>
-                    <li className="flex items-center text-white">
-                      <CheckCircle2 className="h-5 w-5 mr-3" />
-                      Grabaciones de sesiones
-                    </li>
-                    <li className="flex items-center text-white">
-                      <CheckCircle2 className="h-5 w-5 mr-3" />
-                      Certificado de finalización
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Pricing course={course} />
 
         {/* Author Bio */}
         <div className="mb-24">
@@ -354,7 +265,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
                 </p>
 
                 <p className="mt-4 text-black/70">
-                  Tengo más de 8 años de experiencia laboral en empresas de
+                  Tengo más de 9 años de experiencia laboral en empresas de
                   tecnología, startups locales y extranjeras. Creo contenido en
                   redes sociales sobre programación.
                 </p>
