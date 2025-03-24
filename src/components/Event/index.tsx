@@ -35,14 +35,14 @@ const currentEvents: Event[] = [
     date: "22 Abr",
     href: "/en-vivo/nextjs",
   },
-  // {
-  //   id: "4",
-  //   title: "Curso: De 0 a React EN VIVO",
-  //   description:
-  //     "Domina la biblioteca más popular del front-end y construye aplicaciones web dinámicas.",
-  //   date: "05 Feb",
-  //   href: "https://www.codinglatam.dev/cursos/react",
-  // },
+  {
+    id: "4",
+    title: "Curso: De 0 a React EN VIVO",
+    description:
+      "Domina la biblioteca más popular del front-end y construye aplicaciones web dinámicas.",
+    date: "23 Abr",
+    href: "/en-vivo/react",
+  },
   // {
   //   id: "5",
   //   title: "Portafolios que Contratan: Aprende a Destacar como Dev",
