@@ -36,6 +36,36 @@ export async function getCourseBySlug(
   }
 }
 
+export async function getLiveCourseBySlug(
+  slug: string
+): Promise<LiveCourseProps | null> {
+  try {
+    // Query to find course by slug
+    const coursesRef = collection(db, "liveCourses");
+    const q = query(coursesRef, where("slug", "==", slug));
+
+    const querySnapshot = await getDocs(q);
+
+    // Check if any course matches the slug
+    if (querySnapshot.empty) {
+      console.warn(`No course found with slug: ${slug}`);
+      return null;
+    }
+
+    // Assuming slugs are unique, get the first matching document
+    const courseDoc = querySnapshot.docs[0];
+
+    return {
+      id: courseDoc.id,
+      ...courseDoc.data(),
+    } as LiveCourseProps;
+  } catch (error) {
+    console.error("Failed to fetch course:", error);
+    throw new Error(`Failed to fetch course with slug: ${slug}`);
+    return null;
+  }
+}
+
 export const orderVideosByTitle = (videos: CourseProps[]) => {
   const orderedVideos = videos.sort((a: CourseProps, b: CourseProps) => {
     const matchA = a.title.match(/^\d+/);
@@ -306,6 +336,8 @@ export async function getLiveCourses(): Promise<LiveCourseProps[] | null> {
         image: data.image,
         instructor: data.instructor,
         temario: data.temario,
+        slug: data.slug,
+        project: data.project,
       };
     });
     return coursesList;

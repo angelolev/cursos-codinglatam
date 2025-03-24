@@ -17,7 +17,13 @@ export interface CourseProps {
   length: number;
 }
 
+interface CourseProjectProps {
+  title: string;
+  ideas: string[];
+}
 export interface LiveCourseProps {
+  id: string;
+  slug: string;
   title: string;
   description: string;
   available: boolean;
@@ -33,4 +39,5 @@ export interface LiveCourseProps {
   image: string;
   instructor: string;
   temario: string;
+  project: CourseProjectProps;
 }

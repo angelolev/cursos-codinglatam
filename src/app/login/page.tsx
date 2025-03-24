@@ -19,7 +19,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center pt-48">
+    <main className=" mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow flex items-center justify-center pt-24">
       <div className="bg-white p-8 rounded shadow-md w-96">
         <div className="flex justify-center pb-6">
           <LogoDark />
@@ -37,6 +37,6 @@ export default function LoginPage() {
           </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

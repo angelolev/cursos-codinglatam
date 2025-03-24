@@ -7,7 +7,7 @@ export default async function Cursos() {
   const workshops = await getWorkshops();
 
   return (
-    <>
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <div className="text-center mt-12 mb-24">
         <h1 className="text-4xl font-bold text-white/90 mb-4">
           Nuestros cursos
@@ -25,6 +25,6 @@ export default async function Cursos() {
           <Workshop key={index} {...workshop} />
         ))}
       </div>
-    </>
+    </main>
   );
 }

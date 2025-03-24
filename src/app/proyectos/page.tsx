@@ -5,7 +5,7 @@ export default async function ProjectsPage() {
   const projects = await getProjects();
 
   return (
-    <section>
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <div className="mb-12">
         <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6 text-center">
           Aprende HACIENDO proyectos REALES
@@ -20,6 +20,6 @@ export default async function ProjectsPage() {
           <ProjectCard key={project.id} {...project} />
         ))}
       </div>
-    </section>
+    </main>
   );
 }

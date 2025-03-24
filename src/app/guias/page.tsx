@@ -5,7 +5,7 @@ export default async function Guias() {
   const products = await getProducts();
 
   return (
-    <>
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <div className="text-center mt-12 mb-24">
         <h1 className="text-4xl font-bold text-white/90 mb-4">
           Guías de estudio para ti
@@ -20,6 +20,6 @@ export default async function Guias() {
           <Product key={index} {...product} />
         ))}
       </div>
-    </>
+    </main>
   );
 }

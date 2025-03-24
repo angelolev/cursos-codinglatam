@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Calendar, Clock, FileText, Play } from "lucide-react";
 import { LiveCourseProps } from "@/types/course";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CountdownResult {
   days: number;
@@ -59,6 +60,7 @@ export function LiveCourseCard({
   image,
   instructor,
   temario,
+  slug,
 }: LiveCourseProps) {
   const countdown = useCountdown(startDate);
   const startDateFormatted = new Date(startDate).toLocaleDateString("es-PE", {
@@ -98,7 +100,10 @@ export function LiveCourseCard({
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+        <Link href={`/en-vivo/${slug}`}>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+        </Link>
+
         <p className="text-gray-600 mb-4">{description}</p>
 
         <div className="flex items-center text-sm text-gray-500 mb-4">

@@ -73,7 +73,7 @@ export default async function ProPage() {
   }
 
   return (
-    <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -198,6 +198,6 @@ export default async function ProPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

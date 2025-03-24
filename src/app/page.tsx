@@ -5,6 +5,7 @@ import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { auth } from "./auth";
 import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
+import { MonthlyEvents } from "@/components/Event";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -13,7 +14,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <>
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       {session?.user?.isPremium ? null : <Hero />}
 
       <div className="text-center mb-24">
@@ -33,6 +34,8 @@ export default async function Home() {
           <Workshop key={index} {...workshop} />
         ))}
       </div>
+
+      <MonthlyEvents />
 
       {/* <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
@@ -64,6 +67,6 @@ export default async function Home() {
         ))}
       </div>
       {session?.user?.isPremium ? null : <Pricing />}
-    </>
+    </main>
   );
 }

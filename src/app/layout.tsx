@@ -59,9 +59,9 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <Navbar />
 
-          <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
-            {children}
-          </main>
+          {/* <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow"> */}
+          {children}
+          {/* </main> */}
           <Footer />
         </SessionProvider>
         <div className="bg-white rounded-full max-w-16 fixed w-full bottom-5 right-4">

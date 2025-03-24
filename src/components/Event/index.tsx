@@ -29,35 +29,35 @@ const currentEvents: Event[] = [
 
   {
     id: "3",
-    title: "Curso: De 0 a la Web EN VIVO",
+    title: "Curso: Next JS desde cero EN VIVO",
     description:
-      "Aprende desde cero las tecnologías con las que podrás crear proyectos para la web.",
-    date: "04 Feb",
-    href: "https://www.codinglatam.dev/cursos/web",
+      "Aprende a construir aplicaciones web modernas, rápidas y escalables con Next.js.",
+    date: "22 Abr",
+    href: "/en-vivo/nextjs",
   },
-  {
-    id: "4",
-    title: "Curso: De 0 a React EN VIVO",
-    description:
-      "Domina la biblioteca más popular del front-end y construye aplicaciones web dinámicas.",
-    date: "05 Feb",
-    href: "https://www.codinglatam.dev/cursos/react",
-  },
-  {
-    id: "5",
-    title: "Portafolios que Contratan: Aprende a Destacar como Dev",
-    description:
-      "Aprende los tips y consejos para que tu portafolio destaque tus habilidades y atraiga reclutadores.",
-    date: "08 Feb",
-    href: "https://cursos.codinglatam.dev/workshops/portafolios-que-contratan",
-  },
+  // {
+  //   id: "4",
+  //   title: "Curso: De 0 a React EN VIVO",
+  //   description:
+  //     "Domina la biblioteca más popular del front-end y construye aplicaciones web dinámicas.",
+  //   date: "05 Feb",
+  //   href: "https://www.codinglatam.dev/cursos/react",
+  // },
+  // {
+  //   id: "5",
+  //   title: "Portafolios que Contratan: Aprende a Destacar como Dev",
+  //   description:
+  //     "Aprende los tips y consejos para que tu portafolio destaque tus habilidades y atraiga reclutadores.",
+  //   date: "08 Feb",
+  //   href: "https://cursos.codinglatam.dev/workshops/portafolios-que-contratan",
+  // },
 ];
 
 export function MonthlyEvents() {
   //   const currentMonth = new Date().toLocaleString("default", { month: "long" });
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+    <div className="bg-white rounded-3xl shadow-lg overflow-hidden mt-24">
       <div className="bg-gradient-to-r from-primary-300 to-primary-400 px-6 py-4">
         <h2 className="text-2xl font-bold text-white flex items-center">
           <Calendar className="h-6 w-6 mr-2" />

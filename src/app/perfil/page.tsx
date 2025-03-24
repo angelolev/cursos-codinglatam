@@ -189,7 +189,7 @@ export default function CompleteProfile() {
     );
 
   return (
-    <div className="p-8 max-w-md mx-auto">
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <h1 className="text-2xl font-bold mb-6 text-white/90">Mi Perfil</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -245,6 +245,6 @@ export default function CompleteProfile() {
           Guardar Perfil
         </button>
       </form>
-    </div>
+    </main>
   );
 }
