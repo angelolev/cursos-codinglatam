@@ -40,4 +40,5 @@ export interface LiveCourseProps {
   instructor: string;
   temario: string;
   project: CourseProjectProps;
+  purchaseLink: string;
 }

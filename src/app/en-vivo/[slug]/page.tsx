@@ -18,6 +18,15 @@ import { Pricing } from "@/components/live-courses/components/Pricing";
 
 type Params = Promise<{ slug: string }>;
 
+const testimonials = [
+  {
+    video: "https://www.youtube.com/embed/u78lm-2SCD4?si=qkB45L0jOhOrprh2",
+  },
+  {
+    video: "https://www.youtube.com/embed/he1QHTND0UU?si=TNvrbwcMQlF0_B7R",
+  },
+];
+
 const faqs = [
   {
     question: "¿Qué pasa si me pierdo una sesión en vivo?",
@@ -58,7 +67,7 @@ const reasons = [
       "Construye un proyecto listo para producción desde cero con las mejores prácticas",
   },
   {
-    title: "Aplicaciones reales",
+    title: "Buenas prácticas",
     description:
       "Aprende patrones y técnicas utilizadas en el desarrollo profesional",
   },
@@ -118,6 +127,15 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
     notFound();
   }
 
+  const startDateFormatted = new Date(course.startDate).toLocaleDateString(
+    "es-PE",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
+
   return (
     <main className="pt-16 flex-grow">
       {/* Hero Section */}
@@ -135,16 +153,14 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Volver a los cursos
               </Link>
-              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
                 {course.title}
               </h1>
               <p className="text-xl text-gray-200 mb-8">{course.description}</p>
               <div className="flex flex-wrap gap-4 text-white">
                 <div className="flex items-center">
                   <Calendar className="h-5 w-5 mr-2" />
-                  <span>
-                    Inicia {new Date(course.startDate).toLocaleDateString()}
-                  </span>
+                  <span>Inicia {startDateFormatted}</span>
                 </div>
                 <div className="flex items-center">
                   <Clock className="h-5 w-5 mr-2" />
@@ -246,7 +262,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
             Conoce a tu instructor
           </h2>
           <div className="bg-white rounded-xl shadow-md p-8">
-            <div className="flex items-start">
+            <div className="flex flex-wrap items-start gap-4 md:flex-nowrap">
               <Image
                 src={instructorImage}
                 alt={course.instructor}
@@ -254,7 +270,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
                 width={100}
                 height={100}
               />
-              <div className="ml-6">
+              <div className="lg:ml-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
                   {course.instructor}
                 </h3>
@@ -300,6 +316,36 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
                 <p className="text-gray-600">{faq.answer}</p>
               </div>
             ))}
+          </div>
+
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold text-white/90 mb-8">
+              Testimonios de los estudiantes
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {testimonials.map((testimonial, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl shadow-md overflow-hidden"
+                >
+                  <div className="aspect-video">
+                    <iframe
+                      className="w-full h-full"
+                      src={testimonial.video}
+                      title="Student Testimonial 1"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900">
+                      Conoce la experiencia de otros desarrolladores
+                    </h3>
+                    <p className="text-gray-600 text-sm"></p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

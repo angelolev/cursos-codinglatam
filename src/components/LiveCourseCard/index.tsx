@@ -60,9 +60,8 @@ export function LiveCourseCard({
   title,
   description,
   available,
-  buyLink,
+  purchaseLink,
   days,
-  demo,
   discountPrice,
   price,
   schedule,
@@ -236,7 +235,7 @@ export function LiveCourseCard({
         {/* Actions */}
         <div className="flex flex-col space-y-2">
           <a
-            href={buyLink}
+            href={purchaseLink}
             className={`w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
               available
                 ? "bg-indigo-600 hover:bg-indigo-700"
@@ -250,13 +249,12 @@ export function LiveCourseCard({
           {available ? (
             <div className="flex gap-2 flex-wrap">
               <a
-                href={demo}
+                href={`/en-vivo/${slug}`}
                 className="flex w-full justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                target="_blank"
                 rel="noopener noreferrer"
               >
                 <Play className="h-4 w-4 mr-2" />
-                Opiniones de alumnos
+                Detalles del Curso
               </a>
               <a
                 href={temario}

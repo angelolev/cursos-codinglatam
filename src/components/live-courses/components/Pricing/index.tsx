@@ -1,5 +1,12 @@
 "use client";
-import { CheckCircle2, Calendar, Clock, Star, ChevronDown } from "lucide-react";
+import {
+  CheckCircle2,
+  Calendar,
+  Clock,
+  Star,
+  ChevronDown,
+  MessageCircle,
+} from "lucide-react";
 import { LiveCourseProps } from "@/types/course";
 import { useState } from "react";
 import { USFlag } from "../USFlag";
@@ -42,11 +49,11 @@ export function Pricing({ course }: { course: LiveCourseProps }) {
 
   return (
     <div className="mb-24">
-      <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl overflow-hidden">
+      <div className="bg-black/20 rounded-3xl overflow-hidden">
         <div className="px-8 py-12 sm:px-16 sm:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+              <div className="bg-indigo-500 rounded-xl p-6 mb-8">
                 <h3 className="text-2xl font-bold text-white mb-2">
                   Detalles del curso
                 </h3>
@@ -116,30 +123,30 @@ export function Pricing({ course }: { course: LiveCourseProps }) {
                 </p>
                 <div className="space-y-4">
                   <a
-                    href={course.buyLink}
-                    className="block w-full bg-white text-indigo-600 text-center px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
-                    target="_blank"
+                    href={course.purchaseLink}
+                    className="block w-full bg-primary-400 text-white text-center px-6 py-3 rounded-lg font-semibold hover:bg-primary-500 transition-colors"
                     rel="noopener noreferrer"
                   >
                     Inscribirme ahora
                   </a>
                   <a
-                    href={course.demo}
-                    className="block w-full border-2 border-white text-white text-center px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+                    href={course.buyLink}
+                    className="flex items-center justify-center w-full border-2 border-white text-white text-center px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Ver testimonios
+                    <MessageCircle className="h-5 w-5 mr-3" />
+                    ¿Tienes dudas? Habla con nosotros
                   </a>
                 </div>
               </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-indigo-500 rounded-xl p-6">
               <h3 className="text-xl font-bold text-white mb-6">Qué incluye</h3>
               <ul className="space-y-4">
                 <li className="flex items-center text-white">
                   <CheckCircle2 className="h-5 w-5 mr-3" />
-                  Sesiones interactivas en vivo
+                  Clases interactivas EN VIVO
                 </li>
                 <li className="flex items-center text-white">
                   <CheckCircle2 className="h-5 w-5 mr-3" />

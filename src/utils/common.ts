@@ -338,6 +338,7 @@ export async function getLiveCourses(): Promise<LiveCourseProps[] | null> {
         temario: data.temario,
         slug: data.slug,
         project: data.project,
+        purchaseLink: data.purchaseLink,
       };
     });
     return coursesList;
