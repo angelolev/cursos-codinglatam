@@ -206,7 +206,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
             {/* What You'll Build */}
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div className="flex flex-col items-center gap-4">
               <Image
                 src={projectImage}
                 alt="Project Preview"
@@ -214,6 +214,12 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
                 width={700}
                 height={700}
               />
+              <Link
+                className="text-white/90 underline text-xl underline-offset-4"
+                href={course.figmaLink}
+              >
+                Figma del proyecto
+              </Link>
             </div>
             <div>
               <h3 className="text-2xl font-bold text-white/90 mb-6">
