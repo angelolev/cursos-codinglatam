@@ -15,6 +15,14 @@ import { MXFlag } from "../MXFlag";
 import { CLFlag } from "../CLFlag";
 import { COFlag } from "../COFlag";
 import { formatPrice } from "../../utils/format-price";
+import Image from "next/image";
+import paypalImage from "@/assets/paypal.svg";
+import visaImage from "@/assets/visa.svg";
+import cardImage from "@/assets/card.svg";
+import americanExpressImage from "@/assets/amex.svg";
+import yapeImage from "@/assets/yape.svg";
+import plinImage from "@/assets/plin.svg";
+import yapeQR from "@/assets/yape-qr.png";
 
 // Update the RATES object to include COP
 const RATES = {
@@ -52,7 +60,7 @@ export function Pricing({ course }: { course: LiveCourseProps }) {
       <h2 className="text-3xl font-bold text-white/90 mb-12">Inversión</h2>
       <div className="bg-transparent  md:bg-black/20 rounded-3xl overflow-hidden ">
         <div className="px-0 md:px-8 md:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
               <div className="bg-indigo-500 rounded-xl p-6 mb-8">
                 <h3 className="text-2xl font-bold text-white mb-2">
@@ -142,30 +150,79 @@ export function Pricing({ course }: { course: LiveCourseProps }) {
                 </div>
               </div>
             </div>
-            <div className="bg-indigo-500 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-white mb-6">Qué incluye</h3>
-              <ul className="space-y-4">
-                <li className="flex items-center text-white">
-                  <CheckCircle2 className="h-5 w-5 mr-3" />
-                  Clases interactivas EN VIVO
-                </li>
-                <li className="flex items-center text-white">
-                  <CheckCircle2 className="h-5 w-5 mr-3" />
-                  Código fuente del proyecto
-                </li>
-                <li className="flex items-center text-white">
-                  <CheckCircle2 className="h-5 w-5 mr-3" />
-                  Acceso privado al grupo de Whatsapp
-                </li>
-                <li className="flex items-center text-white">
-                  <CheckCircle2 className="h-5 w-5 mr-3" />
-                  Grabaciones de sesiones
-                </li>
-                <li className="flex items-center text-white">
-                  <CheckCircle2 className="h-5 w-5 mr-3" />
-                  Certificado de finalización
-                </li>
-              </ul>
+            <div>
+              <div className="bg-indigo-500 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-6">
+                  Qué incluye
+                </h3>
+                <ul className="space-y-4">
+                  <li className="flex items-center text-white">
+                    <CheckCircle2 className="h-5 w-5 mr-3" />
+                    Clases interactivas EN VIVO
+                  </li>
+                  <li className="flex items-center text-white">
+                    <CheckCircle2 className="h-5 w-5 mr-3" />
+                    Código fuente del proyecto
+                  </li>
+                  <li className="flex items-center text-white">
+                    <CheckCircle2 className="h-5 w-5 mr-3" />
+                    Acceso privado al grupo de Whatsapp
+                  </li>
+                  <li className="flex items-center text-white">
+                    <CheckCircle2 className="h-5 w-5 mr-3" />
+                    Grabaciones de sesiones
+                  </li>
+                  <li className="flex items-center text-white">
+                    <CheckCircle2 className="h-5 w-5 mr-3" />
+                    Certificado de finalización
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-xl p-6 mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <h3 className="text-xl font-bold text-black/90 mb-2">
+                    Paga con
+                  </h3>
+                  <div className="flex items-center gap-0 flex-wrap">
+                    <Image src={visaImage} alt="Visa" width={50} height={50} />
+                    <Image src={cardImage} alt="Card" width={60} height={60} />
+                    <Image
+                      src={paypalImage}
+                      alt="Paypal"
+                      width={50}
+                      height={50}
+                    />
+                    <Image
+                      src={americanExpressImage}
+                      alt="American Express"
+                      width={50}
+                      height={50}
+                    />
+                  </div>
+                  <p className="text-black/90 text-base font-bold mt-4">
+                    Otras opciones (válidas para Perú):
+                  </p>
+                  <div className="flex items-center gap-4 mt-2">
+                    <Image src={yapeImage} alt="Card" width={50} height={50} />
+                    <Image src={plinImage} alt="Visa" width={50} height={50} />
+                  </div>
+                  <p className="text-black/90 text-sm mt-4">
+                    Envia tu voucher al <b>+51 964225808</b> para completar tu
+                    registro
+                  </p>
+                </div>
+                <div className="flex justify-center items-center flex-wrap gap-4">
+                  <div className="relative w-full h-80 md:h-full">
+                    <Image
+                      src={yapeQR}
+                      alt="Yape QR"
+                      fill
+                      sizes="100vh"
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
