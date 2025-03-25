@@ -82,7 +82,7 @@ export default async function WorkshopPage({ params }: { params: Params }) {
   );
 
   return (
-    <div className="px-4 sm:px-0">
+    <div className="px-4 pt-24">
       <div className="max-w-7xl mx-auto">
         <BackButton />
 

@@ -66,8 +66,8 @@ export default async function CoursePage({ params }: { params: Params }) {
   const clases = await getVideosFromCollection(slug);
 
   return (
-    <div className="container max-w-7xl mx-auto px-0 pt-0 pb-8">
-      <div className="pt-0">
+    <div className="container max-w-7xl mx-auto px-4 pt-0 pb-8">
+      <div className="pt-24">
         <div className="max-w-7xl mx-auto">
           <BackButton label="Volver a los cursos" />
 

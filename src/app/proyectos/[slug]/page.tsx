@@ -49,7 +49,7 @@ export default async function ProjectDetail({ params }: { params: Params }) {
   const projectComments = await getProjectComments(project.id);
 
   return (
-    <div className="pb-16 px-4 sm:px-0">
+    <div className="pb-16 px-4 pt-24">
       <div className="max-w-7xl mx-auto">
         <BackButton href="/proyectos" label="Volver a proyectos" />
 
