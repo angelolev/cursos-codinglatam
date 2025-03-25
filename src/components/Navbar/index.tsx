@@ -146,7 +146,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-400 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-colors"
+                className="hidden md:inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-400 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-colors"
               >
                 <LogIn className="h-4 w-4 mr-2" />
                 Ingresar
@@ -154,26 +154,34 @@ export function Navbar() {
             )}
 
             {/* Mobile Menu Button */}
-            {session?.user && (
-              <button
-                className="md:hidden"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                {isMenuOpen ? (
-                  <X size={24} className="text-white" />
-                ) : (
-                  <Menu size={24} className="text-white" />
-                )}
-              </button>
-            )}
+            <button
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? (
+                <X size={24} className="text-white" />
+              ) : (
+                <Menu size={24} className="text-white" />
+              )}
+            </button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      {session?.user && isMenuOpen && (
+      {isMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
+          <div className="px-2 space-y-1 bg-white border-t">
+            {!session?.user && (
+              <Link
+                href="/login"
+                className="flex items-center border-gray-700 border-b px-4 py-2 font-medium  text-indigo-500  "
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                Ingresar
+              </Link>
+            )}
+
             <Link
               href="/proyectos"
               className="text-gray-700 border-b flex py-2 px-3 gap-2 items-center"
@@ -183,44 +191,46 @@ export function Navbar() {
             </Link>
             <Link
               href="/en-vivo"
-              className="text-gray-700 border-b flex py-2 px-3 items-center gap-2"
+              className="text-gray-700 flex py-2 px-3 items-center gap-2"
             >
               <Play size={18} />
               Cursos en vivo
             </Link>
             {session?.user && (
-              <div className="px-3 py-2 text-gray-700 border-b flex items-center gap-2">
-                <div className="relative">
-                  <Image
-                    src={session?.user?.image || "/default-avatar.png"}
-                    alt={
-                      profileData?.name
-                        ? profileData?.name
-                        : session?.user?.email
-                    }
-                    width={36}
-                    height={36}
-                    className="rounded-full"
-                  />
+              <>
+                <div className="px-3 py-2 text-gray-700 border-b border-t flex items-center gap-2">
+                  <div className="relative">
+                    <Image
+                      src={session?.user?.image || "/default-avatar.png"}
+                      alt={
+                        profileData?.name
+                          ? profileData?.name
+                          : session?.user?.email
+                      }
+                      width={36}
+                      height={36}
+                      className="rounded-full"
+                    />
+                  </div>
+                  {profileData?.name ? profileData?.name : session?.user?.name}
                 </div>
-                {profileData?.name ? profileData?.name : session?.user?.name}
-              </div>
-            )}
 
-            <Link
-              href="/perfil"
-              className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
-            >
-              <Settings className="h-4 w-4 inline" />
-              Mi perfil
-            </Link>
-            <button
-              className="w-full mt-2 flex items-center px-3 py-2 text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Salir
-            </button>
+                <Link
+                  href="/perfil"
+                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 transition-colors"
+                >
+                  <Settings className="h-4 w-4 inline" />
+                  Mi perfil
+                </Link>
+                <button
+                  className="w-full mt-2 flex items-center border-t pb-3 border-gray-700 px-3 py-2 text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Salir
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

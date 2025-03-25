@@ -172,9 +172,9 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Why Take This Course */}
-        <div className="mb-24">
+        <div className="mb-12 md:mb-16">
           <h2 className="text-3xl font-bold text-white/90 mb-12">
             ¿Por qué debería tomar este curso?
           </h2>
@@ -198,57 +198,53 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
         </div>
 
         {/* Syllabus */}
-        <div className="mb-24">
-          <h2 className="text-3xl font-bold text-white/90 mb-12">Temario</h2>
-          <div className="bg-white rounded-xl shadow-md p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {course.topics.map((topic, index) => (
-                <div key={index} className="flex items-center">
-                  <div className="flex-shrink-0 bg-indigo-100 rounded-full p-2">
-                    <Code2 className="h-6 w-6 text-indigo-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg text-gray-900">{topic}</h3>
-                  </div>
+        <h2 className="text-3xl font-bold text-white/90 mb-12">Temario</h2>
+        <div className="bg-white rounded-xl shadow-md p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {course.topics.map((topic, index) => (
+              <div key={index} className="flex items-center">
+                <div className="flex-shrink-0 bg-indigo-100 rounded-full p-2">
+                  <Code2 className="h-6 w-6 text-indigo-600" />
                 </div>
-              ))}
-            </div>
+                <div className="ml-4">
+                  <h3 className="text-lg text-gray-900">{topic}</h3>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Project Preview */}
-        <div className="mb-24">
-          <h2 className="text-3xl font-bold text-white/90 mb-12">
-            {/* What You'll Build */}
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="flex flex-col items-center gap-4">
-              <Image
-                src={projectImage}
-                alt="Project Preview"
-                className="rounded-xl shadow-lg"
-                width={700}
-                height={700}
-              />
-              <Link
-                className="text-white/90 underline text-xl underline-offset-4"
-                href={course.figmaLink}
-              >
-                Figma del proyecto
-              </Link>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-white/90 mb-6">
-                Proyecto a desarrollar: {course.project.title}
-              </h3>
-              <div className="space-y-6">
-                {course.project.ideas.map((idea, index) => (
-                  <div key={index} className="flex items-start">
-                    <Rocket size={20} className="text-indigo-600 mr-4 mt-1" />
-                    <p className="text-white/70 w-[90%] text-xl">{idea}</p>
-                  </div>
-                ))}
-              </div>
+        <h2 className="text-3xl font-bold text-white/90 mb-12">
+          {/* What You'll Build */}
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col items-center gap-4">
+            <Image
+              src={projectImage}
+              alt="Project Preview"
+              className="rounded-xl shadow-lg"
+              width={700}
+              height={700}
+            />
+            <Link
+              className="text-white/90 underline text-xl underline-offset-4"
+              href={course.figmaLink}
+            >
+              Figma del proyecto
+            </Link>
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-white/90 mb-6">
+              Proyecto a desarrollar: {course.project.title}
+            </h3>
+            <div className="space-y-6">
+              {course.project.ideas.map((idea, index) => (
+                <div key={index} className="flex items-start">
+                  <Rocket size={20} className="text-indigo-600 mr-4 mt-1" />
+                  <p className="text-white/70 w-[90%] text-xl">{idea}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -257,7 +253,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
         <Pricing course={course} />
 
         {/* Author Bio */}
-        <div className="mb-24">
+        <div className="mb-12">
           <h2 className="text-3xl font-bold text-white/90 mb-12">
             Conoce a tu instructor
           </h2>
@@ -303,49 +299,47 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
         </div>
 
         {/* FAQs */}
-        <div>
-          <h2 className="text-3xl font-bold text-white/90 mb-12">
-            Preguntas frecuentes
+        <h2 className="text-3xl font-bold text-white/90 mb-12">
+          Preguntas frecuentes
+        </h2>
+        <div className="grid gap-6">
+          {faqs.map((faq, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-md p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {faq.question}
+              </h3>
+              <p className="text-gray-600">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-white/90 mb-8">
+            Testimonios de los estudiantes
           </h2>
-          <div className="grid gap-6">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {faq.question}
-                </h3>
-                <p className="text-gray-600">{faq.answer}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl shadow-md overflow-hidden"
+              >
+                <div className="aspect-video">
+                  <iframe
+                    className="w-full h-full"
+                    src={testimonial.video}
+                    title="Student Testimonial 1"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-gray-900">
+                    Conoce la experiencia de otros desarrolladores
+                  </h3>
+                  <p className="text-gray-600 text-sm"></p>
+                </div>
               </div>
             ))}
-          </div>
-
-          <div className="mt-16">
-            <h2 className="text-2xl font-bold text-white/90 mb-8">
-              Testimonios de los estudiantes
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-xl shadow-md overflow-hidden"
-                >
-                  <div className="aspect-video">
-                    <iframe
-                      className="w-full h-full"
-                      src={testimonial.video}
-                      title="Student Testimonial 1"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900">
-                      Conoce la experiencia de otros desarrolladores
-                    </h3>
-                    <p className="text-gray-600 text-sm"></p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>

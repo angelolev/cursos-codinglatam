@@ -71,7 +71,6 @@ export function MonthlyEvents() {
               href={event.href}
               key={event.id}
               className="flex items-center space-x-4"
-              target="_blank"
             >
               <div className="flex-shrink-0 w-16 h-16 bg-indigo-100 rounded-lg flex items-center justify-center text-center">
                 <span className="text-lg font-bold text-indigo-600">

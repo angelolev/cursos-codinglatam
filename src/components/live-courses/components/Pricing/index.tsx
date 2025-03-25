@@ -48,9 +48,10 @@ export function Pricing({ course }: { course: LiveCourseProps }) {
   };
 
   return (
-    <div className="mb-24">
-      <div className="bg-black/20 rounded-3xl overflow-hidden">
-        <div className="px-8 py-12 sm:px-16 sm:py-16">
+    <div className="my-12 md:my-16">
+      <h2 className="text-3xl font-bold text-white/90 mb-12">Inversión</h2>
+      <div className="bg-transparent  md:bg-black/20 rounded-3xl overflow-hidden ">
+        <div className="px-0 md:px-8 md:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="bg-indigo-500 rounded-xl p-6 mb-8">
