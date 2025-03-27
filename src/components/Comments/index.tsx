@@ -64,13 +64,6 @@ export function Comments({ commentId }: CommentsProps) {
           };
         });
 
-      // For each reply, log the parentId and check if it matches any comment.id
-      replies.forEach((reply) => {
-        const matchingParent = mainComments.find(
-          (comment) => comment.id === reply.parentId
-        );
-      });
-
       // Attach replies to their parent comments
       replies.forEach((reply) => {
         const parentComment = mainComments.find(
@@ -109,12 +102,15 @@ export function Comments({ commentId }: CommentsProps) {
       const uniqueReplyId = `${commentId}-reply-${Date.now()}`;
 
       const replyData = {
-        parentId,
+        parentId, // This is the key field that links to the parent comment
         name: session.user?.name,
         comment: replyContent,
         date: new Date().toISOString(),
         photoURL: session.user?.image,
       };
+
+      console.log(`Adding reply to parent: ${parentId}`, replyData);
+      console.log(`Generated reply ID: ${uniqueReplyId}`);
 
       // Use doc() with a specific ID instead of addDoc()
       // This lets you control the document ID instead of letting Firestore generate it
