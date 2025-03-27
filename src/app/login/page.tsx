@@ -21,19 +21,19 @@ export default function LoginPage() {
   return (
     <main className=" mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow flex items-center justify-center pt-24">
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <div className="flex justify-center pb-6">
-          <LogoDark />
+        <div className="flex justify-center">
+          <p>Inicia sesión</p>
         </div>
 
         <div className="mt-4 space-y-2">
           <button
             onClick={() => handleLogin("google")}
-            className="w-full bg-indigo-600 text-white p-4 rounded flex items-center gap-4 justify-center"
+            className="w-full bg-indigo-600 text-white p-4 rounded flex items-center gap-4 justify-center cursor-pointer"
           >
             <div className="max-w-8">
               <GoogleIcon />
             </div>
-            Login con Google
+            Entrar con Google
           </button>
         </div>
       </div>

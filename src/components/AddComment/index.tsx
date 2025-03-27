@@ -14,6 +14,7 @@ interface CommentProps {
   name: string | null;
   comment: string;
   date: string;
+  photoURL?: string;
 }
 
 export function AddComment({ commentId }: AddCommentProps) {
@@ -21,6 +22,7 @@ export function AddComment({ commentId }: AddCommentProps) {
     name: "",
     comment: "",
     date: new Date().toISOString(),
+    photoURL: "",
   });
   const [hasCommented, setHasCommented] = useState(false);
   const { data: session } = useSession();
@@ -49,11 +51,13 @@ export function AddComment({ commentId }: AddCommentProps) {
             setNewComment((prevComment) => ({
               ...prevComment,
               name: name,
+              photoURL: user?.image || "",
             }));
           } else {
             setNewComment((prevComment) => ({
               ...prevComment,
               name: user?.email || "",
+              photoURL: user?.image || "",
             }));
           }
         }
@@ -82,6 +86,7 @@ export function AddComment({ commentId }: AddCommentProps) {
     try {
       await setDoc(doc(db, "comments", `${commentId}-${user?.aud}`), {
         ...newComment,
+        photoURL: user?.image || "",
         date: new Date().toISOString(),
       });
       setNewComment((prevComment) => ({
@@ -114,7 +119,7 @@ export function AddComment({ commentId }: AddCommentProps) {
           />
           <button
             type="submit"
-            className="mt-2 px-6 py-4 bg-primary-300 text-white rounded-lg hover:bg-primary-400 transition-colors w-full font-medium"
+            className="mt-2 px-6 py-4 bg-primary-300 text-white rounded-lg hover:bg-primary-400 transition-colors w-full font-medium cursor-pointer"
           >
             Comentar
           </button>
