@@ -66,7 +66,7 @@ export function AddComment({ commentId }: AddCommentProps) {
       checkIfCommented();
       fetchData();
     }
-  }, [session, hasCommented]);
+  }, [session, hasCommented, commentId, user?.aud, user?.image, user?.email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
