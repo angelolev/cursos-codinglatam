@@ -144,7 +144,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
         style={{ backgroundImage: `url(${course.image})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-gray-900/90">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 h-full flex items-center">
             <div className="max-w-3xl">
               <Link
                 href="/en-vivo"
@@ -172,7 +172,7 @@ export default async function LiveCoursePage({ params }: { params: Params }) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 py-8 md:py-12">
         {/* Why Take This Course */}
         <div className="mb-12 md:mb-16">
           <h2 className="text-3xl font-bold text-white/90 mb-12">
