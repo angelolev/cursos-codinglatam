@@ -1,5 +1,4 @@
 "use client";
-import LogoDark from "@/components/LogoDark";
 import GoogleIcon from "@/components/GoogleIcon";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
