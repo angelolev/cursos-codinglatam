@@ -240,7 +240,7 @@ export default function CompleteProfile() {
         </div>
         <button
           type="submit"
-          className="w-full bg-primary-300 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-400 transition-colors"
+          className="w-full bg-primary-300 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-400 transition-colors cursor-pointer"
         >
           Guardar Perfil
         </button>

@@ -191,13 +191,13 @@ export function Comments({ commentId }: CommentsProps) {
                   <div className="flex justify-end gap-2 mt-2">
                     <button
                       onClick={() => setReplyingTo(null)}
-                      className="px-3 py-1 text-xs text-gray-700 bg-gray-200 rounded"
+                      className="px-3 py-1 text-xs text-gray-700 bg-gray-200 rounded cursor-pointer"
                     >
                       Cancelar
                     </button>
                     <button
                       onClick={() => handleReply(comment.id)}
-                      className="px-3 py-1 text-xs text-white bg-indigo-500 rounded"
+                      className="px-3 py-1 text-xs text-white bg-indigo-500 rounded cursor-pointer"
                       disabled={!replyContent.trim()}
                     >
                       Enviar

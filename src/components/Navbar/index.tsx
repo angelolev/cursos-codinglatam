@@ -125,7 +125,7 @@ export function Navbar() {
                   {isMenuOpen && (
                     <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50">
                       <Link
-                        href="/perfil"
+                        href="/profile"
                         className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                       >
                         <Settings className="h-4 w-4 inline" />
@@ -216,7 +216,7 @@ export function Navbar() {
                 </div>
 
                 <Link
-                  href="/perfil"
+                  href="/profile"
                   className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 transition-colors"
                 >
                   <Settings className="h-4 w-4 inline" />

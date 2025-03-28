@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: Params }) {
       : null;
 
   return (
-    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 flex flex-col lg:flex-row gap-6 lg:px-0 flex-grow">
+    <main className="pt-20 mx-auto max-w-7xl sm:px-6 px-4 flex flex-col lg:flex-row gap-6 lg:px-0 flex-grow">
       <div className="w-full">
         <div className="w-full relative mb-8 overflow-hidden bg-gray-800 rounded aspect-video">
           <iframe
@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Params }) {
         </div>
       </div>
 
-      <div className="w-full lg:max-w-[350px]">
+      <div className="w-full lg:max-w-[400px]">
         <div>
           <h2 className="text-2xl mb-4 font-bold text-white/90">
             Recursos de la clase
@@ -127,12 +127,12 @@ export default async function Page({ params }: { params: Params }) {
             <Resources classId={guid} />
           </ul>
         </div>
-        <div className="max-h-96 mt-10 mb-20">
+        <div className="mt-6 mb-20">
           <h2 className="text-2xl mb-4 font-bold text-white/90">
             Comentarios de la clase
           </h2>
           <AddComment commentId={guid} />
-          <ul>
+          <ul className="lg:max-h-96 overflow-y-auto">
             <Comments commentId={guid} />
           </ul>
         </div>
