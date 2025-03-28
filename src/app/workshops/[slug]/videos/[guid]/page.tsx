@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: Params }) {
   const video = await data.json();
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
+    <main className="pt-20 mx-auto max-w-7xl sm:px-6 px-4 flex flex-col lg:flex-row gap-6 lg:px-0 flex-grow">
       <div className="w-full">
         <div className="w-full relative mb-8 overflow-hidden bg-gray-800 rounded aspect-video">
           <iframe
@@ -98,6 +98,6 @@ export default async function Page({ params }: { params: Params }) {
           </ul>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
