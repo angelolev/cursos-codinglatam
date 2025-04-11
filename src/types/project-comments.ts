@@ -7,4 +7,6 @@ export interface ProjectCommentsProps {
   projectId: string;
   user: UserProps;
   timestamp: Date;
+  parentId?: string; // For identifying parent comment (null for top-level comments)
+  replies?: ProjectCommentsProps[]; // For nested replies
 }

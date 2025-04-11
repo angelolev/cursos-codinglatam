@@ -9,11 +9,12 @@ interface RequestBody {
   user: UserProps;
   comment: string;
   githubLink: string;
+  parentId?: string; // Add parentId for replies
 }
 
 export async function POST(request: Request) {
   try {
-    const { projectId, user, comment, githubLink }: RequestBody =
+    const { projectId, user, comment, githubLink, parentId }: RequestBody =
       await request.json();
 
     const docRef = await addDoc(collection(db, "projectsComments"), {
@@ -21,6 +22,7 @@ export async function POST(request: Request) {
       user,
       comment,
       githubLink,
+      parentId, // Include parentId in the document
       timestamp: new Date(),
     });
 

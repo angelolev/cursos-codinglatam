@@ -5,6 +5,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import Comments from "../projects/components/Comments";
 import AddCommentForm from "../projects/components/AddCommentForm";
+import ReplyForm from "../projects/components/ReplyForm";
 
 interface ProjectComments {
   projectId: string;
@@ -17,6 +18,7 @@ export default function ProjectComments({
 }: ProjectComments) {
   const [comments, setComments] =
     useState<ProjectCommentsProps[]>(initialComments);
+  const [replyingToId, setReplyingToId] = useState<string | null>(null);
 
   // Listen for real-time updates
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function ProjectComments({
         updatedComments.push({
           id: doc.id,
           ...data,
+          parentId: data.parentId || null,
           timestamp: data.timestamp.toDate(), // Convert Firestore Timestamp to Date
         } as ProjectCommentsProps);
       });
@@ -41,6 +44,16 @@ export default function ProjectComments({
     return () => unsubscribe();
   }, [projectId]);
 
+  // Handle reply
+  const handleReply = (parentId: string) => {
+    setReplyingToId(parentId);
+  };
+
+  // When reply is complete, reset the replyingToId
+  const handleReplyComplete = () => {
+    setReplyingToId(null);
+  };
+
   return (
     <div className="mt-16">
       <h2 className="text-2xl font-bold text-white/90 mb-8">
@@ -48,7 +61,16 @@ export default function ProjectComments({
       </h2>
 
       <AddCommentForm projectId={projectId} />
-      <Comments comments={comments} />
+      <Comments comments={comments} onReply={handleReply} />
+
+      {/* Show reply form only for the comment being replied to */}
+      {replyingToId && (
+        <ReplyForm
+          projectId={projectId}
+          parentId={replyingToId}
+          onReplyComplete={handleReplyComplete}
+        />
+      )}
     </div>
   );
 }

@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       break;
   }
 
-  const redirectUrl = "https://cursos.codinglatam.dev/gracias";
+  const redirectUrl = "https://codinglatam.dev/gracias";
   return NextResponse.redirect(redirectUrl, 303);
 }
 

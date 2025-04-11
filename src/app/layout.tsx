@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   title: "Aprende a programar HACIENDO proyectos | Coding Latam",
   description: "Aprende HACIENDO proyectos REALES",
   openGraph: {
-    title: "Cursos | Coding Latam",
+    title: "Coding Latam",
     description: "Aprende HACIENDO proyectos REALES",
-    url: "https://cursos.codinglatam.dev",
+    url: "https://codinglatam.dev",
     siteName: "Coding Latam",
     images: [
       {
-        url: "https://cursos.codinglatam.dev/og.png",
+        url: "https://codinglatam.dev/og.png",
         width: 1200,
         height: 630,
         alt: "Coding Latam og image",

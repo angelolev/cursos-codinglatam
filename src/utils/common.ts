@@ -420,6 +420,7 @@ export async function getProjectComments(
         comment: data.comment,
         githubLink: data.githubLink,
         projectId: data.projectId,
+        parentId: data.parentId || null, // Include parentId
         user: data.user,
         timestamp: data.timestamp.toDate(), // Convert Firestore Timestamp to JavaScript Date
       });
