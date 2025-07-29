@@ -1,3 +1,4 @@
+"use client";
 import {
   Check,
   Star,
@@ -10,8 +11,17 @@ import {
   Users,
 } from "lucide-react";
 import SubscriptionButton from "@/components/buttons/SubscriptionButton";
-import { auth } from "../auth";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { useState, useEffect } from "react";
+
+type BillingFrequency = "weekly" | "monthly" | "yearly";
+
+interface PricingOption {
+  price: number;
+  label: string;
+  savings?: string;
+}
 
 const benefits = [
   {
@@ -64,12 +74,25 @@ const benefits = [
   },
 ];
 
-export default async function ProPage() {
-  const session = await auth();
-  const user = session?.user;
+export default function ProPage() {
+  const { data: session } = useSession();
+  const [billingFrequency, setBillingFrequency] =
+    useState<BillingFrequency>("monthly");
 
-  if (!user) {
-    redirect("/login");
+  const pricing: Record<BillingFrequency, PricingOption> = {
+    weekly: { price: 1.99, label: "/semana", savings: "Prueba 7 días" },
+    monthly: { price: 4.99, label: "/mes" },
+    yearly: { price: 49.99, label: "/año", savings: "Ahorra $9.89" },
+  };
+
+  useEffect(() => {
+    if (session === null) {
+      redirect("/login");
+    }
+  }, [session]);
+
+  if (session === undefined) {
+    return null; // Loading state
   }
 
   return (
@@ -89,6 +112,33 @@ export default async function ProPage() {
             aprendizaje y te ayudarán a convertirte en un(a) mejor
             desarrollador(a)
           </p>
+
+          {/* Billing Frequency Toggle */}
+          <div className="mb-8 inline-flex bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+            {(["weekly", "monthly", "yearly"] as BillingFrequency[]).map(
+              (frequency) => (
+                <button
+                  key={frequency}
+                  onClick={() => setBillingFrequency(frequency)}
+                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
+                    billingFrequency === frequency
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-white/70 hover:text-white/90"
+                  }`}
+                >
+                  {frequency === "weekly" && "Semanal"}
+                  {frequency === "monthly" && "Mensual"}
+                  {frequency === "yearly" && "Anual"}
+                  {frequency === "yearly" && (
+                    <span className="ml-1 text-xs bg-green-500 text-white px-1.5 py-0.5 rounded">
+                      Ahorra
+                    </span>
+                  )}
+                </button>
+              )
+            )}
+          </div>
+
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <SubscriptionButton />
           </div>
@@ -139,15 +189,65 @@ export default async function ProPage() {
         <h2 className="text-2xl text-center font-bold text-white mb-8 md:hidden">
           ¿Estás listo(a) para llevar tus habilidades al siguiente nivel?
         </h2>
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg mx-auto md:hidden">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Crown className="h-8 w-8 text-indigo-600" />
-            <h3 className="text-2xl font-bold text-gray-900 text-center">
-              Membresía Pro
-            </h3>
+
+        {/* Mobile Billing Frequency Toggle */}
+        <div className="mb-8 flex justify-center md:hidden">
+          <div className="inline-flex bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+            {(["weekly", "monthly", "yearly"] as BillingFrequency[]).map(
+              (frequency) => (
+                <button
+                  key={frequency}
+                  onClick={() => setBillingFrequency(frequency)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
+                    billingFrequency === frequency
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-white/70 hover:text-white/90"
+                  }`}
+                >
+                  {frequency === "weekly" && "Semanal"}
+                  {frequency === "monthly" && "Mensual"}
+                  {frequency === "yearly" && "Anual"}
+                  {frequency === "yearly" && (
+                    <span className="ml-1 text-xs bg-green-500 text-white px-1.5 py-0.5 rounded">
+                      Ahorra
+                    </span>
+                  )}
+                </button>
+              )
+            )}
           </div>
-          <div className="text-5xl font-bold text-gray-900 text-center mb-6">
-            $4.99<span className="text-xl text-gray-500">/mes</span>
+        </div>
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg mx-auto md:hidden">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <Crown className="h-8 w-8 text-indigo-600" />
+              <h3 className="text-2xl font-bold text-gray-900">
+                Membresía Pro
+              </h3>
+            </div>
+            {pricing[billingFrequency].savings && (
+              <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
+                {pricing[billingFrequency].savings}
+              </span>
+            )}
+          </div>
+          <div className="text-center mb-6">
+            <div className="text-5xl font-bold text-gray-900">
+              ${pricing[billingFrequency].price}
+              <span className="text-xl text-gray-500">
+                {pricing[billingFrequency].label}
+              </span>
+            </div>
+            {billingFrequency === "yearly" && (
+              <div className="mt-1 text-sm text-gray-500">
+                ${(pricing[billingFrequency].price / 12).toFixed(2)}/mes
+              </div>
+            )}
+            {billingFrequency === "weekly" && (
+              <div className="mt-1 text-sm text-blue-600 font-medium">
+                Acceso completo por 7 días
+              </div>
+            )}
           </div>
           <ul className="space-y-4 mb-8 text-left max-w-md mx-auto">
             {benefits.map((benefit, index) => (
@@ -168,19 +268,67 @@ export default async function ProPage() {
             <h2 className="text-3xl font-bold text-white mb-6">
               ¿Estás listo(a) para llevar tus habilidades al siguiente nivel?
             </h2>
-            <p className="text-xl text-indigo-100 mb-12 max-w-3xl mx-auto">
+            <p className="text-xl text-indigo-100 mb-8 max-w-3xl mx-auto">
               Únete a los desarrolladores que ya son parte de Pro y aceleraron
               su crecimiento profesional.
             </p>
+
+            {/* Desktop Billing Frequency Toggle */}
+            <div className="mb-12 inline-flex bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+              {(["weekly", "monthly", "yearly"] as BillingFrequency[]).map(
+                (frequency) => (
+                  <button
+                    key={frequency}
+                    onClick={() => setBillingFrequency(frequency)}
+                    className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
+                      billingFrequency === frequency
+                        ? "bg-white text-gray-900 shadow-sm"
+                        : "text-white/70 hover:text-white/90"
+                    }`}
+                  >
+                    {frequency === "weekly" && "Semanal"}
+                    {frequency === "monthly" && "Mensual"}
+                    {frequency === "yearly" && "Anual"}
+                    {frequency === "yearly" && (
+                      <span className="ml-1 text-xs bg-green-500 text-white px-1.5 py-0.5 rounded">
+                        Ahorra
+                      </span>
+                    )}
+                  </button>
+                )
+              )}
+            </div>
             <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg mx-auto">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <Crown className="h-8 w-8 text-indigo-600" />
-                <h3 className="text-3xl font-bold text-gray-900">
-                  Membresía Pro
-                </h3>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <Crown className="h-8 w-8 text-indigo-600" />
+                  <h3 className="text-3xl font-bold text-gray-900">
+                    Membresía Pro
+                  </h3>
+                </div>
+                {pricing[billingFrequency].savings && (
+                  <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
+                    {pricing[billingFrequency].savings}
+                  </span>
+                )}
               </div>
-              <div className="text-5xl font-bold text-gray-900 mb-6">
-                $4.99<span className="text-xl text-gray-500">/mes</span>
+              <div className="text-center mb-6">
+                <div className="text-5xl font-bold text-gray-900">
+                  ${pricing[billingFrequency].price}
+                  <span className="text-xl text-gray-500">
+                    {pricing[billingFrequency].label}
+                  </span>
+                </div>
+                {billingFrequency === "yearly" && (
+                  <div className="mt-1 text-sm text-gray-500">
+                    ${(pricing[billingFrequency].price / 12).toFixed(2)}/mes
+                  </div>
+                )}
+                {billingFrequency === "weekly" && (
+                  <div className="mt-1 text-sm text-blue-600 font-medium">
+                    Acceso completo por 7 días
+                  </div>
+                )}
               </div>
               <ul className="space-y-4 mb-8 text-left max-w-md mx-auto">
                 {benefits.map((benefit, index) => (

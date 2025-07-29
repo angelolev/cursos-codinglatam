@@ -19,8 +19,20 @@ export default auth((req) => {
     loginUrl.searchParams.set("callbackUrl", pathname);
     return Response.redirect(loginUrl);
   } else {
-    if (!req.auth?.user?.isPremium) {
-      // Redirect non-premium users to upgrade page or show premium required message
+    // Define routes that require premium access
+    const isProjectRoute = pathname.startsWith("/proyectos/");
+    const isGuideRoute = pathname.startsWith("/guias/");
+    const isLiveEventRoute = pathname.startsWith("/en-vivo/");
+    
+    // Routes that need premium (workshops and lessons will have component-level access control)
+    const requiresPremium = isProjectRoute || 
+                           isGuideRoute || 
+                           isLiveEventRoute;
+    
+    // For individual lessons, let component-level freemium logic handle access control
+    // Middleware only blocks premium-only sections
+    if (requiresPremium && !req.auth?.user?.isPremium) {
+      // Redirect non-premium users to upgrade page
       return Response.redirect(new URL("/pro", req.nextUrl.origin));
     }
   }
@@ -28,7 +40,7 @@ export default auth((req) => {
   // Second check: Special handling for admin routes
   if (pathname.startsWith("/admin")) {
     if (!req.auth?.user?.email || req.auth.user.email !== ADMIN_EMAIL) {
-      // Redirect non-admin users to login
+      // Redirect non-admin users to home
       return Response.redirect(new URL("/", req.nextUrl.origin));
     }
   }

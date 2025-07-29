@@ -1,5 +1,4 @@
 import { db } from "@/utils/firebase";
-import { isActivePatron } from "@/utils/patreon";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import NextAuth, { Profile } from "next-auth";
 import GitHub from "next-auth/providers/github";
@@ -17,11 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           ? await fecthIsPremiumFirebase(profile.sub)
           : false;
 
-        if (userIsPremium) {
-          token.isPremium = true;
-        } else {
-          token.isPremium = await isActivePatron(user?.email ?? "");
-        }
+        token.isPremium = userIsPremium;
       }
       return token;
     },

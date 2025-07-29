@@ -82,11 +82,11 @@ export function Navbar() {
               Proyectos
             </Link>
             <Link
-              href="/en-vivo"
+              href="/cursos"
               className="hidden text-white/90 md:flex items-center gap-2"
             >
               <Play size={18} />
-              Cursos en vivo
+              Cursos
             </Link>
             {session?.user ? (
               <div className="hidden md:flex items-center gap-4 ">
@@ -190,11 +190,11 @@ export function Navbar() {
               Proyectos
             </Link>
             <Link
-              href="/en-vivo"
+              href="/cursos"
               className="text-gray-700 flex py-2 px-3 items-center gap-2"
             >
               <Play size={18} />
-              Cursos en vivo
+              Cursos
             </Link>
             {session?.user && (
               <>

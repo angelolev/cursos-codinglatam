@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
-import { Clock, BookOpen, Award } from "lucide-react";
+import { Clock, BookOpen, Award, Lock, Play } from "lucide-react";
 import { db } from "@/utils/firebase";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,12 +10,14 @@ import {
   formatTime,
   getCourseBySlug,
   getVideosFromCollection,
+  orderVideosByTitle,
 } from "@/utils/common";
 import { VideoProps } from "@/types/video";
 import ActionButton from "@/components/buttons/ActionButton";
 import WatchButton from "@/components/buttons/WatchButton";
 import { AverageRating } from "@/components/AverageRating";
 import BackButton from "@/components/buttons/BackButton";
+import { isLessonFree } from "@/utils/freemium";
 
 type Params = Promise<{ slug: string }>;
 
@@ -64,6 +66,7 @@ export default async function CoursePage({ params }: { params: Params }) {
   }
 
   const clases = await getVideosFromCollection(slug);
+  const orderedClases = clases ? orderVideosByTitle(clases) : null;
 
   return (
     <div className="container max-w-7xl mx-auto px-4 md:px-0 pt-0 pb-8">
@@ -99,20 +102,48 @@ export default async function CoursePage({ params }: { params: Params }) {
                   Clases
                 </h2>
                 <ul className="space-y-4">
-                  {clases &&
-                    clases?.map((item: VideoProps) => (
-                      <Link
-                        key={item.guid}
-                        href={`/cursos/${course.slug}/clases/${item.guid}`}
-                        className="grid grid-cols-[20px_1fr_60px] md:grid-cols-[20px_minmax(550px,_1fr)_1fr] gap-2 items-center"
-                      >
-                        <BookOpen size={20} className="text-indigo-600" />
-                        <span>{item.title}</span>
-                        <span className="justify-self-end text-indigo-600 ">
-                          {formatTime(item.length)}
-                        </span>
-                      </Link>
-                    ))}
+                  {orderedClases &&
+                    orderedClases?.map((item: VideoProps, index: number) => {
+                      const isFree = isLessonFree(index);
+                      return (
+                        <Link
+                          key={item.guid}
+                          href={`/cursos/${course.slug}/clases/${item.guid}`}
+                          className={`grid grid-cols-[20px_1fr_60px_60px] md:grid-cols-[20px_minmax(450px,_1fr)_1fr_60px] gap-2 items-center p-3 rounded-lg transition-colors ${
+                            isFree ? "hover:bg-green-50" : "hover:bg-amber-50"
+                          }`}
+                        >
+                          {isFree ? (
+                            <Play size={20} className="text-green-600" />
+                          ) : (
+                            <Lock size={20} className="text-amber-600" />
+                          )}
+                          <span
+                            className={
+                              isFree ? "text-gray-900" : "text-gray-600"
+                            }
+                          >
+                            {item.title}
+                          </span>
+                          <span
+                            className={`justify-self-end ${
+                              isFree ? "text-green-600" : "text-amber-600"
+                            }`}
+                          >
+                            {formatTime(item.length)}
+                          </span>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full text-center ${
+                              isFree
+                                ? "bg-green-100 text-green-800"
+                                : "bg-amber-100 text-amber-800"
+                            }`}
+                          >
+                            {isFree ? "Gratis" : "Pro"}
+                          </span>
+                        </Link>
+                      );
+                    })}
                   {!clases &&
                     course?.topics?.map((item) => (
                       <div
@@ -171,22 +202,42 @@ export default async function CoursePage({ params }: { params: Params }) {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  {clases && (
+                  {orderedClases && (
                     <ActionButton
-                      href={`/cursos/${course.slug}/clases/${clases[0].guid}`}
+                      href={`/cursos/${course.slug}/clases/${orderedClases[0].guid}`}
                       label="Empezar curso"
                     />
                   )}
 
-                  {!clases && (
+                  {!orderedClases && (
                     <WatchButton
                       isAvailable={course.available}
-                      clases={clases}
+                      clases={orderedClases}
                     />
                   )}
                 </div>
-                <div className="mt-6 text-center text-sm text-gray-500">
-                  Disponible mientras tu suscripción esté activa
+                <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-amber-50 rounded-lg border border-gray-200">
+                  <div className="text-center mb-3">
+                    <h4 className="font-semibold text-gray-800 mb-2">
+                      Acceso al Curso
+                    </h4>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center">
+                      <Play className="h-4 w-4 text-green-600 mr-2" />
+                      <span className="text-green-700">
+                        4 lecciones gratuitas
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <Lock className="h-4 w-4 text-amber-600 mr-2" />
+                      <span className="text-amber-700">Resto requiere Pro</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600 text-center mt-3">
+                    Solo necesitas estar registrado para acceder a las primeras
+                    4 lecciones
+                  </p>
                 </div>
               </div>
             </div>
