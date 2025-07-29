@@ -14,6 +14,9 @@ export async function POST(request: Request) {
   const payload: WebhookPayload = await request.json();
   console.log("Webhook payload:", payload);
 
+  let userEmail: string;
+  const subscriptionData = payload.data;
+
   // Handle subscription events
   switch (payload.meta.event_name) {
     case "order_created":
@@ -22,25 +25,99 @@ export async function POST(request: Request) {
       break;
     case "subscription_created":
       // Handle new subscription
-      console.log("New subscription created:", payload.data);
-      const subscription = payload.data;
-      const userEmail = subscription.attributes.user_email; // Use email to identify the user
-      //   const subscriptionId = subscription.id;
-
-      // Update the user's `isPremium` field in Firestore
-      await updateUserPremiumStatus(userEmail, true);
+      console.log("New subscription created:", subscriptionData);
+      userEmail = subscriptionData.attributes.user_email;
+      
+      await updateUserSubscriptionStatus(userEmail, {
+        isPremium: true,
+        subscriptionId: subscriptionData.id,
+        subscriptionStatus: 'active',
+        endsAt: subscriptionData.attributes.renews_at || undefined,
+        premiumSince: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
       console.log(`User ${userEmail} is now a premium subscriber.`);
       break;
     case "subscription_updated":
       // Handle subscription update
-      console.log("Subscription updated:", payload.data);
+      console.log("Subscription updated:", subscriptionData);
+      userEmail = subscriptionData.attributes.user_email;
+      
+      await updateUserSubscriptionStatus(userEmail, {
+        isPremium: subscriptionData.attributes.status === 'active',
+        subscriptionId: subscriptionData.id,
+        subscriptionStatus: subscriptionData.attributes.status,
+        endsAt: subscriptionData.attributes.ends_at || subscriptionData.attributes.renews_at || undefined,
+        updatedAt: new Date().toISOString()
+      });
       break;
     case "subscription_cancelled":
-      // Handle subscription cancellation
-      await updateUserPremiumStatus(userEmail, false);
-      console.log("Subscription cancelled:", payload.data);
+      // Handle subscription cancellation - keep access until ends_at
+      console.log("Subscription cancelled:", subscriptionData);
+      userEmail = subscriptionData.attributes.user_email;
+      
+      await updateUserSubscriptionStatus(userEmail, {
+        isPremium: true, // Keep access during grace period
+        subscriptionId: subscriptionData.id,
+        subscriptionStatus: 'cancelled',
+        endsAt: subscriptionData.attributes.ends_at || undefined,
+        updatedAt: new Date().toISOString()
+      });
+      break;
+    case "subscription_expired":
+      // Handle subscription expiration - remove access
+      console.log("Subscription expired:", subscriptionData);
+      userEmail = subscriptionData.attributes.user_email;
+      
+      await updateUserSubscriptionStatus(userEmail, {
+        isPremium: false,
+        subscriptionId: subscriptionData.id,
+        subscriptionStatus: 'expired',
+        endsAt: subscriptionData.attributes.ends_at || undefined,
+        updatedAt: new Date().toISOString()
+      });
+      break;
+    case "subscription_payment_failed":
+      // Handle payment failure
+      console.log("Subscription payment failed:", subscriptionData);
+      userEmail = subscriptionData.attributes.user_email;
+      
+      await updateUserSubscriptionStatus(userEmail, {
+        isPremium: subscriptionData.attributes.status !== 'expired', // Keep access unless expired
+        subscriptionId: subscriptionData.id,
+        subscriptionStatus: 'unpaid',
+        endsAt: subscriptionData.attributes.ends_at || undefined,
+        updatedAt: new Date().toISOString()
+      });
+      break;
+    case "subscription_paused":
+      // Handle subscription pause
+      console.log("Subscription paused:", subscriptionData);
+      userEmail = subscriptionData.attributes.user_email;
+      
+      await updateUserSubscriptionStatus(userEmail, {
+        isPremium: false,
+        subscriptionId: subscriptionData.id,
+        subscriptionStatus: 'paused',
+        endsAt: subscriptionData.attributes.ends_at || undefined,
+        updatedAt: new Date().toISOString()
+      });
+      break;
+    case "subscription_unpaused":
+      // Handle subscription unpause
+      console.log("Subscription unpaused:", subscriptionData);
+      userEmail = subscriptionData.attributes.user_email;
+      
+      await updateUserSubscriptionStatus(userEmail, {
+        isPremium: true,
+        subscriptionId: subscriptionData.id,
+        subscriptionStatus: 'active',
+        endsAt: subscriptionData.attributes.renews_at || undefined,
+        updatedAt: new Date().toISOString()
+      });
       break;
     default:
+      console.log("Unhandled webhook event:", payload.meta.event_name);
       break;
   }
 
@@ -48,7 +125,14 @@ export async function POST(request: Request) {
   return NextResponse.redirect(redirectUrl, 303);
 }
 
-async function updateUserPremiumStatus(userEmail: string, isPremium: boolean) {
+async function updateUserSubscriptionStatus(userEmail: string, subscriptionData: {
+  isPremium: boolean;
+  subscriptionId?: string;
+  subscriptionStatus?: string;
+  endsAt?: string | null;
+  premiumSince?: string | null;
+  updatedAt?: string | null;
+}) {
   // Query Firestore to find the user document with the matching email
   const usersRef = collection(db, "users");
   const q = query(usersRef, where("email", "==", userEmail));
@@ -59,11 +143,9 @@ async function updateUserPremiumStatus(userEmail: string, isPremium: boolean) {
     return;
   }
 
-  // Update the `isPremium` field for the user
-  const userDoc = querySnapshot.docs[0]; // Get the first matching document
-  await updateDoc(userDoc.ref, {
-    isPremium: isPremium,
-  });
+  // Update the user's subscription data in Firestore
+  const userDoc = querySnapshot.docs[0];
+  await updateDoc(userDoc.ref, subscriptionData);
 
-  console.log(`Updated isPremium to ${isPremium} for user ${userEmail}.`);
+  console.log(`Updated subscription status for user ${userEmail}:`, subscriptionData);
 }

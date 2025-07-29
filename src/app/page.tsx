@@ -5,7 +5,6 @@ import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { auth } from "./auth";
 import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
-import { MonthlyEvents } from "@/components/Event";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -35,7 +34,7 @@ export default async function Home() {
         ))}
       </div>
 
-      <MonthlyEvents />
+      {/* <MonthlyEvents /> */}
 
       {/* <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
