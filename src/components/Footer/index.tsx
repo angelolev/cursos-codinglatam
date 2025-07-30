@@ -1,4 +1,4 @@
-import { Twitter, Github, Linkedin, Instagram, Youtube } from "lucide-react";
+import { Github, Linkedin, Instagram, Youtube, Twitch } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -45,7 +45,7 @@ export default function Footer() {
                 target="_blank"
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                <Twitter className="h-6 w-6" />
+                <Twitch className="h-6 w-6" />
               </Link>
             </div>
           </div>

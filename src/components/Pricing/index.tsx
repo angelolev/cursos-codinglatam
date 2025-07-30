@@ -104,7 +104,7 @@ export default function Pricing() {
               <button
                 key={frequency}
                 onClick={() => setBillingFrequency(frequency)}
-                className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                   billingFrequency === frequency
                     ? "bg-white text-gray-900 shadow-sm"
                     : "text-white/70 hover:text-white/90"
@@ -127,7 +127,7 @@ export default function Pricing() {
         {pricingPlans.map((plan) => (
           <div
             key={plan.name}
-            className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl  ${
+            className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer ${
               plan.popular
                 ? "ring-2 ring-indigo-600 scale-105"
                 : "hover:scale-102"

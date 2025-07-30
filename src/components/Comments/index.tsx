@@ -160,7 +160,11 @@ export function Comments({ commentId }: CommentsProps) {
                   {comment.name}
                 </h3>
                 <span className="text-[12px] text-white/60">
-                  {new Date(comment.date).toLocaleDateString()}
+                  {new Date(comment.date).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
                 </span>
               </div>
               <div className="w-full">
@@ -237,7 +241,14 @@ export function Comments({ commentId }: CommentsProps) {
                               {reply.name}
                             </h3>
                             <span className="text-[10px] text-white/60">
-                              {new Date(reply.date).toLocaleDateString()}
+                              {new Date(reply.date).toLocaleDateString(
+                                "es-ES",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                }
+                              )}
                             </span>
                           </div>
                           <div className="w-full">

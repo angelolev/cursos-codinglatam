@@ -56,7 +56,7 @@ export function Reviews({ reviewId }: ReviewsProps) {
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-gray-900">{review.name}</h3>
                 <span className="text-sm text-gray-500">
-                  {new Date(review.date).toLocaleDateString()}
+                  {new Date(review.date).toLocaleDateString('es-ES', {day: '2-digit', month: '2-digit', year: 'numeric'})}
                 </span>
               </div>
               <div className="flex items-center mb-3">
