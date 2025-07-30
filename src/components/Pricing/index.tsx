@@ -23,7 +23,8 @@ interface PricingPlan {
 
 export default function Pricing() {
   const { data: session } = useSession();
-  const [billingFrequency, setBillingFrequency] = useState<BillingFrequency>("monthly");
+  const [billingFrequency, setBillingFrequency] =
+    useState<BillingFrequency>("monthly");
 
   const pricingPlans: PricingPlan[] = [
     {
@@ -95,37 +96,41 @@ export default function Pricing() {
           Selecciona el plan que mejor se adapte a tus objetivos y lleva tus
           skills de programación al siguiente nivel
         </p>
-        
+
         {/* Billing Frequency Toggle */}
         <div className="mt-8 inline-flex bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
-          {(['weekly', 'monthly', 'yearly'] as BillingFrequency[]).map((frequency) => (
-            <button
-              key={frequency}
-              onClick={() => setBillingFrequency(frequency)}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                billingFrequency === frequency
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-white/70 hover:text-white/90'
-              }`}
-            >
-              {frequency === 'weekly' && 'Semanal'}
-              {frequency === 'monthly' && 'Mensual'}
-              {frequency === 'yearly' && 'Anual'}
-              {frequency === 'yearly' && (
-                <span className="ml-1 text-xs bg-green-500 text-white px-1.5 py-0.5 rounded">
-                  Ahorra
-                </span>
-              )}
-            </button>
-          ))}
+          {(["weekly", "monthly", "yearly"] as BillingFrequency[]).map(
+            (frequency) => (
+              <button
+                key={frequency}
+                onClick={() => setBillingFrequency(frequency)}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  billingFrequency === frequency
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-white/70 hover:text-white/90"
+                }`}
+              >
+                {frequency === "weekly" && "Semanal"}
+                {frequency === "monthly" && "Mensual"}
+                {frequency === "yearly" && "Anual"}
+                {frequency === "yearly" && (
+                  <span className="ml-1 text-xs bg-green-500 text-white px-1.5 py-0.5 rounded">
+                    Ahorra
+                  </span>
+                )}
+              </button>
+            )
+          )}
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {pricingPlans.map((plan) => (
           <div
             key={plan.name}
-            className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl ${
-              plan.popular ? "ring-2 ring-indigo-600 scale-105" : "hover:scale-102"
+            className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl  ${
+              plan.popular
+                ? "ring-2 ring-indigo-600 scale-105"
+                : "hover:scale-102"
             }`}
           >
             {plan.popular && (
@@ -151,14 +156,16 @@ export default function Pricing() {
                 <span className="text-4xl font-bold text-gray-900">
                   ${plan.pricing[billingFrequency].price}
                 </span>
-                <span className="text-gray-600 ml-1">{plan.pricing[billingFrequency].label}</span>
+                <span className="text-gray-600 ml-1">
+                  {plan.pricing[billingFrequency].label}
+                </span>
               </div>
-              {billingFrequency === 'yearly' && plan.name !== 'Gratis' && (
+              {billingFrequency === "yearly" && plan.name !== "Gratis" && (
                 <div className="mt-1 text-sm text-gray-500">
                   ${(plan.pricing[billingFrequency].price / 12).toFixed(2)}/mes
                 </div>
               )}
-              {billingFrequency === 'weekly' && plan.name !== 'Gratis' && (
+              {billingFrequency === "weekly" && plan.name !== "Gratis" && (
                 <div className="mt-1 text-sm text-blue-600 font-medium">
                   Acceso completo por 7 días
                 </div>
@@ -166,8 +173,8 @@ export default function Pricing() {
               <p className="mt-2 text-gray-600">{plan.description}</p>
               <ul className="mt-8 space-y-4">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start">
-                    <Check className="h-5 w-5 text-green-500 mr-3 mt-1" />
+                  <li key={feature} className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -180,12 +187,15 @@ export default function Pricing() {
                     : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                 }`}
               >
-                {plan.name === "Gratis" 
-                  ? "Comienza ahora" 
-                  : billingFrequency === 'weekly' 
-                    ? "Prueba 7 días" 
-                    : `Suscríbete ${billingFrequency === 'yearly' ? 'anualmente' : 'mensualmente'}`
-                }
+                {plan.name === "Gratis"
+                  ? "Comienza ahora"
+                  : billingFrequency === "weekly"
+                  ? "Prueba 7 días"
+                  : `Suscríbete ${
+                      billingFrequency === "yearly"
+                        ? "anualmente"
+                        : "mensualmente"
+                    }`}
               </Link>
             </div>
           </div>
