@@ -145,7 +145,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="#"
+                  href="/about"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   Acerca de
@@ -169,7 +169,7 @@ export default function Footer() {
               </li> */}
               <li>
                 <Link
-                  href="#"
+                  href="/terms"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   Términos de uso
@@ -177,7 +177,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/privacy"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   Política de privacidad

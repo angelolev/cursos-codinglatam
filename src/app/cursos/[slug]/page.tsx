@@ -70,7 +70,7 @@ export default async function CoursePage({ params }: { params: Params }) {
 
   return (
     <div className="container max-w-7xl mx-auto px-4 md:px-0 pt-0 pb-8">
-      <div className="pt-24">
+      <div className="pt-24 px-0 md:px-6">
         <div className="max-w-7xl mx-auto">
           <BackButton label="Volver a los cursos" />
 
@@ -96,7 +96,9 @@ export default async function CoursePage({ params }: { params: Params }) {
                 )}
               </div>
               <AverageRating reviewId={course.id} />
-              <p className="text-xl text-white/80 mb-8">{course.description}</p>
+              <p className="text-base md:text-xl text-white/80 mb-8">
+                {course.description}
+              </p>
               <div className="bg-white rounded-xl shadow-md p-6 mb-16">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Clases
@@ -109,7 +111,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                         <Link
                           key={item.guid}
                           href={`/cursos/${course.slug}/clases/${item.guid}`}
-                          className={`grid grid-cols-[20px_1fr_60px_60px] md:grid-cols-[20px_minmax(450px,_1fr)_1fr_60px] gap-2 items-center p-3 rounded-lg transition-colors ${
+                          className={`grid grid-cols-[20px_1fr_60px] md:grid-cols-[20px_minmax(450px,_1fr)_1fr_60px] gap-2 items-center py-3 rounded-lg transition-colors mb-0 ${
                             isFree ? "hover:bg-green-50" : "hover:bg-amber-50"
                           }`}
                         >
@@ -119,21 +121,21 @@ export default async function CoursePage({ params }: { params: Params }) {
                             <Lock size={20} className="text-amber-600" />
                           )}
                           <span
-                            className={
+                            className={`text-sm md:text-base ${
                               isFree ? "text-gray-900" : "text-gray-600"
-                            }
+                            }`}
                           >
                             {item.title}
                           </span>
                           <span
-                            className={`justify-self-end ${
+                            className={`justify-self-end text-sm md:text-base ${
                               isFree ? "text-green-600" : "text-amber-600"
                             }`}
                           >
                             {formatTime(item.length)}
                           </span>
                           <span
-                            className={`text-xs px-2 py-1 rounded-full text-center ${
+                            className={`hidden md:block text-xs px-2 py-1 rounded-full text-center ${
                               isFree
                                 ? "bg-green-100 text-green-800"
                                 : "bg-amber-100 text-amber-800"
@@ -222,7 +224,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                       Acceso al Curso
                     </h4>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm flex-col gap-2">
                     <div className="flex items-center">
                       <Play className="h-4 w-4 text-green-600 mr-2" />
                       <span className="text-green-700">

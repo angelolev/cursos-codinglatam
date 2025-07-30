@@ -156,7 +156,9 @@ export function Comments({ commentId }: CommentsProps) {
             </div>
             <div className="flex flex-col flex-grow">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-white/90">{comment.name}</h3>
+                <h3 className="text-[14px] font-semibold text-white/90">
+                  {comment.name}
+                </h3>
                 <span className="text-[12px] text-white/60">
                   {new Date(comment.date).toLocaleDateString()}
                 </span>

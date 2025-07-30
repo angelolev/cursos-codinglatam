@@ -49,10 +49,10 @@ export default async function ProductPage({ params }: { params: Params }) {
                 className="w-full md:w-64 h-80 object-cover rounded-xl shadow-lg"
               />
               <div>
-                <h1 className="text-4xl font-bold text-white mb-4">
+                <h1 className="text-2xl md:text-4xl font-bold text-white mb-4">
                   {product.title}
                 </h1>
-                <p className="text-xl text-white/90 mb-4">
+                <p className="text-base md:text-xl text-white/90 mb-4">
                   {product.description}
                 </p>
                 <div className="flex items-center text-white/90 mb-2">

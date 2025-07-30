@@ -45,12 +45,12 @@ export default function ValidAccessButton({
         <Link
           href={href}
           target="_blank"
-          className="w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center"
+          className="w-full bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors flex items-center justify-center"
         >
           <Play className="h-5 w-5 mr-2" />
           {label}
         </Link>
-        <div className="flex items-center justify-center text-xs text-green-700">
+        <div className="flex items-center justify-center text-sm text-green-700">
           <Gift className="h-3 w-3 mr-1" />
           <span>Contenido gratuito</span>
         </div>
@@ -67,8 +67,8 @@ export default function ValidAccessButton({
           <p className="text-amber-700 text-sm mb-3">
             Este contenido requiere una suscripción Pro para acceder.
           </p>
-          <Link 
-            href="/pro" 
+          <Link
+            href="/pro"
             className="inline-flex items-center px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors text-sm font-semibold"
           >
             <Crown className="h-4 w-4 mr-2" />
