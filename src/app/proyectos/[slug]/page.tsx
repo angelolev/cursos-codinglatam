@@ -1,5 +1,13 @@
 import React from "react";
-import { Clock, Wrench, Code2, Layers, ExternalLink, Lock, Crown } from "lucide-react";
+import {
+  Clock,
+  Wrench,
+  Code2,
+  Layers,
+  ExternalLink,
+  Lock,
+  Crown,
+} from "lucide-react";
 import Link from "next/link";
 import { getProjectBySlug, getProjectComments } from "@/utils/common";
 import { collection, getDocs } from "firebase/firestore";
@@ -57,7 +65,7 @@ export default async function ProjectDetail({ params }: { params: Params }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <Image
-              src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={project.image}
               alt={project.title}
               className="w-full h-80 object-cover rounded-xl mb-8"
               width={800}
@@ -91,8 +99,8 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                 Mockups del proyecto
               </h2>
               <p className="text-gray-600 mb-4">
-                Consulta la imagen adjunta del proyecto para ver el diseño UI/UX
-                y los componentes completos.
+                Consulta la imagen adjunta del proyecto para ver el diseño del
+                proyecto.
               </p>
               <Link href={project.image} target="_blank">
                 <div className="relative h-96">
@@ -101,7 +109,7 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                     alt={project.title}
                     width={800}
                     height={260}
-                    className="w-full h-96 object-contain rounded-xl mb-8"
+                    className="w-full h-96 object-cover rounded-xl mb-8"
                   />
                 </div>
               </Link>
@@ -110,12 +118,32 @@ export default async function ProjectDetail({ params }: { params: Params }) {
             {project.figmaLink && (
               <div className="bg-white rounded-xl shadow-md p-6 mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <svg className="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="#1abcfe"/>
-                    <path d="M4 20a4 4 0 0 1 4-4h4v4a4 4 0 0 1-8 0Z" fill="#0acf83"/>
-                    <path d="M4 12a4 4 0 0 1 4-4h4v8H8a4 4 0 0 1-4-4Z" fill="#ff7262"/>
-                    <path d="M4 4a4 4 0 0 1 4-4h4v8H8a4 4 0 0 1-4-4Z" fill="#f24e1e"/>
-                    <path d="M12 4a4 4 0 0 1 4-4 4 4 0 0 1 0 8h-4V4Z" fill="#a259ff"/>
+                  <svg
+                    className="h-6 w-6 mr-3"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z"
+                      fill="#1abcfe"
+                    />
+                    <path
+                      d="M4 20a4 4 0 0 1 4-4h4v4a4 4 0 0 1-8 0Z"
+                      fill="#0acf83"
+                    />
+                    <path
+                      d="M4 12a4 4 0 0 1 4-4h4v8H8a4 4 0 0 1-4-4Z"
+                      fill="#ff7262"
+                    />
+                    <path
+                      d="M4 4a4 4 0 0 1 4-4h4v8H8a4 4 0 0 1-4-4Z"
+                      fill="#f24e1e"
+                    />
+                    <path
+                      d="M12 4a4 4 0 0 1 4-4 4 4 0 0 1 0 8h-4V4Z"
+                      fill="#a259ff"
+                    />
                   </svg>
                   Archivos de Figma
                 </h2>
@@ -123,7 +151,9 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                 {isPremium ? (
                   <>
                     <p className="text-gray-600 mb-4">
-                      Accede a los archivos de diseño de Figma para ver los componentes, estilos y especificaciones completas del proyecto.
+                      Accede a los archivos de diseño de Figma para ver los
+                      componentes, estilos y especificaciones completas del
+                      proyecto.
                     </p>
                     <Link
                       href={project.figmaLink}
@@ -144,7 +174,9 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                       Contenido Premium
                     </h3>
                     <p className="text-gray-600 mb-6">
-                      Los archivos de Figma están disponibles solo para usuarios premium. Accede a recursos de diseño completos y especificaciones detalladas.
+                      Los archivos de Figma están disponibles solo para usuarios
+                      premium. Accede a recursos de diseño completos y
+                      especificaciones detalladas.
                     </p>
                     <div className="bg-gradient-to-r from-indigo-500 to-indigo-700 rounded-lg p-6 text-white">
                       <div className="flex items-center justify-center mb-3">
@@ -152,10 +184,12 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                         <span className="font-semibold">Hazte Premium</span>
                       </div>
                       <p className="mb-4">
-                        Accede a todos los recursos de diseño, código fuente y contenido exclusivo.
+                        Accede a todos los recursos de diseño, código fuente y
+                        contenido exclusivo.
                       </p>
                       <div className="text-2xl font-bold mb-4">
-                        $4.99<span className="text-sm text-indigo-200">/mes</span>
+                        $4.99
+                        <span className="text-sm text-indigo-200">/mes</span>
                       </div>
                       <Link
                         href="/pro"

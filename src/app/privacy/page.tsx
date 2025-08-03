@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Shield } from "lucide-react";
 
+export const dynamic = 'force-static';
+
 const PrivacyPage: FC = () => {
   return (
     <div className="container mx-auto px-4 py-24">

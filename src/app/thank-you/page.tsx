@@ -1,6 +1,8 @@
 import React from "react";
 import { CheckCircle2, PartyPopper } from "lucide-react";
 
+export const dynamic = 'force-static';
+
 export default function ThankYou() {
   return (
     <div className="pt-48 pb-16 px-4 sm:px-6 lg:px-8 flex-grow">

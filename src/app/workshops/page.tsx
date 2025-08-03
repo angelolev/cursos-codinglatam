@@ -1,6 +1,8 @@
 import Workshop from "@/components/WorkshopCard";
 import { getWorkshops } from "@/utils/common";
 
+export const dynamic = 'force-static';
+
 export default async function Workshops() {
   const workshops = await getWorkshops();
 
