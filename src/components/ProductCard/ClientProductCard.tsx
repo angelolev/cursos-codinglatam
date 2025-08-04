@@ -11,7 +11,7 @@ export function ClientProductCard({
   isFree,
 }: ProductProps) {
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative md:max-w-[320px]">
+    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative w-full md:max-w-[320px]">
       <Link href={`guias/${slug}`}>
         {/* Free/Premium Badge */}
         <div className="absolute top-2 right-2 z-20">

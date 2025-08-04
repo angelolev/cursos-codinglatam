@@ -59,39 +59,72 @@ export function ProductsInfiniteScroll({
 
   return (
     <div className="relative">
-      {/* Horizontal scrolling container */}
-      <div className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-hide">
-        {products.map((product, index) => (
-          <div key={product.id || index} className="flex-none snap-start">
-            <ClientProductCard {...product} />
-          </div>
-        ))}
+      {/* Mobile and tablet: Responsive grid */}
+      <div className="xl:hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products.map((product, index) => (
+            <div key={product.id || index} className="flex justify-center">
+              <ClientProductCard {...product} />
+            </div>
+          ))}
 
-        {/* Loading placeholder */}
-        {loading && (
-          <div className="flex-none">
-            <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse md:max-w-[320px]">
-              <div className="h-48 w-full bg-gray-200"></div>
-              <div className="p-6">
-                <div className="h-6 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+          {/* Loading placeholder */}
+          {loading && (
+            <div className="flex justify-center">
+              <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse w-full max-w-[320px]">
+                <div className="h-48 w-full bg-gray-200"></div>
+                <div className="p-6">
+                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
               </div>
             </div>
+          )}
+        </div>
+
+        {/* Grid indicator */}
+        <div className="flex justify-center mt-6">
+          <div className="text-sm text-white/60">
+            {products.length} guías{hasMore && " (más contenido se carga automáticamente)"}
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* Desktop (XL and up): Horizontal scroll */}
+      <div className="hidden xl:block">
+        <div className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-hide">
+          {products.map((product, index) => (
+            <div key={product.id || index} className="flex-none snap-start">
+              <ClientProductCard {...product} />
+            </div>
+          ))}
+
+          {/* Loading placeholder */}
+          {loading && (
+            <div className="flex-none">
+              <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse w-full max-w-[320px]">
+                <div className="h-48 w-full bg-gray-200"></div>
+                <div className="p-6">
+                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Horizontal scroll indicator */}
+        <div className="flex justify-center mt-6">
+          <div className="text-sm text-white/60">
+            {products.length} guías{hasMore && " (desliza horizontalmente para ver más)"}
+          </div>
+        </div>
       </div>
 
       {/* Intersection observer target */}
       <div ref={observerRef} className="w-full h-4 absolute -bottom-4 left-0" />
-
-      {/* Scroll indicators */}
-      <div className="flex justify-center mt-6 gap-2">
-        <div className="text-sm text-white/60">
-          {products.length} de {products.length} guías
-          {hasMore && " (desliza para ver más)"}
-        </div>
-      </div>
 
       <style jsx>{`
         .scrollbar-hide {
