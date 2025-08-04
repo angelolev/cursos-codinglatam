@@ -59,9 +59,9 @@ export function ProductsInfiniteScroll({
 
   return (
     <div className="relative">
-      {/* Mobile and tablet: Responsive grid */}
-      <div className="xl:hidden">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Mobile: Responsive grid */}
+      <div className="md:hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {products.map((product, index) => (
             <div key={product.id || index} className="flex justify-center">
               <ClientProductCard {...product} />
@@ -91,8 +91,8 @@ export function ProductsInfiniteScroll({
         </div>
       </div>
 
-      {/* Desktop (XL and up): Horizontal scroll */}
-      <div className="hidden xl:block">
+      {/* Tablet and Desktop (MD and up): Horizontal scroll */}
+      <div className="hidden md:block">
         <div className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-hide">
           {products.map((product, index) => (
             <div key={product.id || index} className="flex-none snap-start">
