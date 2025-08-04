@@ -1,10 +1,10 @@
 import { CourseCard } from "@/components/CourseCard";
-import Product from "@/components/ProductCard";
 import Workshop from "@/components/WorkshopCard";
 import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { auth } from "./auth";
 import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
+import { ProductsInfiniteScroll } from "@/components/ProductsInfiniteScroll";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -60,11 +60,7 @@ export default async function Home() {
           búsqueda laboral y mejora de skills
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products?.map((product, index) => (
-          <Product key={index} {...product} />
-        ))}
-      </div>
+      <ProductsInfiniteScroll initialProducts={products || []} />
       {session?.user?.isPremium ? null : <Pricing />}
     </main>
   );

@@ -47,6 +47,7 @@ export default async function Workshop({
             </span>
           )}
         </div>
+
         <div className="h-48 w-full overflow-hidden relative">
           <Image
             className="w-full h-full object-cover"

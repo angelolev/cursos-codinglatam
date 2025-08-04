@@ -200,7 +200,7 @@ export async function getProducts(): Promise<ProductProps[] | null> {
     });
     return productsList;
   } catch (error) {
-    console.error("Failed to fetch course:", error);
+    console.error("Failed to fetch products:", error);
     return null;
   }
 }
@@ -308,6 +308,7 @@ export const formatTime = (seconds: number) => {
 
   return `${formattedMinutes}:${formattedSeconds}`;
 };
+
 
 export async function getLiveCourses(): Promise<LiveCourseProps[] | null> {
   try {

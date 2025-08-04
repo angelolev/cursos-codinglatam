@@ -1,7 +1,7 @@
 import Product from "@/components/ProductCard";
 import { getProducts } from "@/utils/common";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 
 export default async function Guias() {
   const products = await getProducts();
