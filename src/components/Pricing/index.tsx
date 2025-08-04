@@ -3,6 +3,7 @@ import { Check, Crown } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 type BillingFrequency = "weekly" | "monthly" | "yearly";
 
@@ -23,6 +24,7 @@ interface PricingPlan {
 
 export default function Pricing() {
   const { data: session } = useSession();
+  const { convertAndFormatPrice, currentCurrency, isLoading } = useCurrency();
   const [billingFrequency, setBillingFrequency] =
     useState<BillingFrequency>("monthly");
 
@@ -122,6 +124,15 @@ export default function Pricing() {
             )
           )}
         </div>
+        
+        {/* Currency Indicator */}
+        {!isLoading && currentCurrency.code !== 'USD' && (
+          <div className="mt-4 text-sm text-white/60 flex items-center justify-center gap-2">
+            <span>{currentCurrency.flag}</span>
+            <span>Precios mostrados en {currentCurrency.name}</span>
+            <span className="text-xs text-white/40">• Pago procesado en USD</span>
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {pricingPlans.map((plan) => (
@@ -154,7 +165,13 @@ export default function Pricing() {
               </div>
               <div className="mt-4 flex items-baseline">
                 <span className="text-4xl font-bold text-gray-900">
-                  ${plan.pricing[billingFrequency].price}
+                  {isLoading ? (
+                    <span className="animate-pulse">$...</span>
+                  ) : plan.name === "Gratis" ? (
+                    `${currentCurrency.symbol}${plan.pricing[billingFrequency].price}`
+                  ) : (
+                    convertAndFormatPrice(plan.pricing[billingFrequency].price)
+                  )}
                 </span>
                 <span className="text-gray-600 ml-1">
                   {plan.pricing[billingFrequency].label}
@@ -162,7 +179,12 @@ export default function Pricing() {
               </div>
               {billingFrequency === "yearly" && plan.name !== "Gratis" && (
                 <div className="mt-1 text-sm text-gray-500">
-                  ${(plan.pricing[billingFrequency].price / 12).toFixed(2)}/mes
+                  {isLoading ? (
+                    <span className="animate-pulse">$...</span>
+                  ) : (
+                    convertAndFormatPrice(plan.pricing[billingFrequency].price / 12)
+                  )}
+                  /mes
                 </div>
               )}
               {billingFrequency === "weekly" && plan.name !== "Gratis" && (

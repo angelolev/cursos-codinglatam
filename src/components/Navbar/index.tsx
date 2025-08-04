@@ -19,6 +19,7 @@ import { DocumentData } from "firebase/firestore";
 import Swal from "sweetalert2";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import CurrencySelector from "../CurrencySelector";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -90,6 +91,7 @@ export function Navbar() {
             </Link>
             {session?.user ? (
               <div className="hidden md:flex items-center gap-4 ">
+                <CurrencySelector />
                 <div className="relative">
                   <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -144,13 +146,16 @@ export function Navbar() {
                 </div>
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="hidden md:inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-400 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-colors"
-              >
-                <LogIn className="h-4 w-4 mr-2" />
-                Ingresar
-              </Link>
+              <div className="hidden md:flex items-center gap-4">
+                <CurrencySelector />
+                <Link
+                  href="/login"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-400 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-colors"
+                >
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Ingresar
+                </Link>
+              </div>
             )}
 
             {/* Mobile Menu Button */}

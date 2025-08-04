@@ -70,7 +70,7 @@ export default async function CoursePage({ params }: { params: Params }) {
 
   return (
     <div className="container max-w-7xl mx-auto px-4 md:px-0 pt-0 pb-8">
-      <div className="pt-24 px-0 md:px-6">
+      <div className="pt-24 px-0 md:px-6 lg:px-0">
         <div className="max-w-7xl mx-auto">
           <BackButton label="Volver a los cursos" />
 
