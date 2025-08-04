@@ -50,10 +50,10 @@ export async function CourseCard({
           />
         </div>
         <div className="p-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
 
           {course && <AverageRating reviewId={course.id} />}
-          <p className="text-gray-600 mb-4">{shortDescription}</p>
+          <p className="text-gray-600 mb-4 text-sm">{shortDescription}</p>
           <div className="flex justify-between items-center text-sm text-gray-500">
             <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">
               {level}

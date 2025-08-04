@@ -47,10 +47,10 @@ export default async function Product({
           />
         </div>
         <div className="p-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
 
           {product && <AverageRating reviewId={product.id} />}
-          <p className="text-gray-600 mb-4">{description}</p>
+          <p className="text-gray-600 mb-4 text-sm">{description}</p>
         </div>
       </Link>
     </div>

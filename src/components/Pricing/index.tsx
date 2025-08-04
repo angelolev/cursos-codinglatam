@@ -63,6 +63,7 @@ export default function Pricing() {
         "Acceso al grupo privado de la comunidad",
         "Descuentos Exclusivos para Cursos en vivo",
         "Proyectos y plantillas premium",
+        "Figma de proyectos",
         "Workshops en vivo",
         "Soporte prioritario",
       ],
@@ -124,13 +125,15 @@ export default function Pricing() {
             )
           )}
         </div>
-        
+
         {/* Currency Indicator */}
-        {!isLoading && currentCurrency.code !== 'USD' && (
+        {!isLoading && currentCurrency.code !== "USD" && (
           <div className="mt-4 text-sm text-white/60 flex items-center justify-center gap-2">
             <span>{currentCurrency.flag}</span>
             <span>Precios mostrados en {currentCurrency.name}</span>
-            <span className="text-xs text-white/40">• Pago procesado en USD</span>
+            <span className="text-xs text-white/40">
+              • Pago procesado en USD
+            </span>
           </div>
         )}
       </div>
@@ -182,7 +185,9 @@ export default function Pricing() {
                   {isLoading ? (
                     <span className="animate-pulse">$...</span>
                   ) : (
-                    convertAndFormatPrice(plan.pricing[billingFrequency].price / 12)
+                    convertAndFormatPrice(
+                      plan.pricing[billingFrequency].price / 12
+                    )
                   )}
                   /mes
                 </div>
@@ -213,11 +218,7 @@ export default function Pricing() {
                   ? "Comienza ahora"
                   : billingFrequency === "weekly"
                   ? "Prueba 7 días"
-                  : `Suscríbete ${
-                      billingFrequency === "yearly"
-                        ? "anualmente"
-                        : "mensualmente"
-                    }`}
+                  : `Suscríbete`}
               </Link>
             </div>
           </div>
