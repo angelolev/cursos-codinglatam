@@ -5,6 +5,7 @@ import { auth } from "./auth";
 import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
 import { ProductsInfiniteScroll } from "@/components/ProductsInfiniteScroll";
+import Link from "next/link";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -61,6 +62,9 @@ export default async function Home() {
         </p>
       </div>
       <ProductsInfiniteScroll initialProducts={products || []} />
+      <Link href="/guias" className="text-white/60 text-center block mx-auto">
+        Ver todas las guías
+      </Link>
       {session?.user?.isPremium ? null : <Pricing />}
     </main>
   );
