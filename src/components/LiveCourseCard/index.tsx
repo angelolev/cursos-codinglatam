@@ -132,7 +132,7 @@ export function LiveCourseCard({
           <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
         </Link>
 
-        <p className="text-gray-600 mb-4">{description}</p>
+        <p className="text-gray-600 mb-4 text-sm">{description}</p>
 
         <div className="flex items-center text-sm text-gray-500 mb-4">
           <Calendar className="h-4 w-4 mr-1" />

@@ -23,7 +23,7 @@ export default function Hero() {
               </Link>
             </div>
           </div>
-          <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
                 <Users className="h-8 w-8 text-white mb-3" />
@@ -44,7 +44,7 @@ export default function Hero() {
                 </p>
               </div>
             </div>
-            <div className="space-y-6 sm:mt-6">
+            <div className="space-y-6 lg:mt-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
                 <Rocket className="h-8 w-8 text-white mb-3" />
                 <h3 className="text-xl font-semibold text-white mb-2">

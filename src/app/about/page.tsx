@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { BookOpen, Users, Zap } from "lucide-react";
 
+export const dynamic = 'force-static';
+
 const AboutPage: FC = () => {
   return (
     <div className="container mx-auto px-4 py-24">

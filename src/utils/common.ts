@@ -32,7 +32,6 @@ export async function getCourseBySlug(
   } catch (error) {
     console.error("Failed to fetch course:", error);
     throw new Error(`Failed to fetch course with slug: ${slug}`);
-    return null;
   }
 }
 
@@ -62,7 +61,6 @@ export async function getLiveCourseBySlug(
   } catch (error) {
     console.error("Failed to fetch course:", error);
     throw new Error(`Failed to fetch course with slug: ${slug}`);
-    return null;
   }
 }
 
@@ -202,7 +200,7 @@ export async function getProducts(): Promise<ProductProps[] | null> {
     });
     return productsList;
   } catch (error) {
-    console.error("Failed to fetch course:", error);
+    console.error("Failed to fetch products:", error);
     return null;
   }
 }
@@ -311,6 +309,7 @@ export const formatTime = (seconds: number) => {
   return `${formattedMinutes}:${formattedSeconds}`;
 };
 
+
 export async function getLiveCourses(): Promise<LiveCourseProps[] | null> {
   try {
     const coursesCollection = collection(db, "liveCourses");
@@ -379,18 +378,19 @@ export async function getProjectBySlug(
   slug: string
 ): Promise<ProjectProps | null> {
   try {
-    // Query to find course by slug
+    // Query to find project by slug - much more efficient
     const projectsRef = collection(db, "projects");
-    const q = query(projectsRef);
+    const q = query(projectsRef, where("slug", "==", slug));
 
     const querySnapshot = await getDocs(q);
 
-    // Find the course with matching slug
-    const projectDoc = querySnapshot.docs.find(
-      (doc) => doc.data().slug === slug
-    );
+    if (querySnapshot.empty) {
+      console.warn(`No project found with slug: ${slug}`);
+      return null;
+    }
 
-    if (!projectDoc) return null;
+    // Assuming slugs are unique, get the first matching document
+    const projectDoc = querySnapshot.docs[0];
 
     return {
       id: projectDoc.id,
@@ -417,12 +417,14 @@ export async function getProjectComments(
       const data = doc.data();
       projectComments.push({
         id: doc.id, // Include the document ID
-        comment: data.comment,
-        githubLink: data.githubLink,
+        comment: data.comment || "",
+        githubLink: data.githubLink || "",
         projectId: data.projectId,
         parentId: data.parentId || null, // Include parentId
-        user: data.user,
-        timestamp: data.timestamp.toDate(), // Convert Firestore Timestamp to JavaScript Date
+        user: data.user || {},
+        timestamp: data.timestamp
+          ? data.timestamp.toDate().toISOString()
+          : new Date().toISOString(), // Convert to ISO string for serialization
       });
     });
 

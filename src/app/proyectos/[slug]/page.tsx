@@ -1,5 +1,10 @@
 import React from "react";
-import { Clock, Wrench, Code2, Layers } from "lucide-react";
+import {
+  Clock,
+  Wrench,
+  Code2,
+  Layers,
+} from "lucide-react";
 import Link from "next/link";
 import { getProjectBySlug, getProjectComments } from "@/utils/common";
 import { collection, getDocs } from "firebase/firestore";
@@ -9,6 +14,7 @@ import ProjectComments from "@/components/ProjectComments";
 import { auth } from "@/app/auth";
 import { redirect } from "next/navigation";
 import BackButton from "@/components/buttons/BackButton";
+import FigmaLinkSection from "@/components/projects/FigmaLinkSection";
 
 type Params = Promise<{ slug: string }>;
 
@@ -47,6 +53,7 @@ export default async function ProjectDetail({ params }: { params: Params }) {
   }
 
   const projectComments = await getProjectComments(project.id);
+  const isPremium = session.user?.isPremium || false;
 
   return (
     <div className="pb-16 px-4 pt-24">
@@ -56,7 +63,7 @@ export default async function ProjectDetail({ params }: { params: Params }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <Image
-              src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={project.image}
               alt={project.title}
               className="w-full h-80 object-cover rounded-xl mb-8"
               width={800}
@@ -90,8 +97,8 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                 Mockups del proyecto
               </h2>
               <p className="text-gray-600 mb-4">
-                Consulta la imagen adjunta del proyecto para ver el diseño UI/UX
-                y los componentes completos.
+                Consulta la imagen adjunta del proyecto para ver el diseño del
+                proyecto.
               </p>
               <Link href={project.image} target="_blank">
                 <div className="relative h-96">
@@ -100,11 +107,18 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                     alt={project.title}
                     width={800}
                     height={260}
-                    className="w-full h-96 object-contain rounded-xl mb-8"
+                    className="w-full h-96 object-cover rounded-xl mb-8"
                   />
                 </div>
               </Link>
             </div>
+
+            {project.figmaLink && (
+              <FigmaLinkSection 
+                figmaLink={project.figmaLink} 
+                isPremium={isPremium} 
+              />
+            )}
 
             <ProjectComments
               comments={projectComments}

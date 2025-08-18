@@ -1,10 +1,11 @@
 import { CourseCard } from "@/components/CourseCard";
-import Product from "@/components/ProductCard";
 import Workshop from "@/components/WorkshopCard";
 import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { auth } from "./auth";
 import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
+import { ProductsInfiniteScroll } from "@/components/ProductsInfiniteScroll";
+import Link from "next/link";
 
 export default async function Home() {
   const courses = await getCourses();
@@ -13,7 +14,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
       {session?.user?.isPremium ? null : <Hero />}
 
       <div className="text-center mb-24">
@@ -25,7 +26,7 @@ export default async function Home() {
           impartidos por expertos de la industria
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {courses?.map((course, index) => (
           <CourseCard key={index} {...course} />
         ))}
@@ -60,11 +61,13 @@ export default async function Home() {
           búsqueda laboral y mejora de skills
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products?.map((product, index) => (
-          <Product key={index} {...product} />
-        ))}
-      </div>
+      <ProductsInfiniteScroll initialProducts={products || []} />
+      <Link
+        href="/guias"
+        className="text-white/60 text-center block mx-auto cursor-pointer"
+      >
+        Ver todas las guías
+      </Link>
       {session?.user?.isPremium ? null : <Pricing />}
     </main>
   );

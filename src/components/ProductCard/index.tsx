@@ -14,7 +14,7 @@ export default async function Product({
 }: ProductProps) {
   const product = await getProductBySlug(slug);
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative">
+    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative md:max-w-[320px]">
       <Link href={`guias/${slug}`}>
         {/* Free/Premium Badge */}
         <div className="absolute top-2 right-2 z-20">
@@ -47,10 +47,10 @@ export default async function Product({
           />
         </div>
         <div className="p-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
 
           {product && <AverageRating reviewId={product.id} />}
-          <p className="text-gray-600 mb-4">{description}</p>
+          <p className="text-gray-600 mb-4 text-sm">{description}</p>
         </div>
       </Link>
     </div>

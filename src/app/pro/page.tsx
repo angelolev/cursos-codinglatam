@@ -14,6 +14,7 @@ import SubscriptionButton from "@/components/buttons/SubscriptionButton";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 type BillingFrequency = "weekly" | "monthly" | "yearly";
 
@@ -76,6 +77,7 @@ const benefits = [
 
 export default function ProPage() {
   const { data: session } = useSession();
+  const { convertAndFormatPrice, currentCurrency, isLoading } = useCurrency();
   const [billingFrequency, setBillingFrequency] =
     useState<BillingFrequency>("monthly");
 
@@ -138,6 +140,15 @@ export default function ProPage() {
               )
             )}
           </div>
+
+          {/* Currency Indicator */}
+          {!isLoading && currentCurrency.code !== 'USD' && (
+            <div className="mb-6 text-sm text-white/60 flex items-center justify-center gap-2">
+              <span>{currentCurrency.flag}</span>
+              <span>Precios mostrados en {currentCurrency.name}</span>
+              <span className="text-xs text-white/40">• Pago procesado en USD</span>
+            </div>
+          )}
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <SubscriptionButton />
@@ -233,14 +244,23 @@ export default function ProPage() {
           </div>
           <div className="text-center mb-6">
             <div className="text-5xl font-bold text-gray-900">
-              ${pricing[billingFrequency].price}
+              {isLoading ? (
+                <span className="animate-pulse">$...</span>
+              ) : (
+                convertAndFormatPrice(pricing[billingFrequency].price)
+              )}
               <span className="text-xl text-gray-500">
                 {pricing[billingFrequency].label}
               </span>
             </div>
             {billingFrequency === "yearly" && (
               <div className="mt-1 text-sm text-gray-500">
-                ${(pricing[billingFrequency].price / 12).toFixed(2)}/mes
+                {isLoading ? (
+                  <span className="animate-pulse">$...</span>
+                ) : (
+                  convertAndFormatPrice(pricing[billingFrequency].price / 12)
+                )}
+                /mes
               </div>
             )}
             {billingFrequency === "weekly" && (
@@ -314,14 +334,23 @@ export default function ProPage() {
               </div>
               <div className="text-center mb-6">
                 <div className="text-5xl font-bold text-gray-900">
-                  ${pricing[billingFrequency].price}
+                  {isLoading ? (
+                    <span className="animate-pulse">$...</span>
+                  ) : (
+                    convertAndFormatPrice(pricing[billingFrequency].price)
+                  )}
                   <span className="text-xl text-gray-500">
                     {pricing[billingFrequency].label}
                   </span>
                 </div>
                 {billingFrequency === "yearly" && (
                   <div className="mt-1 text-sm text-gray-500">
-                    ${(pricing[billingFrequency].price / 12).toFixed(2)}/mes
+                    {isLoading ? (
+                      <span className="animate-pulse">$...</span>
+                    ) : (
+                      convertAndFormatPrice(pricing[billingFrequency].price / 12)
+                    )}
+                    /mes
                   </div>
                 )}
                 {billingFrequency === "weekly" && (

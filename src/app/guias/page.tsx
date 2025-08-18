@@ -1,12 +1,14 @@
-import Product from "@/components/ProductCard";
+import GuiasClient from "@/components/GuiasClient";
 import { getProducts } from "@/utils/common";
+
+export const dynamic = "force-static";
 
 export default async function Guias() {
   const products = await getProducts();
 
   return (
     <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
-      <div className="text-center mt-12 mb-24">
+      <div className="text-center my-12">
         <h1 className="text-4xl font-bold text-white/90 mb-4">
           Guías de estudio para ti
         </h1>
@@ -15,11 +17,7 @@ export default async function Guias() {
           búsqueda laboral y mejora de skills
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products?.map((product, index) => (
-          <Product key={index} {...product} />
-        ))}
-      </div>
+      <GuiasClient products={products || []} />
     </main>
   );
 }

@@ -41,8 +41,7 @@ export default function ReplyForm({
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-      console.log(result);
+      await response.json();
 
       // Clear the form
       setReply("");
