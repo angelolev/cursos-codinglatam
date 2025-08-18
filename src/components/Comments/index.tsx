@@ -72,9 +72,6 @@ export function Comments({ commentId }: CommentsProps) {
         if (parentComment && parentComment.replies) {
           parentComment.replies.push(reply);
         } else {
-          console.log(
-            `Could not find parent comment with ID: ${reply.parentId}`
-          ); // Debug log
         }
       });
 
@@ -108,9 +105,6 @@ export function Comments({ commentId }: CommentsProps) {
         date: new Date().toISOString(),
         photoURL: session.user?.image,
       };
-
-      console.log(`Adding reply to parent: ${parentId}`, replyData);
-      console.log(`Generated reply ID: ${uniqueReplyId}`);
 
       // Use doc() with a specific ID instead of addDoc()
       // This lets you control the document ID instead of letting Firestore generate it

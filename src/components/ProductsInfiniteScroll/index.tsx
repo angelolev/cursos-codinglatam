@@ -46,7 +46,7 @@ export function ProductsInfiniteScroll({
 
   const scrollLeft = useCallback(() => {
     if (scrollContainerRef.current) {
-      const cardWidth = 320 + 24; // Card width + gap
+      const cardWidth = 290 + 24; // Card width + gap
       scrollContainerRef.current.scrollBy({
         left: -cardWidth * 2,
         behavior: "smooth",
@@ -56,7 +56,7 @@ export function ProductsInfiniteScroll({
 
   const scrollRight = useCallback(() => {
     if (scrollContainerRef.current) {
-      const cardWidth = 320 + 24; // Card width + gap
+      const cardWidth = 290 + 24; // Card width + gap
       scrollContainerRef.current.scrollBy({
         left: cardWidth * 2,
         behavior: "smooth",
@@ -121,7 +121,7 @@ export function ProductsInfiniteScroll({
           {/* Loading placeholder */}
           {loading && (
             <div className="flex justify-center">
-              <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse w-full max-w-[320px]">
+              <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse w-full max-w-[290px]">
                 <div className="h-48 w-full bg-gray-200"></div>
                 <div className="p-6">
                   <div className="h-6 bg-gray-200 rounded mb-2"></div>
@@ -144,7 +144,7 @@ export function ProductsInfiniteScroll({
 
       {/* Tablet and Desktop (MD and up): Horizontal scroll */}
       <div className="hidden md:block">
-        <div className="relative">
+        <div className="relative overflow-hidden">
           {/* Left Arrow */}
           <button
             onClick={scrollLeft}
@@ -176,7 +176,7 @@ export function ProductsInfiniteScroll({
           {/* Scrollable container */}
           <div
             ref={scrollContainerRef}
-            className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-hide px-16 mx-16"
+            className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory scrollbar-hide md:px-8 lg:px-16"
           >
             {products.map((product, index) => (
               <div key={product.id || index} className="flex-none snap-start">
@@ -187,7 +187,7 @@ export function ProductsInfiniteScroll({
             {/* Loading placeholder */}
             {loading && (
               <div className="flex-none">
-                <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse w-full max-w-[320px]">
+                <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse w-full max-w-[290px]">
                   <div className="h-48 w-full bg-gray-200"></div>
                   <div className="p-6">
                     <div className="h-6 bg-gray-200 rounded mb-2"></div>

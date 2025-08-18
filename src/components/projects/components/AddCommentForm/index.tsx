@@ -37,8 +37,7 @@ export default function AddCommentForm({ projectId }: AddCommentFormProps) {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-      console.log(result);
+      await response.json();
     } catch (error) {
       console.error("Error:", error);
     } finally {

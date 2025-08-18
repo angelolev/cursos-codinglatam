@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reviews } from "@/components/Reviews";
 import { AddReview } from "@/components/AddReview";
+import CourseProgressCard from "@/components/CourseProgressCard";
+import LessonProgressIndicator from "@/components/LessonProgressIndicator";
 import {
   formatTime,
   getCourseBySlug,
@@ -111,15 +113,19 @@ export default async function CoursePage({ params }: { params: Params }) {
                         <Link
                           key={item.guid}
                           href={`/cursos/${course.slug}/clases/${item.guid}`}
-                          className={`grid grid-cols-[20px_1fr_60px] md:grid-cols-[20px_minmax(450px,_1fr)_1fr_60px] gap-2 items-center py-3 rounded-lg transition-colors mb-0 ${
+                          className={`grid grid-cols-[20px_1fr_60px] md:grid-cols-[20px_minmax(400px,_1fr)_80px_60px] gap-2 items-center py-3 rounded-lg transition-colors mb-0 ${
                             isFree ? "hover:bg-green-50" : "hover:bg-amber-50"
                           }`}
                         >
-                          {isFree ? (
-                            <Play size={20} className="text-green-600" />
-                          ) : (
-                            <Lock size={20} className="text-amber-600" />
-                          )}
+                          <div className="flex items-center">
+                            <LessonProgressIndicator
+                              courseId={course.slug}
+                              lessonId={item.guid}
+                              lessonTitle=""
+                              showTitle={false}
+                              size="sm"
+                            />
+                          </div>
                           <span
                             className={`text-sm md:text-base ${
                               isFree ? "text-gray-900" : "text-gray-600"
@@ -189,10 +195,15 @@ export default async function CoursePage({ params }: { params: Params }) {
             </div>
 
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-                <div className="text-3xl font-bold text-gray-900 mb-6">
-                  {course.title}
-                </div>
+              <div className="space-y-6">
+                <CourseProgressCard 
+                  courseId={course.slug}
+                  courseTitle={course.title}
+                />
+                <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
+                  <div className="text-3xl font-bold text-gray-900 mb-6">
+                    {course.title}
+                  </div>
                 <div className="space-y-4 mb-6">
                   <div className="flex items-center text-gray-600">
                     <Clock className="h-5 w-5 mr-2" />
@@ -240,6 +251,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                     Solo necesitas estar registrado para acceder a las primeras
                     4 lecciones
                   </p>
+                </div>
                 </div>
               </div>
             </div>

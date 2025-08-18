@@ -101,7 +101,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
       checkIfCommented();
       fetchData();
     }
-  }, [session, hasCommented]);
+  }, [session, hasCommented, reviewId, user?.aud, user?.email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

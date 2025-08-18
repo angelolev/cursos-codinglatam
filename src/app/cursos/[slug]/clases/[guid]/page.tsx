@@ -4,6 +4,7 @@ import { Comments } from "@/components/Comments";
 import FreemiumGuard from "@/components/FreemiumGuard";
 import LikeMaterial from "@/components/LikeMaterial";
 import Resources from "@/components/Resources";
+import VideoPlayerWithProgress from "@/components/VideoPlayerWithProgress";
 import { getVideosFromCollection, orderVideosByTitle } from "@/utils/common";
 import { getLessonIndex } from "@/utils/freemium";
 import { ArrowRight } from "lucide-react";
@@ -55,6 +56,7 @@ export default async function Page({ params }: { params: Params }) {
   );
 
   const video = await data.json();
+  
 
   const allVideos = await getVideosFromCollection(slug);
   
@@ -81,21 +83,13 @@ export default async function Page({ params }: { params: Params }) {
     >
       <main className="pt-20 mx-auto max-w-7xl sm:px-6 px-4 flex flex-col lg:flex-row gap-6 lg:px-0 flex-grow">
         <div className="w-full">
-          <div className="w-full relative mb-8 overflow-hidden bg-gray-800 rounded aspect-video">
-            <iframe
-              src={`https://iframe.mediadelivery.net/embed/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true`}
-              loading="lazy"
-              style={{
-                border: 0,
-                position: "absolute",
-                top: 0,
-                height: "100%",
-                width: "100%",
-              }}
-              allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
-              allowFullScreen
-            ></iframe>
-          </div>
+          <VideoPlayerWithProgress 
+            guid={guid}
+            courseSlug={slug}
+            videoDuration={video.length || video.duration || video.lengthSeconds || video.durationSeconds}
+            libraryId={process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID || ""}
+            totalCourseLessons={orderedVideos.length}
+          />
           <div className="class-information">
             <div className="w-full flex-wrap gap-6 flex items-center justify-between mb-8">
               <h1 className="text-2xl font-bold text-primary-300">

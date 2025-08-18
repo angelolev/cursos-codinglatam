@@ -10,7 +10,6 @@ import {
   filterBySearch,
   filterByFreePremium,
 } from "@/utils/filterHelpers";
-import Link from "next/link";
 
 interface GuiasClientProps {
   products: ProductProps[];

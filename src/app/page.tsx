@@ -14,7 +14,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
+    <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
       {session?.user?.isPremium ? null : <Hero />}
 
       <div className="text-center mb-24">
@@ -26,7 +26,7 @@ export default async function Home() {
           impartidos por expertos de la industria
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {courses?.map((course, index) => (
           <CourseCard key={index} {...course} />
         ))}
@@ -62,7 +62,10 @@ export default async function Home() {
         </p>
       </div>
       <ProductsInfiniteScroll initialProducts={products || []} />
-      <Link href="/guias" className="text-white/60 text-center block mx-auto">
+      <Link
+        href="/guias"
+        className="text-white/60 text-center block mx-auto cursor-pointer"
+      >
         Ver todas las guías
       </Link>
       {session?.user?.isPremium ? null : <Pricing />}
