@@ -11,7 +11,7 @@ import ProgressBar from "@/components/ProgressBar";
 function formatWatchTime(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
-  
+
   if (hours > 0) {
     return `${hours}h ${minutes}m`;
   }
@@ -22,22 +22,24 @@ function formatWatchTime(seconds: number): string {
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
-  const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-  
-  if (diffInDays === 0) return 'Hoy';
-  if (diffInDays === 1) return 'Ayer';
+  const diffInDays = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  if (diffInDays === 0) return "Hoy";
+  if (diffInDays === 1) return "Ayer";
   if (diffInDays < 7) return `Hace ${diffInDays} días`;
-  return date.toLocaleDateString('es-ES', { 
-    day: 'numeric', 
-    month: 'short', 
-    year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined 
+  return date.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "short",
+    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
   });
 }
 
 export default async function Profile() {
   const session = await auth();
   const user = session?.user;
-  
+
   if (!user?.email) {
     return (
       <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
@@ -54,28 +56,35 @@ export default async function Profile() {
   const [progressStats, userCourseProgress, courses] = await Promise.all([
     getUserProgressStats(user.email),
     getUserCourseProgress(user.email),
-    getCourses()
+    getCourses(),
   ]);
 
   // Combine course progress with course metadata
-  const coursesWithProgress = userCourseProgress.map(progress => {
-    const courseData = courses?.find(course => course.slug === progress.courseId);
-    return {
-      ...progress,
-      courseData
-    };
-  }).filter(item => item.courseData); // Only include courses that exist
+  const coursesWithProgress = userCourseProgress
+    .map((progress) => {
+      const courseData = courses?.find(
+        (course) => course.slug === progress.courseId
+      );
+      return {
+        ...progress,
+        courseData,
+      };
+    })
+    .filter((item) => item.courseData); // Only include courses that exist
 
   // Sort by last accessed date (most recent first)
-  coursesWithProgress.sort((a, b) => 
-    new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime()
+  coursesWithProgress.sort(
+    (a, b) =>
+      new Date(b.lastAccessedAt).getTime() -
+      new Date(a.lastAccessedAt).getTime()
   );
 
   // Get recommended courses (courses not yet started)
-  const startedCourseIds = userCourseProgress.map(p => p.courseId);
-  const recommendedCourses = courses
-    ?.filter(course => !startedCourseIds.includes(course.slug))
-    ?.slice(0, 3) ?? [];
+  const startedCourseIds = userCourseProgress.map((p) => p.courseId);
+  const recommendedCourses =
+    courses
+      ?.filter((course) => !startedCourseIds.includes(course.slug))
+      ?.slice(0, 3) ?? [];
 
   return (
     <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
@@ -207,11 +216,14 @@ export default async function Profile() {
                 </h2>
                 <div className="space-y-6">
                   {coursesWithProgress.map((courseProgress) => (
-                    <div key={courseProgress.courseId} className="flex items-start">
+                    <div
+                      key={courseProgress.courseId}
+                      className="flex items-start"
+                    >
                       <div className="relative">
                         <Image
-                          src={courseProgress.courseData.image}
-                          alt={courseProgress.courseData.title}
+                          src={courseProgress?.courseData?.image || ""}
+                          alt={courseProgress?.courseData?.title || ""}
                           width={96}
                           height={64}
                           className="w-24 h-16 object-cover rounded-lg"
@@ -225,24 +237,29 @@ export default async function Profile() {
                       <div className="ml-4 flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
                           <Link
-                            href={`/cursos/${courseProgress.courseData.slug}`}
+                            href={`/cursos/${courseProgress?.courseData?.slug}`}
                             className="text-lg font-medium text-gray-900 hover:text-indigo-600 transition-colors"
                           >
-                            {courseProgress.courseData.title}
+                            {courseProgress?.courseData?.title}
                           </Link>
                           <div className="flex items-center text-sm text-gray-500 mt-1 sm:mt-0">
                             <Calendar className="h-4 w-4 mr-1" />
                             <span>
-                              Última vez: {formatDate(courseProgress.lastAccessedAt)}
+                              Última vez:{" "}
+                              {formatDate(courseProgress.lastAccessedAt)}
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center mb-2">
                           <div className="flex-1 mr-4">
-                            <ProgressBar 
-                              progress={courseProgress.progressPercentage} 
+                            <ProgressBar
+                              progress={courseProgress.progressPercentage}
                               showPercentage={false}
-                              color={courseProgress.progressPercentage === 100 ? 'success' : 'primary'}
+                              color={
+                                courseProgress.progressPercentage === 100
+                                  ? "success"
+                                  : "primary"
+                              }
                             />
                           </div>
                           <span className="text-sm font-medium text-gray-600 min-w-[3rem]">
@@ -251,16 +268,18 @@ export default async function Profile() {
                         </div>
                         <div className="flex items-center text-sm text-gray-500">
                           <span>
-                            {courseProgress.completedLessons} de {courseProgress.totalLessons} lecciones completadas
+                            {courseProgress.completedLessons} de{" "}
+                            {courseProgress.totalLessons} lecciones completadas
                           </span>
-                          {courseProgress.currentLessonId && courseProgress.progressPercentage < 100 && (
-                            <Link
-                              href={`/cursos/${courseProgress.courseData.slug}/clases/${courseProgress.currentLessonId}`}
-                              className="ml-4 text-indigo-600 hover:text-indigo-700 font-medium"
-                            >
-                              Continuar →
-                            </Link>
-                          )}
+                          {courseProgress.currentLessonId &&
+                            courseProgress.progressPercentage < 100 && (
+                              <Link
+                                href={`/cursos/${courseProgress?.courseData?.slug}/clases/${courseProgress.currentLessonId}`}
+                                className="ml-4 text-indigo-600 hover:text-indigo-700 font-medium"
+                              >
+                                Continuar →
+                              </Link>
+                            )}
                         </div>
                       </div>
                     </div>
