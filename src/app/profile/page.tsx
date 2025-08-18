@@ -109,7 +109,7 @@ export default async function Profile() {
                     user?.isPremium ? "text-green-600" : "text-indigo-600"
                   }`}
                 >
-                  {user?.isPremium ? "Pro" : "Free"}
+                  {user?.isPremium ? "Pro" : "Gratis"}
                 </p>
                 <p className="text-gray-600">{user?.email}</p>
               </div>

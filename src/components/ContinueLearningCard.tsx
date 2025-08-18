@@ -1,0 +1,180 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { CourseProgress } from "@/types/progress";
+import { getUserCourseProgress } from "@/utils/progress";
+import { getCourseBySlug } from "@/utils/common";
+import { CourseProps } from "@/types/course";
+import Image from "next/image";
+import Link from "next/link";
+import { Clock, BookOpen, Play, ChevronRight } from "lucide-react";
+import ProgressBar from "./ProgressBar";
+
+interface RecentCourse extends CourseProgress {
+  course?: CourseProps | null;
+}
+
+export default function ContinueLearningCard() {
+  const { data: session } = useSession();
+  const [recentCourses, setRecentCourses] = useState<RecentCourse[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchRecentActivity() {
+      if (!session?.user?.email) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Get all course progress for the user
+        const allProgress = await getUserCourseProgress(session.user.email);
+        
+        // Filter courses accessed in the last 3 days
+        const threeDaysAgo = new Date();
+        threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+        
+        const recentActivity = allProgress.filter(progress => {
+          const lastAccessed = new Date(progress.lastAccessedAt);
+          return lastAccessed > threeDaysAgo && progress.progressPercentage > 0;
+        });
+
+        // Sort by most recently accessed
+        recentActivity.sort((a, b) => 
+          new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime()
+        );
+
+        // Get course details for each recent activity
+        const coursesWithDetails: RecentCourse[] = await Promise.all(
+          recentActivity.slice(0, 3).map(async (progress): Promise<RecentCourse> => {
+            try {
+              const course = await getCourseBySlug(progress.courseId);
+              return { ...progress, course };
+            } catch (error) {
+              console.error(`Error fetching course ${progress.courseId}:`, error);
+              return { ...progress, course: null };
+            }
+          })
+        );
+
+        setRecentCourses(coursesWithDetails.filter(course => course.course !== null));
+      } catch (error) {
+        console.error("Error fetching recent activity:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchRecentActivity();
+  }, [session]);
+
+  const formatLastAccessed = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 24) {
+      return `Hace ${diffInHours === 0 ? 'menos de 1' : diffInHours} hora${diffInHours !== 1 ? 's' : ''}`;
+    }
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `Hace ${diffInDays} día${diffInDays !== 1 ? 's' : ''}`;
+  };
+
+  // Don't render if user is not logged in or no recent activity
+  if (!session?.user?.email || loading) {
+    return null;
+  }
+
+  if (recentCourses.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mb-16">
+      <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 shadow-xl">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-2">
+              Continúa aprendiendo
+            </h2>
+            <p className="text-gray-300">
+              Retoma donde lo dejaste y sigue progresando
+            </p>
+          </div>
+          <Play className="w-8 h-8 text-blue-400" />
+        </div>
+
+        <div className="grid gap-3">
+          {recentCourses.map((courseProgress) => {
+            const course = courseProgress.course;
+            if (!course) return null;
+            return (
+              <Link
+                key={courseProgress.courseId}
+                href={`/cursos/${course.slug}${
+                  courseProgress.currentLessonId 
+                    ? `/clases/${courseProgress.currentLessonId}` 
+                    : ''
+                }`}
+                className="group block"
+              >
+                <div className="bg-gray-800/80 rounded-lg p-4 border border-gray-600/30 hover:border-blue-500/50 transition-all hover:bg-gray-700/80 hover:shadow-lg">
+                  <div className="flex gap-4">
+                    <div className="relative w-20 h-14 rounded-lg overflow-hidden flex-shrink-0 ring-1 ring-gray-600/50">
+                      <Image
+                        src={course.image}
+                        alt={course.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-white font-semibold text-lg mb-1 group-hover:text-blue-300 transition-colors">
+                            {course.title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-sm text-gray-400 mb-3">
+                            <div className="flex items-center gap-1">
+                              <BookOpen className="w-4 h-4" />
+                              <span>
+                                {courseProgress.completedLessons}/{courseProgress.totalLessons} clases
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              <span>{formatLastAccessed(courseProgress.lastAccessedAt)}</span>
+                            </div>
+                          </div>
+                          <ProgressBar 
+                            progress={courseProgress.progressPercentage} 
+                            className="mb-0"
+                            showPercentage
+                          />
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-blue-400 transition-colors ml-2" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 text-center">
+          <Link 
+            href="/cursos" 
+            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors inline-flex items-center gap-1 hover:gap-2"
+          >
+            Ver todos los cursos 
+            <span className="transition-all">→</span>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

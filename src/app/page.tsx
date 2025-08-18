@@ -5,6 +5,7 @@ import { auth } from "./auth";
 import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
 import { ProductsInfiniteScroll } from "@/components/ProductsInfiniteScroll";
+import ContinueLearningCard from "@/components/ContinueLearningCard";
 import Link from "next/link";
 
 export default async function Home() {
@@ -16,6 +17,9 @@ export default async function Home() {
   return (
     <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
       {session?.user?.isPremium ? null : <Hero />}
+
+      {/* Show continue learning for logged-in users */}
+      <ContinueLearningCard />
 
       <div className="text-center mb-24">
         <h1 className="text-4xl font-bold text-white/90 mb-4">

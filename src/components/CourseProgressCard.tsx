@@ -158,6 +158,11 @@ export default function CourseProgressCard({
     });
   };
 
+  // Don't render if user is not logged in
+  if (!session?.user?.email) {
+    return null;
+  }
+
   if (loading) {
     return (
       <div
