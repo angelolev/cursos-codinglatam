@@ -113,14 +113,7 @@ export default function Footer() {
                   Documentation
                 </Link>
               </li> */}
-              <li>
-                <Link
-                  href="/certifications"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Certificaciones
-                </Link>
-              </li>
+
               <li>
                 <Link
                   target="_blank"

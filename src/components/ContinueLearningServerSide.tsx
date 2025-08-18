@@ -1,93 +1,48 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { CourseProgress } from "@/types/progress";
-import { getUserCourseProgress } from "@/utils/progress";
-import { getCourseBySlug } from "@/utils/common";
-import { CourseProps } from "@/types/course";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, BookOpen, Play, ChevronRight } from "lucide-react";
 import ProgressBar from "./ProgressBar";
+import { CourseProps } from "@/types/course";
 
-interface RecentCourse extends CourseProgress {
-  course?: CourseProps | null;
+interface RecentCourse {
+  courseId: string;
+  userId: string;
+  totalLessons: number;
+  completedLessons: number;
+  progressPercentage: number;
+  startedAt: string;
+  lastAccessedAt: string;
+  completedAt?: string;
+  currentLessonId?: string;
+  course: CourseProps | null;
 }
 
-export default function ContinueLearningCard() {
-  const { data: session } = useSession();
-  const [recentCourses, setRecentCourses] = useState<RecentCourse[]>([]);
-  const [loading, setLoading] = useState(true);
+interface ContinueLearningServerSideProps {
+  recentCourses: RecentCourse[];
+}
 
-  useEffect(() => {
-    async function fetchRecentActivity() {
-      if (!session?.user?.email) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        // Get all course progress for the user
-        const allProgress = await getUserCourseProgress(session.user.email);
-        
-        // Filter courses accessed in the last 3 days
-        const threeDaysAgo = new Date();
-        threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
-        
-        const recentActivity = allProgress.filter(progress => {
-          const lastAccessed = new Date(progress.lastAccessedAt);
-          return lastAccessed > threeDaysAgo && progress.progressPercentage > 0;
-        });
-
-        // Sort by most recently accessed
-        recentActivity.sort((a, b) => 
-          new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime()
-        );
-
-        // Get course details for each recent activity
-        const coursesWithDetails: RecentCourse[] = await Promise.all(
-          recentActivity.slice(0, 3).map(async (progress): Promise<RecentCourse> => {
-            try {
-              const course = await getCourseBySlug(progress.courseId);
-              return { ...progress, course };
-            } catch (error) {
-              console.error(`Error fetching course ${progress.courseId}:`, error);
-              return { ...progress, course: null };
-            }
-          })
-        );
-
-        setRecentCourses(coursesWithDetails.filter(course => course.course !== null));
-      } catch (error) {
-        console.error("Error fetching recent activity:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchRecentActivity();
-  }, [session]);
-
+export default function ContinueLearningServerSide({
+  recentCourses,
+}: ContinueLearningServerSideProps) {
   const formatLastAccessed = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+    const diffInHours = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
+    );
+
     if (diffInHours < 24) {
-      return `Hace ${diffInHours === 0 ? 'menos de 1' : diffInHours} hora${diffInHours !== 1 ? 's' : ''}`;
+      return `Hace ${diffInHours === 0 ? "menos de 1" : diffInHours} hora${
+        diffInHours !== 1 ? "s" : ""
+      }`;
     }
-    
+
     const diffInDays = Math.floor(diffInHours / 24);
-    return `Hace ${diffInDays} día${diffInDays !== 1 ? 's' : ''}`;
+    return `Hace ${diffInDays} día${diffInDays !== 1 ? "s" : ""}`;
   };
 
-  // Don't render if user is not logged in or no recent activity
-  if (!session?.user?.email || loading) {
-    return null;
-  }
-
-  if (recentCourses.length === 0) {
+  // Don't render if no recent courses
+  if (!recentCourses || recentCourses.length === 0) {
     return null;
   }
 
@@ -114,9 +69,9 @@ export default function ContinueLearningCard() {
               <Link
                 key={courseProgress.courseId}
                 href={`/cursos/${course.slug}${
-                  courseProgress.currentLessonId 
-                    ? `/clases/${courseProgress.currentLessonId}` 
-                    : ''
+                  courseProgress.currentLessonId
+                    ? `/clases/${courseProgress.currentLessonId}`
+                    : ""
                 }`}
                 className="group block"
               >
@@ -128,9 +83,10 @@ export default function ContinueLearningCard() {
                         alt={course.title}
                         fill
                         className="object-cover"
+                        sizes="80px"
                       />
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -141,16 +97,21 @@ export default function ContinueLearningCard() {
                             <div className="flex items-center gap-1">
                               <BookOpen className="w-4 h-4" />
                               <span>
-                                {courseProgress.completedLessons}/{courseProgress.totalLessons} clases
+                                {courseProgress.completedLessons}/
+                                {courseProgress.totalLessons} clases
                               </span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
-                              <span>{formatLastAccessed(courseProgress.lastAccessedAt)}</span>
+                              <span>
+                                {formatLastAccessed(
+                                  courseProgress.lastAccessedAt
+                                )}
+                              </span>
                             </div>
                           </div>
-                          <ProgressBar 
-                            progress={courseProgress.progressPercentage} 
+                          <ProgressBar
+                            progress={courseProgress.progressPercentage}
                             className="mb-0"
                             showPercentage
                           />
@@ -166,11 +127,11 @@ export default function ContinueLearningCard() {
         </div>
 
         <div className="mt-6 text-center">
-          <Link 
-            href="/cursos" 
-            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors inline-flex items-center gap-1 hover:gap-2"
+          <Link
+            href="/cursos"
+            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors inline-flex items-center gap-1 "
           >
-            Ver todos los cursos 
+            Ver todos los cursos
             <span className="transition-all">→</span>
           </Link>
         </div>

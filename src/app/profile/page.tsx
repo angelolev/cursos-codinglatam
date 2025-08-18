@@ -42,13 +42,13 @@ export default async function Profile() {
 
   if (!user?.email) {
     return (
-      <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex-grow">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-gray-900">
             Por favor inicia sesión para ver tu perfil
           </h1>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -87,7 +87,7 @@ export default async function Profile() {
       ?.slice(0, 3) ?? [];
 
   return (
-    <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex-grow">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Profile Sidebar */}
@@ -320,6 +320,6 @@ export default async function Profile() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

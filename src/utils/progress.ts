@@ -14,6 +14,11 @@ import {
   CourseProgress,
   ProgressStats,
 } from "@/types/progress";
+import { CourseProps } from "@/types/course";
+
+interface RecentCourseActivity extends CourseProgress {
+  course: CourseProps | null;
+}
 
 // Get user's progress for a specific course
 export async function getCourseProgress(
@@ -528,6 +533,71 @@ export function subscribeToCourseProgress(
       callback(null);
     }
   );
+}
+
+// Check if user has started any course
+export async function hasStartedAnyCourse(userId: string): Promise<boolean> {
+  try {
+    const progressQuery = query(collection(db, "users", userId, "progress"));
+    const progressSnap = await getDocs(progressQuery);
+    
+    // Return true if user has any course progress records
+    return !progressSnap.empty;
+  } catch (error) {
+    console.error("Error checking if user started any course:", error);
+    return false;
+  }
+}
+
+// Get recent course activity for a user (server-side)
+export async function getRecentCourseActivity(userId: string): Promise<RecentCourseActivity[]> {
+  try {
+    // Get all course progress for the user
+    const allProgress = await getUserCourseProgress(userId);
+    
+    if (allProgress.length === 0) {
+      return [];
+    }
+    
+    // Filter courses accessed in the last 3 days with progress > 0
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    
+    const recentActivity = allProgress.filter(progress => {
+      const lastAccessed = new Date(progress.lastAccessedAt);
+      return lastAccessed > threeDaysAgo && progress.progressPercentage > 0;
+    });
+
+    if (recentActivity.length === 0) {
+      return [];
+    }
+
+    // Sort by most recently accessed
+    recentActivity.sort((a, b) => 
+      new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime()
+    );
+
+    // Get course details for each recent activity (limit to top 3)
+    const { getCourseBySlug } = await import("./common");
+    
+    const coursesWithDetails = await Promise.all(
+      recentActivity.slice(0, 3).map(async (progress) => {
+        try {
+          const course = await getCourseBySlug(progress.courseId);
+          return { ...progress, course };
+        } catch (error) {
+          console.error(`Error fetching course ${progress.courseId}:`, error);
+          return { ...progress, course: null };
+        }
+      })
+    );
+
+    // Filter out courses that couldn't be found
+    return coursesWithDetails.filter(course => course.course !== null);
+  } catch (error) {
+    console.error("Error fetching recent course activity:", error);
+    return [];
+  }
 }
 
 // Subscribe to real-time lesson progress updates

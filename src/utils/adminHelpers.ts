@@ -79,8 +79,8 @@ export function filterUsers(users: AdminUser[], filters: FilterState): AdminUser
 
 export function sortUsers(users: AdminUser[], field: SortField, direction: SortDirection): AdminUser[] {
   return [...users].sort((a, b) => {
-    let aValue: any;
-    let bValue: any;
+    let aValue: string | number;
+    let bValue: string | number;
 
     switch (field) {
       case 'name':

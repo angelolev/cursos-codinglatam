@@ -228,9 +228,6 @@ export default function CourseProgressCard({
           <BookOpen className="w-4 h-4" />
           <span>Curso no iniciado</span>
         </div>
-        <div className="mt-2 text-xs text-gray-500">
-          Debug: No progress data found
-        </div>
       </div>
     );
   }

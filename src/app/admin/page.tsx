@@ -94,7 +94,7 @@ export default function AdminDashboard() {
             ? docData.createdAt.seconds
               ? new Date(docData.createdAt.seconds * 1000)
               : new Date(docData.createdAt)
-            : null,
+            : undefined,
         };
         data.push(user);
       });

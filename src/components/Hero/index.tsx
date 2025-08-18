@@ -3,12 +3,12 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900 rounded-3xl overflow-hidden mb-24 border border-gray-700/50 shadow-2xl relative">
+    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900 rounded-3xl overflow-hidden mb-12 border border-gray-700/50 shadow-2xl relative">
       {/* Clean gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-900/5 to-transparent"></div>
       <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-br from-blue-600/10 via-transparent to-transparent"></div>
       <div className="absolute bottom-0 right-0 w-1/2 h-2/3 bg-gradient-to-tl from-purple-600/8 via-transparent to-transparent"></div>
-      
+
       <div className="relative px-8 py-16 sm:px-16 sm:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
