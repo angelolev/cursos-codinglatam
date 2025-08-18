@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 import { CourseProps, LiveCourseProps } from "@/types/course";
 import { db } from "@/utils/firebase";
 import { ProductProps } from "@/types/product";
@@ -148,10 +148,13 @@ export async function getWorkshopByslug(
   }
 }
 
-export async function getCourses(): Promise<CourseProps[] | null> {
+export async function getCourses(limitCount?: number): Promise<CourseProps[] | null> {
   try {
     const coursesCollection = collection(db, "courses");
-    const querySnapshot = await getDocs(coursesCollection);
+    const q = limitCount 
+      ? query(coursesCollection, orderBy("title"), limit(limitCount))
+      : coursesCollection;
+    const querySnapshot = await getDocs(q);
     const coursesList = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
@@ -180,10 +183,13 @@ export async function getCourses(): Promise<CourseProps[] | null> {
   }
 }
 
-export async function getProducts(): Promise<ProductProps[] | null> {
+export async function getProducts(limitCount?: number): Promise<ProductProps[] | null> {
   try {
     const productsCollection = collection(db, "products");
-    const querySnapshot = await getDocs(productsCollection);
+    const q = limitCount 
+      ? query(productsCollection, orderBy("title"), limit(limitCount))
+      : productsCollection;
+    const querySnapshot = await getDocs(q);
     const productsList = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
@@ -205,56 +211,49 @@ export async function getProducts(): Promise<ProductProps[] | null> {
   }
 }
 
-export async function getWorkshops(): Promise<WorkshopProps[] | null> {
+export async function getWorkshops(limitCount?: number): Promise<WorkshopProps[] | null> {
   try {
     const workshopsCollection = collection(db, "workshops");
 
-    // First, get available workshops
+    // Optimized: Get all workshops in a single query, sorted by availability and date
     const availableQuery = query(
       workshopsCollection,
       where("available", "==", true),
-      orderBy("releaseDate", "desc")
+      orderBy("releaseDate", "desc"),
+      ...(limitCount ? [limit(Math.ceil(limitCount * 0.7))] : []) // Prioritize available workshops
     );
 
-    // Then, get non-available workshops
     const nonAvailableQuery = query(
       workshopsCollection,
       where("available", "==", false),
-      orderBy("releaseDate", "desc")
+      orderBy("releaseDate", "desc"),
+      ...(limitCount ? [limit(Math.ceil(limitCount * 0.3))] : [])
     );
 
-    // Execute both queries
+    // Execute both queries in parallel
     const [availableSnapshot, nonAvailableSnapshot] = await Promise.all([
       getDocs(availableQuery),
       getDocs(nonAvailableQuery),
     ]);
 
-    // Map available workshops
-    const availableWorkshops = availableSnapshot.docs.map((doc) => ({
+    // Map workshops with consistent structure
+    const mapWorkshop = (doc: { id: string; data: () => Record<string, unknown> }) => ({
       id: doc.id,
-      title: doc.data().title,
-      description: doc.data().description,
-      image: doc.data().image,
-      slug: doc.data().slug,
-      available: doc.data().available,
-      releaseDate: doc.data().releaseDate,
-      isFree: doc.data().isFree,
-    }));
+      title: doc.data().title as string,
+      description: doc.data().description as string,
+      image: doc.data().image as string,
+      slug: doc.data().slug as string,
+      available: doc.data().available as boolean,
+      releaseDate: doc.data().releaseDate as string,
+      isFree: doc.data().isFree as boolean,
+    });
 
-    // Map non-available workshops
-    const nonAvailableWorkshops = nonAvailableSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      title: doc.data().title,
-      description: doc.data().description,
-      image: doc.data().image,
-      slug: doc.data().slug,
-      available: doc.data().available,
-      releaseDate: doc.data().releaseDate,
-      isFree: doc.data().isFree,
-    }));
+    const availableWorkshops = availableSnapshot.docs.map(mapWorkshop);
+    const nonAvailableWorkshops = nonAvailableSnapshot.docs.map(mapWorkshop);
 
-    // Combine both arrays, available workshops will be first
-    return [...availableWorkshops, ...nonAvailableWorkshops];
+    // Combine and respect limit if specified
+    const allWorkshops = [...availableWorkshops, ...nonAvailableWorkshops];
+    return limitCount ? allWorkshops.slice(0, limitCount) : allWorkshops;
   } catch (error) {
     console.error("Failed to fetch workshops:", error);
     return null;
