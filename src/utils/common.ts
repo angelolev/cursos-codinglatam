@@ -187,7 +187,9 @@ export async function getCourses(limitCount?: number): Promise<CourseProps[] | n
 export async function getProducts(limitCount?: number): Promise<ProductProps[] | null> {
   try {
     const productsCollection = collection(db, "products");
-    const q = query(productsCollection, orderBy("createdAt", "desc"));
+    const q = limitCount
+      ? query(productsCollection, orderBy("createdAt", "desc"), limit(limitCount))
+      : query(productsCollection, orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
     const productsList = querySnapshot.docs.map((doc) => {
       const data = doc.data();
