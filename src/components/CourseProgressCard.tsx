@@ -158,6 +158,11 @@ export default function CourseProgressCard({
     });
   };
 
+  // Don't render if user is not logged in
+  if (!session?.user?.email) {
+    return null;
+  }
+
   if (loading) {
     return (
       <div
@@ -222,9 +227,6 @@ export default function CourseProgressCard({
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <BookOpen className="w-4 h-4" />
           <span>Curso no iniciado</span>
-        </div>
-        <div className="mt-2 text-xs text-gray-500">
-          Debug: No progress data found
         </div>
       </div>
     );

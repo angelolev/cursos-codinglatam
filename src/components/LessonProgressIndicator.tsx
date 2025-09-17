@@ -137,6 +137,11 @@ export default function LessonProgressIndicator({
     return "No iniciado";
   };
 
+  // Don't render if user is not logged in
+  if (!session?.user?.email) {
+    return null;
+  }
+
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       {getProgressIcon()}
