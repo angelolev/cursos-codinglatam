@@ -1,7 +1,16 @@
 import GuiasClient from "@/components/GuiasClient";
 import { getProducts } from "@/utils/common";
+import { generatePageMetadata } from "@/utils/metadata";
 
 export const dynamic = "force-static";
+
+export function generateMetadata() {
+  return generatePageMetadata(
+    "Guías de Estudio",
+    "Material enfocado en ayudarte a optimizar todo lo necesario para la búsqueda laboral y mejora de skills en desarrollo web.",
+    "/guias"
+  );
+}
 
 export default async function Guias() {
   const products = await getProducts();

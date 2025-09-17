@@ -1,7 +1,16 @@
 import { FC } from "react";
 import { Shield } from "lucide-react";
+import { generatePageMetadata } from "@/utils/metadata";
 
 export const dynamic = 'force-static';
+
+export function generateMetadata() {
+  return generatePageMetadata(
+    "Política de Privacidad",
+    "Conoce cómo manejamos y protegemos tu información personal en Coding Latam. Tu privacidad es importante para nosotros.",
+    "/privacy"
+  );
+}
 
 const PrivacyPage: FC = () => {
   return (

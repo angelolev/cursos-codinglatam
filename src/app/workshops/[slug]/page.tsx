@@ -8,6 +8,7 @@ import { Reviews } from "@/components/Reviews";
 import ValidAccessButton from "@/components/buttons/ValidAccessButton";
 import { WorkshopProps } from "@/types/workshop";
 import BackButton from "@/components/buttons/BackButton";
+import { generateWorkshopMetadata } from "@/utils/metadata";
 
 type Params = Promise<{ slug: string }>;
 
@@ -23,20 +24,12 @@ export async function generateMetadata({ params }: { params: Params }) {
 
   if (!workshop) {
     return {
-      title: "Curso no encontrado",
-      description: "El curso que buscas no existe",
+      title: "Workshop no encontrado",
+      description: "El workshop que buscas no existe",
     };
   }
 
-  return {
-    title: `${workshop.title} | Talleres para mejorar tus skills`,
-    description: workshop.description,
-    openGraph: {
-      title: workshop.title,
-      description: workshop.description,
-      images: [workshop.image],
-    },
-  };
+  return generateWorkshopMetadata(workshop);
 }
 
 export async function generateStaticParams() {

@@ -1,7 +1,16 @@
 import { FC } from "react";
 import { FileText } from "lucide-react";
+import { generatePageMetadata } from "@/utils/metadata";
 
 export const dynamic = 'force-static';
+
+export function generateMetadata() {
+  return generatePageMetadata(
+    "Términos de Uso",
+    "Consulta los términos y condiciones para el uso de la plataforma Coding Latam y nuestros servicios educativos.",
+    "/terms"
+  );
+}
 
 const TermsPage: FC = () => {
   return (

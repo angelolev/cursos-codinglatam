@@ -15,8 +15,23 @@ import { auth } from "@/app/auth";
 import { redirect } from "next/navigation";
 import BackButton from "@/components/buttons/BackButton";
 import FigmaLinkSection from "@/components/projects/FigmaLinkSection";
+import { generateProjectMetadata } from "@/utils/metadata";
 
 type Params = Promise<{ slug: string }>;
+
+export async function generateMetadata({ params }: { params: Params }) {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
+
+  if (!project) {
+    return {
+      title: "Proyecto no encontrado",
+      description: "El proyecto que buscas no existe",
+    };
+  }
+
+  return generateProjectMetadata(project);
+}
 
 export async function generateStaticParams() {
   try {

@@ -1,7 +1,16 @@
 import WorkshopsClient from "@/components/WorkshopsClient";
 import { getWorkshops } from "@/utils/common";
+import { generatePageMetadata } from "@/utils/metadata";
 
 export const dynamic = "force-static";
+
+export function generateMetadata() {
+  return generatePageMetadata(
+    "Workshops y Training",
+    "Talleres pensados no solo en habilidades técnicas sino también en habilidades blandas para impulsar tu carrera profesional.",
+    "/workshops"
+  );
+}
 
 export default async function Workshops() {
   const workshops = await getWorkshops();

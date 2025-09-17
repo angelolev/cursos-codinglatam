@@ -1,7 +1,16 @@
 import CursosClient from "@/components/CursosClient";
 import { getCourses } from "@/utils/common";
+import { generatePageMetadata } from "@/utils/metadata";
 
 export const dynamic = "force-static";
+
+export function generateMetadata() {
+  return generatePageMetadata(
+    "Nuestros Cursos",
+    "Mejora tus habilidades de desarrollo web con nuestros cursos prácticos impartidos por expertos de la industria. Aprende haciendo proyectos reales.",
+    "/cursos"
+  );
+}
 
 export default async function Cursos() {
   const courses = await getCourses();

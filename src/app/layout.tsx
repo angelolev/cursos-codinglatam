@@ -9,26 +9,11 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "./auth";
 import Footer from "@/components/Footer";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { generateSiteMetadata } from "@/utils/metadata";
+
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Aprende a programar HACIENDO proyectos | Coding Latam",
-  description: "Aprende HACIENDO proyectos REALES",
-  openGraph: {
-    title: "Coding Latam",
-    description: "Aprende HACIENDO proyectos REALES",
-    url: "https://codinglatam.dev",
-    siteName: "Coding Latam",
-    images: [
-      {
-        url: "https://codinglatam.dev/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Coding Latam og image",
-      },
-    ],
-  },
-};
+export const metadata: Metadata = generateSiteMetadata();
 
 export default async function RootLayout({
   children,

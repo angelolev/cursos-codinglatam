@@ -1,7 +1,16 @@
 import { FC } from "react";
 import { BookOpen, Users, Zap } from "lucide-react";
+import { generatePageMetadata } from "@/utils/metadata";
 
 export const dynamic = 'force-static';
+
+export function generateMetadata() {
+  return generatePageMetadata(
+    "Sobre Nosotros",
+    "Conoce más sobre Coding Latam, nuestra misión de democratizar el acceso a la educación en tecnología y cómo ayudamos a formar desarrolladores exitosos.",
+    "/about"
+  );
+}
 
 const AboutPage: FC = () => {
   return (

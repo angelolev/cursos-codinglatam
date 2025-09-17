@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import { getCourses, getProducts, getWorkshops } from "@/utils/common";
 import { hasStartedAnyCourse, getRecentCourseActivity } from "@/utils/progress";
 import { auth } from "./auth";
+import { generatePageMetadata } from "@/utils/metadata";
 
 import { ProductsInfiniteScroll } from "@/components/ProductsInfiniteScroll";
 import ContinueLearningServerSide from "@/components/ContinueLearningServerSide";
@@ -13,6 +14,14 @@ import Link from "next/link";
 
 // Enable revalidation for better performance (ISR)
 export const revalidate = 300; // Revalidate every 5 minutes
+
+export function generateMetadata() {
+  return generatePageMetadata(
+    "Aprende a programar HACIENDO proyectos",
+    "Mejora tus habilidades de desarrollo web con nuestros cursos, proyectos y guías impartidos por expertos de la industria",
+    "/"
+  );
+}
 
 export default async function Home() {
   try {
