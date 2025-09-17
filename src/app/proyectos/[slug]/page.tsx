@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Clock,
-  Wrench,
-  Code2,
-  Layers,
-} from "lucide-react";
+import { Clock, Wrench, Code2, Layers } from "lucide-react";
 import Link from "next/link";
 import { getProjectBySlug, getProjectComments } from "@/utils/common";
 import { collection, getDocs } from "firebase/firestore";
@@ -91,22 +86,6 @@ export default async function ProjectDetail({ params }: { params: Params }) {
               {project.longDescription || project.description}
             </p>
 
-            {project.features && (
-              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Pondrás en práctica:
-                </h2>
-                <ul className="space-y-4">
-                  {project.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <Layers className="h-5 w-5 text-indigo-600 mr-3 mt-1" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
             <div className="bg-white rounded-xl shadow-md p-6 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 Mockups del proyecto
@@ -129,9 +108,9 @@ export default async function ProjectDetail({ params }: { params: Params }) {
             </div>
 
             {project.figmaLink && (
-              <FigmaLinkSection 
-                figmaLink={project.figmaLink} 
-                isPremium={isPremium} 
+              <FigmaLinkSection
+                figmaLink={project.figmaLink}
+                isPremium={isPremium}
               />
             )}
 
@@ -141,8 +120,8 @@ export default async function ProjectDetail({ params }: { params: Params }) {
             />
           </div>
 
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
+          <div className="lg:col-span-1 sticky top-24 self-start">
+            <div className="bg-white rounded-xl shadow-md p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6">
                 Detalles del proyecto
               </h2>
@@ -176,6 +155,23 @@ export default async function ProjectDetail({ params }: { params: Params }) {
                 Ver Proyecto
               </button> */}
             </div>
+            {project.features && (
+              <div className="max-w-4xl mx-auto mt-8 sticky top-24">
+                <div className="bg-white rounded-xl shadow-md p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    Pondrás en práctica:
+                  </h2>
+                  <ul className="space-y-4">
+                    {project.features.map((feature, index) => (
+                      <li key={index} className="flex items-start">
+                        <Layers className="h-5 w-5 text-indigo-600 mr-3 mt-1" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
