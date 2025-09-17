@@ -105,6 +105,7 @@ export async function getProductBySlug(
       pages: data.pages,
       href: data.href,
       description: data.description,
+      createdAt: data.createdAt ? data.createdAt.toDate() : null,
       ...data,
     } as ProductProps;
   } catch (error) {
@@ -183,7 +184,8 @@ export async function getCourses(): Promise<CourseProps[] | null> {
 export async function getProducts(): Promise<ProductProps[] | null> {
   try {
     const productsCollection = collection(db, "products");
-    const querySnapshot = await getDocs(productsCollection);
+    const q = query(productsCollection, orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
     const productsList = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
@@ -196,6 +198,7 @@ export async function getProducts(): Promise<ProductProps[] | null> {
         pages: data.pages,
         href: data.href,
         isFree: data.isFree,
+        createdAt: data.createdAt ? data.createdAt.toDate() : null,
       };
     });
     return productsList;

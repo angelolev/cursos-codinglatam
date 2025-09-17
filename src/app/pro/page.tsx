@@ -98,7 +98,7 @@ export default function ProPage() {
   }
 
   return (
-    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
+    <main className="pt-32 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <div className="text-center mb-16">

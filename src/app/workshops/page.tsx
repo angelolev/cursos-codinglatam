@@ -7,7 +7,7 @@ export default async function Workshops() {
   const workshops = await getWorkshops();
 
   return (
-    <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
+    <main className="pt-32 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <div className="text-center my-12">
         <h1 className="text-4xl font-bold text-white/90 mb-4">
           Workshops y training

@@ -8,4 +8,5 @@ export interface ProductProps {
   pages: number;
   href: string;
   isFree: boolean;
+  createdAt?: Date | null; // Firebase Timestamp converted to Date
 }

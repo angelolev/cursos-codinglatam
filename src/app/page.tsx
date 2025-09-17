@@ -14,7 +14,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
+    <main className="pt-32 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
       {session?.user?.isPremium ? null : <Hero />}
 
       <div className="text-center mb-24">

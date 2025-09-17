@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fira_Code } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
+import PromoBanner from "@/components/PromoBanner";
 import WhastappButton from "@/components/buttons/WhastappButton";
 import Script from "next/script";
 import "./globals.css";
@@ -60,6 +61,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <CurrencyProvider>
             <Navbar />
+            <PromoBanner />
 
             {/* <main className="pt-24 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow"> */}
             {children}
