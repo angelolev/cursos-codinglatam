@@ -26,9 +26,12 @@ interface PricingServerSideProps {
   userSession: Session | null;
 }
 
-export default function PricingServerSide({ userSession }: PricingServerSideProps) {
+export default function PricingServerSide({
+  userSession,
+}: PricingServerSideProps) {
   const { convertAndFormatPrice, currentCurrency, isLoading } = useCurrency();
-  const [billingFrequency, setBillingFrequency] = useState<BillingFrequency>("monthly");
+  const [billingFrequency, setBillingFrequency] =
+    useState<BillingFrequency>("monthly");
 
   const pricingPlans: PricingPlan[] = [
     {
@@ -92,24 +95,24 @@ export default function PricingServerSide({ userSession }: PricingServerSideProp
   ];
 
   return (
-    <div className="my-24">
-      <div className="text-center mb-24">
-        <h2 className="text-4xl font-bold text-white/90 mb-4">
+    <div className="my-12 md:my-24 md:px-4">
+      <div className="text-center mb-12 md:mb-24">
+        <h2 className="text-2xl md:text-4xl font-bold text-white/90 mb-4">
           Elige tu camino de aprendizaje
         </h2>
-        <p className="text-xl text-white/70 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto px-4">
           Selecciona el plan que mejor se adapte a tus objetivos y lleva tus
           skills de programación al siguiente nivel
         </p>
 
         {/* Billing Frequency Toggle */}
-        <div className="mt-8 inline-flex bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+        <div className="mt-8 inline-flex bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20 max-w-full overflow-x-auto">
           {(["weekly", "monthly", "yearly"] as BillingFrequency[]).map(
             (frequency) => (
               <button
                 key={frequency}
                 onClick={() => setBillingFrequency(frequency)}
-                className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                className={`px-3 md:px-6 py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                   billingFrequency === frequency
                     ? "bg-white text-gray-900 shadow-sm"
                     : "text-white/70 hover:text-white/90"
@@ -139,14 +142,14 @@ export default function PricingServerSide({ userSession }: PricingServerSideProp
           </div>
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 max-w-7xl mx-auto">
         {pricingPlans.map((plan) => (
           <div
             key={plan.name}
             className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer ${
               plan.popular
-                ? "ring-2 ring-indigo-600 scale-105"
-                : "hover:scale-102"
+                ? "ring-2 ring-indigo-600 md:scale-105"
+                : "md:hover:scale-102"
             }`}
           >
             {plan.popular && (
@@ -154,9 +157,9 @@ export default function PricingServerSide({ userSession }: PricingServerSideProp
                 Más Popular
               </div>
             )}
-            <div className="p-8">
+            <div className="p-4 md:p-8">
               <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 flex items-center gap-2">
                   {plan.name === "Pro" && (
                     <Crown className="h-6 w-6 text-indigo-600" />
                   )}
@@ -169,7 +172,7 @@ export default function PricingServerSide({ userSession }: PricingServerSideProp
                 )}
               </div>
               <div className="mt-4 flex items-baseline">
-                <span className="text-4xl font-bold text-gray-900">
+                <span className="text-2xl md:text-4xl font-bold text-gray-900">
                   {isLoading ? (
                     <span className="animate-pulse">$...</span>
                   ) : plan.name === "Gratis" ? (
@@ -200,7 +203,7 @@ export default function PricingServerSide({ userSession }: PricingServerSideProp
                 </div>
               )}
               <p className="mt-2 text-gray-600">{plan.description}</p>
-              <ul className="mt-8 space-y-4">
+              <ul className="mt-6 md:mt-8 space-y-3 md:space-y-4">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center">
                     <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
@@ -210,9 +213,9 @@ export default function PricingServerSide({ userSession }: PricingServerSideProp
               </ul>
               <Link
                 href={plan.href}
-                className={`block text-center mt-8 w-full py-3 px-6 rounded-lg cursor-pointer font-semibold transition-all duration-200 ${
+                className={`block text-center mt-6 md:mt-8 w-full py-3 px-6 rounded-lg cursor-pointer font-semibold transition-all duration-200 ${
                   plan.popular
-                    ? "bg-indigo-600 text-white hover:bg-indigo-700 transform hover:scale-105"
+                    ? "bg-indigo-600 text-white hover:bg-indigo-700 transform md:hover:scale-105"
                     : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                 }`}
               >
