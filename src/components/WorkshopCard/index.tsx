@@ -54,7 +54,9 @@ export default async function Workshop({
           <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
 
           {workshop && <AverageRating reviewId={workshop.id} />}
-          <p className="text-gray-600 mb-4 text-sm">{description}</p>
+          <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+            {description}
+          </p>
         </div>
       </Link>
     </div>
