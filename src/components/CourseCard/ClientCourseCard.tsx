@@ -11,9 +11,6 @@ export function ClientCourseCard({
   level,
   duration,
   slug,
-  available,
-  releaseDate,
-  hasAllClassesAvailable,
   isPremium,
 }: CourseProps) {
   return (

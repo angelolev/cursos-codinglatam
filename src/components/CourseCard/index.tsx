@@ -13,9 +13,6 @@ export async function CourseCard({
   level,
   duration,
   slug,
-  available,
-  releaseDate,
-  hasAllClassesAvailable,
   isPremium,
 }: CourseProps) {
   // const course = await getCourseBySlug(slug);

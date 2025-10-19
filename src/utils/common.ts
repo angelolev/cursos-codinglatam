@@ -176,6 +176,7 @@ export async function getCourses(limitCount?: number): Promise<CourseProps[] | n
         topics: data.topics || [],
         hasAllClassesAvailable: data.hasAllClassesAvailable,
         length: data.length,
+        isPremium: data.isPremium || false,
       };
     });
     return coursesList;

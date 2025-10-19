@@ -18,7 +18,14 @@ export async function POST(request: Request) {
       await request.json();
 
     // Prepare document data, only include parentId if it's defined
-    const docData: any = {
+    const docData: {
+      projectId: string;
+      user: UserProps;
+      comment: string;
+      githubLink: string;
+      timestamp: Date;
+      parentId?: string;
+    } = {
       projectId,
       user,
       comment,

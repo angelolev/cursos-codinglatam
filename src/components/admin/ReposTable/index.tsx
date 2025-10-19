@@ -75,7 +75,7 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
           No hay repositorios creados todavía.
         </p>
         <p className="text-gray-400 mt-2">
-          Haz clic en "Nuevo Repositorio" para crear uno.
+          Haz clic en &quot;Nuevo Repositorio&quot; para crear uno.
         </p>
       </div>
     );
