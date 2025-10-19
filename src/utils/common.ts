@@ -441,9 +441,7 @@ export async function getProjectComments(
 export async function getStarterRepos(limitCount?: number): Promise<StarterRepoProps[] | null> {
   try {
     const reposCollection = collection(db, "starterRepos");
-    const q = limitCount
-      ? query(reposCollection, orderBy("createdAt", "desc"), limit(limitCount))
-      : query(reposCollection, orderBy("createdAt", "desc"));
+    const q = query(reposCollection, orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
     const reposList = querySnapshot.docs.map((doc) => {
       const data = doc.data();
@@ -466,7 +464,20 @@ export async function getStarterRepos(limitCount?: number): Promise<StarterRepoP
         createdAt: data.createdAt ? data.createdAt.toDate() : null,
       } as StarterRepoProps;
     });
-    return reposList;
+
+    // Sort: Premium repos first, then by creation date
+    const sortedRepos = reposList.sort((a, b) => {
+      // Premium repos first
+      if (a.isPremium && !b.isPremium) return -1;
+      if (!a.isPremium && b.isPremium) return 1;
+      // Then by creation date (newest first)
+      if (a.createdAt && b.createdAt) {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      }
+      return 0;
+    });
+
+    return limitCount ? sortedRepos.slice(0, limitCount) : sortedRepos;
   } catch (error) {
     console.error("Failed to fetch starter repos:", error);
     return null;
