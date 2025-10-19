@@ -76,6 +76,14 @@ export default function Footer() {
                   Proyectos
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/repositorios"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Repositorios
+                </Link>
+              </li>
               {/* <li>
                 <Link
                   href="#"

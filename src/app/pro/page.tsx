@@ -9,6 +9,7 @@ import {
   BookOpen,
   MessageSquare,
   Users,
+  GitBranch,
 } from "lucide-react";
 import SubscriptionButton from "@/components/buttons/SubscriptionButton";
 import { useSession } from "next-auth/react";
@@ -42,6 +43,12 @@ const benefits = [
     title: "Acceso a TODOS los cursos",
     description:
       "Obtén acceso permanente a todos los cursos y materiales educativos.",
+  },
+  {
+    icon: <GitBranch className="h-6 w-6 text-indigo-600" />,
+    title: "Repositorios de apoyo premium",
+    description:
+      "Acceso exclusivo a repositorios optimizados con configuraciones listas para producción y mejores prácticas integradas.",
   },
   {
     icon: <BookOpen className="h-6 w-6 text-indigo-600" />,
@@ -142,11 +149,13 @@ export default function ProPage() {
           </div>
 
           {/* Currency Indicator */}
-          {!isLoading && currentCurrency.code !== 'USD' && (
+          {!isLoading && currentCurrency.code !== "USD" && (
             <div className="mb-6 text-sm text-white/60 flex items-center justify-center gap-2">
               <span>{currentCurrency.flag}</span>
               <span>Precios mostrados en {currentCurrency.name}</span>
-              <span className="text-xs text-white/40">• Pago procesado en USD</span>
+              <span className="text-xs text-white/40">
+                • Pago procesado en USD
+              </span>
             </div>
           )}
 
@@ -348,7 +357,9 @@ export default function ProPage() {
                     {isLoading ? (
                       <span className="animate-pulse">$...</span>
                     ) : (
-                      convertAndFormatPrice(pricing[billingFrequency].price / 12)
+                      convertAndFormatPrice(
+                        pricing[billingFrequency].price / 12
+                      )
                     )}
                     /mes
                   </div>

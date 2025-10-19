@@ -15,6 +15,7 @@ export interface CourseProps {
   topics: string[];
   hasAllClassesAvailable: boolean;
   length: number;
+  isPremium: boolean;
 }
 
 interface CourseProjectProps {

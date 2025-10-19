@@ -27,23 +27,16 @@ export default async function Workshop({
           ) : null}
 
           {/* Free/Premium Badge */}
-          {available && (
-            <span
-              className={`px-2 py-1 text-white text-base rounded flex items-center ${
-                isFree ? "bg-green-600" : "bg-indigo-600"
-              }`}
-            >
-              {isFree ? (
-                <>
-                  <Gift className="h-3 w-3 mr-1" />
-                  Gratis
-                </>
-              ) : (
-                <>
-                  <Crown className="h-3 w-3 mr-1" />
-                  Pro
-                </>
-              )}
+          {available && isFree && (
+            <span className="bg-green-600 px-3 py-1 text-white text-xs font-semibold rounded-full flex items-center gap-1">
+              <Gift className="h-3 w-3" />
+              Gratis
+            </span>
+          )}
+          {available && !isFree && (
+            <span className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
+              <Crown className="h-3 w-3" />
+              PREMIUM
             </span>
           )}
         </div>

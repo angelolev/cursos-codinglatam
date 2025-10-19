@@ -21,8 +21,10 @@ export default function AddCommentForm({ projectId }: AddCommentFormProps) {
     const data = {
       projectId,
       user: {
-        image: session?.user.image,
-        name: session?.user.name,
+        aud: session?.user?.email || "",
+        id: session?.user?.email || "",
+        image: session?.user?.image || "",
+        name: session?.user?.name || "",
       },
       comment: newComment,
       githubLink: newGithubLink,

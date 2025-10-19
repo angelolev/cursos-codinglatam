@@ -5,6 +5,7 @@ import { ProductProps } from "@/types/product";
 import { WorkshopProps } from "@/types/workshop";
 import { ProjectProps } from "@/types/project";
 import { ProjectCommentsProps } from "@/types/project-comments";
+import { StarterRepoProps } from "@/types/starter-repo";
 
 export async function getCourseBySlug(
   slug: string
@@ -433,5 +434,81 @@ export async function getProjectComments(
   } catch (error) {
     console.error("Error fetching comments: ", error);
     throw new Error("Failed to fetch comments");
+  }
+}
+
+export async function getStarterRepos(limitCount?: number): Promise<StarterRepoProps[] | null> {
+  try {
+    const reposCollection = collection(db, "starterRepos");
+    const q = limitCount
+      ? query(reposCollection, orderBy("createdAt", "desc"), limit(limitCount))
+      : query(reposCollection, orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const reposList = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        shortDescription: data.shortDescription,
+        githubUrl: data.githubUrl,
+        thumbnail: data.thumbnail,
+        stack: data.stack || [],
+        difficulty: data.difficulty,
+        category: data.category,
+        features: data.features || [],
+        isPremium: data.isPremium,
+        slug: data.slug,
+        setupTime: data.setupTime,
+        demoUrl: data.demoUrl,
+        readme: data.readme,
+        createdAt: data.createdAt ? data.createdAt.toDate() : null,
+      } as StarterRepoProps;
+    });
+    return reposList;
+  } catch (error) {
+    console.error("Failed to fetch starter repos:", error);
+    return null;
+  }
+}
+
+export async function getStarterRepoBySlug(
+  slug: string
+): Promise<StarterRepoProps | null> {
+  try {
+    const reposRef = collection(db, "starterRepos");
+    const q = query(reposRef, where("slug", "==", slug));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.warn(`No starter repo found with slug: ${slug}`);
+      return null;
+    }
+
+    const repoDoc = querySnapshot.docs[0];
+    const data = repoDoc.data();
+
+    return {
+      id: repoDoc.id,
+      title: data.title,
+      description: data.description,
+      shortDescription: data.shortDescription,
+      githubUrl: data.githubUrl,
+      thumbnail: data.thumbnail,
+      stack: data.stack || [],
+      difficulty: data.difficulty,
+      category: data.category,
+      features: data.features || [],
+      isPremium: data.isPremium,
+      slug: data.slug,
+      setupTime: data.setupTime,
+      demoUrl: data.demoUrl,
+      readme: data.readme,
+      createdAt: data.createdAt ? data.createdAt.toDate() : null,
+    } as StarterRepoProps;
+  } catch (error) {
+    console.error("Failed to fetch starter repo:", error);
+    return null;
   }
 }

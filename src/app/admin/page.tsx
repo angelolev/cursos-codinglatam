@@ -28,13 +28,23 @@ import {
 import FilterBar from "@/components/admin/FilterBar";
 import Pagination from "@/components/admin/Pagination";
 import MetricsCard, { MetricsGrid } from "@/components/admin/MetricsCard";
+import AddRepoForm from "@/components/admin/AddRepoForm";
+import ReposTable from "@/components/admin/ReposTable";
+import { StarterRepoProps } from "@/types/starter-repo";
+import { Plus } from "lucide-react";
+
+type TabType = "usuarios" | "repositorios";
 
 export default function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState<TabType>("usuarios");
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [repos, setRepos] = useState<(StarterRepoProps & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [updatingUser, setUpdatingUser] = useState<string | null>(null);
+  const [showRepoForm, setShowRepoForm] = useState(false);
+  const [editingRepo, setEditingRepo] = useState<(StarterRepoProps & { id: string }) | null>(null);
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
     premiumFilter: "all",
@@ -55,7 +65,21 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchUsers();
+    fetchRepos();
   }, [session, router]);
+
+  const fetchRepos = async () => {
+    try {
+      const response = await fetch("/api/admin/repos");
+      const data = await response.json();
+
+      if (response.ok) {
+        setRepos(data.repos || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch repos:", err);
+    }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -230,8 +254,34 @@ export default function AdminDashboard() {
           Panel de Administración
         </h1>
         <p className="text-gray-400">
-          Gestiona usuarios, suscripciones y mira las métricas de la plataforma
+          Gestiona usuarios, suscripciones y repositorios de la plataforma
         </p>
+
+        {/* Tabs Navigation */}
+        <div className="mt-6 border-b border-gray-700">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab("usuarios")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "usuarios"
+                  ? "border-indigo-500 text-indigo-400"
+                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
+              }`}
+            >
+              Usuarios
+            </button>
+            <button
+              onClick={() => setActiveTab("repositorios")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "repositorios"
+                  ? "border-indigo-500 text-indigo-400"
+                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
+              }`}
+            >
+              Repositorios
+            </button>
+          </nav>
+        </div>
         
         {/* Success Message */}
         {success && (
@@ -258,6 +308,9 @@ export default function AdminDashboard() {
         )}
       </div>
 
+      {/* Usuarios Tab */}
+      {activeTab === "usuarios" && (
+        <>
       <MetricsGrid>
         <MetricsCard
           title="Usuarios Totales"
@@ -553,6 +606,56 @@ export default function AdminDashboard() {
           onItemsPerPageChange={handleItemsPerPageChange}
         />
       </div>
+        </>
+      )}
+
+      {/* Repositorios Tab */}
+      {activeTab === "repositorios" && (
+        <div>
+          <div className="mb-6 flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-white/90">
+              Gestión de Repositorios
+            </h2>
+            <button
+              onClick={() => {
+                setShowRepoForm(!showRepoForm);
+                setEditingRepo(null);
+              }}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+            >
+              <Plus className="h-5 w-5" />
+              {showRepoForm || editingRepo ? "Cancelar" : "Nuevo Repositorio"}
+            </button>
+          </div>
+
+          {(showRepoForm || editingRepo) && (
+            <AddRepoForm
+              mode={editingRepo ? 'edit' : 'create'}
+              initialData={editingRepo}
+              onSuccess={() => {
+                setShowRepoForm(false);
+                setEditingRepo(null);
+                fetchRepos();
+                setSuccess(editingRepo ? "Repositorio actualizado exitosamente" : "Repositorio creado exitosamente");
+                setTimeout(() => setSuccess(null), 3000);
+              }}
+              onCancel={() => {
+                setShowRepoForm(false);
+                setEditingRepo(null);
+              }}
+            />
+          )}
+
+          <ReposTable
+            repos={repos}
+            onDelete={fetchRepos}
+            onEdit={(repo) => {
+              setEditingRepo(repo);
+              setShowRepoForm(false);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

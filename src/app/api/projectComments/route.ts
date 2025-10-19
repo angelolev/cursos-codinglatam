@@ -17,14 +17,21 @@ export async function POST(request: Request) {
     const { projectId, user, comment, githubLink, parentId }: RequestBody =
       await request.json();
 
-    const docRef = await addDoc(collection(db, "projectsComments"), {
+    // Prepare document data, only include parentId if it's defined
+    const docData: any = {
       projectId,
       user,
       comment,
       githubLink,
-      parentId, // Include parentId in the document
       timestamp: new Date(),
-    });
+    };
+
+    // Only add parentId if it's not undefined (for replies)
+    if (parentId !== undefined && parentId !== null) {
+      docData.parentId = parentId;
+    }
+
+    const docRef = await addDoc(collection(db, "projectsComments"), docData);
 
     return NextResponse.json(
       { id: docRef.id, message: "Document added successfully" },

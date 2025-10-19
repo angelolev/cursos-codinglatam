@@ -13,21 +13,21 @@ export function ClientProductCard({
     <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative w-full md:max-w-[290px]">
       <Link href={`guias/${slug}`}>
         {/* Free/Premium Badge */}
-        <div className="absolute top-2 right-2 z-20">
+        <div className="absolute top-2 right-2 z-10">
           <span
-            className={`px-2 py-1 text-white text-base rounded flex items-center ${
-              isFree ? "bg-green-600" : "bg-indigo-600"
+            className={`px-3 py-1 text-white text-xs font-semibold rounded-full flex items-center gap-1 ${
+              isFree ? "bg-green-600" : "bg-gradient-to-r from-indigo-600 to-indigo-800 shadow-lg"
             }`}
           >
             {isFree ? (
               <>
-                <Gift className="h-3 w-3 mr-1" />
+                <Gift className="h-3 w-3" />
                 Gratis
               </>
             ) : (
               <>
-                <Crown className="h-3 w-3 mr-1" />
-                Pro
+                <Crown className="h-3 w-3" />
+                PREMIUM
               </>
             )}
           </span>

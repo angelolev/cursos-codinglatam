@@ -1,6 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { Send } from "lucide-react";
 
 interface ReplyFormProps {
   projectId: string;
@@ -25,8 +26,10 @@ export default function ReplyForm({
       projectId,
       parentId,
       user: {
-        image: session?.user.image,
-        name: session?.user.name,
+        aud: session?.user?.email || "",
+        id: session?.user?.email || "",
+        image: session?.user?.image || "",
+        name: session?.user?.name || "",
       },
       comment: reply,
       githubLink: "", // Replies don't need GitHub links
@@ -69,15 +72,20 @@ export default function ReplyForm({
           placeholder="Escribe tu respuesta..."
           value={reply}
           onChange={(e) => setReply(e.target.value)}
+          maxLength={200}
           required
         />
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center mt-1">
+        <div className="text-xs text-gray-500">
+          {reply.length}/200 caracteres
+        </div>
         <button
           type="submit"
-          className="bg-primary-300 text-white px-3 py-1 rounded-md hover:bg-primary-400 transition-colors cursor-pointer disabled:bg-gray-400 text-sm"
+          className="bg-primary-300 text-white px-3 py-1 rounded-md hover:bg-primary-400 transition-colors cursor-pointer disabled:bg-gray-400 text-sm inline-flex items-center"
           disabled={isLoading}
         >
+          <Send className="h-3 w-3 mr-1" />
           Responder
         </button>
       </div>

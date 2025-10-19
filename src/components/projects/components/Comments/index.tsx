@@ -21,8 +21,10 @@ const Comment = ({
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-md p-6 ${
-        comment.parentId ? "ml-10 mt-4" : ""
+      className={`${
+        comment.parentId
+          ? "ml-10 mt-4 bg-gray-50 rounded-lg p-4 border-l-4 border-primary-200"
+          : "bg-white rounded-xl shadow-md p-6"
       }`}
     >
       <div className="flex items-start gap-2">
@@ -37,7 +39,11 @@ const Comment = ({
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">{comment.user.name}</h3>
             <span className="text-sm text-gray-500">
-              {new Date(comment.timestamp).toLocaleDateString()}
+              {new Date(comment.timestamp).toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+              })}
             </span>
           </div>
           <p className="mt-2 text-gray-600">{comment.comment}</p>
@@ -53,10 +59,10 @@ const Comment = ({
             </a>
           )}
 
-          {onReply && (
+          {onReply && !comment.parentId && (
             <button
               onClick={() => onReply(comment.id)}
-              className="mt-3 ml-4 inline-flex items-center text-gray-600 hover:text-gray-800"
+              className="mt-3 ml-4 inline-flex items-center text-gray-600 hover:text-gray-800 cursor-pointer"
             >
               <MessageCircle className="h-4 w-4 mr-2" />
               Responder
