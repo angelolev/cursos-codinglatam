@@ -13,13 +13,11 @@ export default function PromoBanner() {
       <div className="max-w-7xl mx-auto flex items-center justify-center text-center px-4">
         <div className="flex-1">
           <p className="text-sm leading-6 md:text-base font-medium">
-            🎉 <span className="font-bold">Semana de Promoción</span> - Usa el
-            código{" "}
+            🔥 <span className="font-bold">BLACK FRIDAY</span> - Código{" "}
             <span className="bg-indigo-100 px-2 py-1 rounded-md font-bold text-indigo-800 border border-indigo-300/50">
-              CLAUDE
+              BLACKFRIDAY
             </span>{" "}
-            y obtén <span className="font-bold">20% de descuento</span> en todos
-            los planes
+            = <span className="font-bold">50% OFF</span> 🚀
           </p>
         </div>
         <button
