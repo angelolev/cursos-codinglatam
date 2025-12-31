@@ -30,10 +30,11 @@ import Pagination from "@/components/admin/Pagination";
 import MetricsCard, { MetricsGrid } from "@/components/admin/MetricsCard";
 import AddRepoForm from "@/components/admin/AddRepoForm";
 import ReposTable from "@/components/admin/ReposTable";
+import BannerManagement from "@/components/admin/BannerManagement";
 import { StarterRepoProps } from "@/types/starter-repo";
 import { Plus } from "lucide-react";
 
-type TabType = "usuarios" | "repositorios";
+type TabType = "usuarios" | "repositorios" | "banner";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>("usuarios");
@@ -279,6 +280,16 @@ export default function AdminDashboard() {
               }`}
             >
               Repositorios
+            </button>
+            <button
+              onClick={() => setActiveTab("banner")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "banner"
+                  ? "border-indigo-500 text-indigo-400"
+                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
+              }`}
+            >
+              Banner
             </button>
           </nav>
         </div>
@@ -655,6 +666,16 @@ export default function AdminDashboard() {
             }}
           />
         </div>
+      )}
+
+      {/* Banner Tab */}
+      {activeTab === "banner" && (
+        <BannerManagement
+          onSuccess={() => {
+            setSuccess("Banner actualizado exitosamente");
+            setTimeout(() => setSuccess(null), 3000);
+          }}
+        />
       )}
     </div>
   );

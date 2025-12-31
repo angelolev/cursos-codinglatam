@@ -219,19 +219,15 @@ export async function getWorkshops(limitCount?: number): Promise<WorkshopProps[]
   try {
     const workshopsCollection = collection(db, "workshops");
 
-    // Optimized: Get all workshops in a single query, sorted by availability and date
+    // Fetch all workshops without ordering (to handle string dates properly)
     const availableQuery = query(
       workshopsCollection,
-      where("available", "==", true),
-      orderBy("releaseDate", "desc"),
-      ...(limitCount ? [limit(Math.ceil(limitCount * 0.7))] : []) // Prioritize available workshops
+      where("available", "==", true)
     );
 
     const nonAvailableQuery = query(
       workshopsCollection,
-      where("available", "==", false),
-      orderBy("releaseDate", "desc"),
-      ...(limitCount ? [limit(Math.ceil(limitCount * 0.3))] : [])
+      where("available", "==", false)
     );
 
     // Execute both queries in parallel
@@ -255,8 +251,43 @@ export async function getWorkshops(limitCount?: number): Promise<WorkshopProps[]
     const availableWorkshops = availableSnapshot.docs.map(mapWorkshop);
     const nonAvailableWorkshops = nonAvailableSnapshot.docs.map(mapWorkshop);
 
-    // Combine and respect limit if specified
-    const allWorkshops = [...availableWorkshops, ...nonAvailableWorkshops];
+    // Helper to parse Spanish month-year strings to dates for sorting
+    const parseSpanishDate = (dateStr: string): Date => {
+      const monthMap: Record<string, number> = {
+        'enero': 0, 'febrero': 1, 'marzo': 2, 'abril': 3,
+        'mayo': 4, 'junio': 5, 'julio': 6, 'agosto': 7,
+        'septiembre': 8, 'setiembre': 8, 'octubre': 9,
+        'noviembre': 10, 'diciembre': 11
+      };
+
+      const parts = dateStr.toLowerCase().split(' ');
+      if (parts.length === 2) {
+        const month = monthMap[parts[0]];
+        const year = parseInt(parts[1]);
+        if (month !== undefined && !isNaN(year)) {
+          return new Date(year, month);
+        }
+      }
+      // Fallback: return current date if parsing fails
+      return new Date();
+    };
+
+    // Sort available workshops by date (most recent first)
+    const sortedAvailableWorkshops = availableWorkshops.sort((a, b) => {
+      const dateA = parseSpanishDate(a.releaseDate);
+      const dateB = parseSpanishDate(b.releaseDate);
+      return dateB.getTime() - dateA.getTime(); // Descending order
+    });
+
+    // Sort non-available workshops by date (most recent first)
+    const sortedNonAvailableWorkshops = nonAvailableWorkshops.sort((a, b) => {
+      const dateA = parseSpanishDate(a.releaseDate);
+      const dateB = parseSpanishDate(b.releaseDate);
+      return dateB.getTime() - dateA.getTime(); // Descending order
+    });
+
+    // Combine with priority to available workshops, then apply limit
+    const allWorkshops = [...sortedAvailableWorkshops, ...sortedNonAvailableWorkshops];
     return limitCount ? allWorkshops.slice(0, limitCount) : allWorkshops;
   } catch (error) {
     console.error("Failed to fetch workshops:", error);

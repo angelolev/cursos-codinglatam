@@ -24,10 +24,10 @@ export default function VideoPlayerWithProgress({
   const [isTracking, setIsTracking] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [lessonCompleted, setLessonCompleted] = useState(false);
-  const progressUpdateInterval = useRef<NodeJS.Timeout>();
+  const progressUpdateInterval = useRef<NodeJS.Timeout | undefined>(undefined);
   const lastProgressUpdate = useRef(0);
-  const timerFallbackInterval = useRef<NodeJS.Timeout>();
-  const safetyCompletionInterval = useRef<NodeJS.Timeout>();
+  const timerFallbackInterval = useRef<NodeJS.Timeout | undefined>(undefined);
+  const safetyCompletionInterval = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Update progress every 10 seconds
   const updateProgress = useCallback(async (currentTime: number, completed = false) => {
