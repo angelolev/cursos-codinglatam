@@ -28,14 +28,6 @@ const nextConfig: NextConfig = {
   // Enable modern JavaScript features for better performance
   experimental: {
     optimizePackageImports: ['lucide-react'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
   // Compiler optimizations
   compiler: {

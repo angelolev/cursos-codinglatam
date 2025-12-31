@@ -1,0 +1,8 @@
+Legend: production dependency, optional only, dev only
+
+cursos-codinglatam@0.1.0 /Users/angeloleva/Documents/Projects/cursos-codinglatam
+
+dependencies:
+next 15.0.3
+react 19.0.0-rc-66855b96-20241106
+react-dom 19.0.0-rc-66855b96-20241106
