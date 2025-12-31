@@ -56,6 +56,8 @@ export default async function Home() {
         }),
       ]);
 
+    console.log(workshops, "wk");
+
     // Check if user has started any course and get recent activity
     const [userHasStartedAnyCourse, recentCourseActivity] = session?.user?.email
       ? await Promise.all([
