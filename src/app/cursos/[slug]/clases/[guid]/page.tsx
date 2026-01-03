@@ -42,13 +42,6 @@ export default async function Page({ params }: { params: Params }) {
       redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
     }
 
-    // Log environment check (will show in Vercel logs)
-    console.log('Environment check:', {
-      hasApiUrl: !!process.env.NEXT_PUBLIC_BUNNYNET_API_URL,
-      hasLibraryId: !!process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID,
-      hasAccessKey: !!process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY,
-    });
-
     const data = await fetch(
       `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
       {
@@ -60,11 +53,6 @@ export default async function Page({ params }: { params: Params }) {
     );
 
     if (!data.ok) {
-      console.error('BunnyNet API error:', {
-        status: data.status,
-        statusText: data.statusText,
-        guid,
-      });
       throw new Error(`Failed to fetch video: ${data.status} ${data.statusText}`);
     }
 
@@ -159,7 +147,7 @@ export default async function Page({ params }: { params: Params }) {
     </FreemiumGuard>
     );
   } catch (error) {
-    console.error('Error in lesson page:', error);
-    throw error; // Re-throw to trigger Next.js error page
+    // Re-throw to trigger Next.js error page
+    throw error;
   }
 }
