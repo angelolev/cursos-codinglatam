@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { CheckCircle2, AlertCircle, Mail, ArrowRight } from "lucide-react";
 import { WaitlistAvatar } from "@/types/waitlist";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -355,6 +356,36 @@ export default function WaitlistPage() {
           🔒 Te enviaremos la información por correo. Sin spam. Solo información
           del programa y tu código Early Bird.
         </p>
+
+        {/* Divider with OR */}
+        <div className="relative my-8">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white px-4 text-sm text-gray-500 font-medium">
+              O
+            </span>
+          </div>
+        </div>
+
+        {/* Direct Checkout CTA */}
+        <div className="text-center">
+          <p className="text-gray-700 font-semibold mb-4">
+            Paga ahora mismo y asegura tu lugar con descuento
+          </p>
+          <Link
+            href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/6ca73d5c-90e2-4340-aeb9-5f1e842f64ab"
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] cursor-pointer"
+          >
+            <CheckCircle2 className="h-5 w-5" />
+            Pagar y Asegurar mi Lugar (40% OFF)
+            <ArrowRight className="h-5 w-5" />
+          </Link>
+          <p className="text-gray-500 text-xs mt-3">
+            💳 Pago seguro procesado por Lemon Squeezy
+          </p>
+        </div>
       </div>
 
       {/* Benefits Section */}
