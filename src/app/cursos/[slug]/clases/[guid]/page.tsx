@@ -12,6 +12,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/app/auth";
 
+// Force dynamic rendering for auth checks and redirects
+export const dynamic = 'force-dynamic';
+
 type Params = Promise<{ guid: string; slug: string }>;
 
 interface IVideo {
@@ -26,22 +29,6 @@ interface IVideo {
 interface IMetatag {
   property: string;
   value: string;
-}
-
-export async function generateStaticParams() {
-  const videos = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
-    {
-      headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
-        "Content-Type": "application/json",
-      },
-    }
-  ).then((res) => res.json());
-
-  return videos?.items?.map((video: IVideo) => ({
-    guid: video.guid,
-  }));
 }
 
 export default async function Page({ params }: { params: Params }) {
