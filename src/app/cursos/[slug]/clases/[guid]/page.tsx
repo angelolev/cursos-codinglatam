@@ -9,6 +9,8 @@ import { getVideosFromCollection, orderVideosByTitle } from "@/utils/common";
 import { getLessonIndex } from "@/utils/freemium";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/app/auth";
 
 type Params = Promise<{ guid: string; slug: string }>;
 
@@ -44,6 +46,13 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: Params }) {
   const { guid, slug } = await params;
+
+  // Check authentication server-side before fetching data
+  const session = await auth();
+  if (!session) {
+    const callbackUrl = `/cursos/${slug}/clases/${guid}`;
+    redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+  }
 
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
