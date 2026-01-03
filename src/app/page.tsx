@@ -56,8 +56,6 @@ export default async function Home() {
         }),
       ]);
 
-    console.log(workshops, "wk");
-
     // Check if user has started any course and get recent activity
     const [userHasStartedAnyCourse, recentCourseActivity] = session?.user?.email
       ? await Promise.all([
@@ -123,6 +121,25 @@ export default async function Home() {
         <div>
           <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
+              Guías de estudio para ti
+            </h1>
+            <p className="text-xl text-white/60 max-w-2xl mx-auto">
+              Material enfocado en ayudarte a optimizar todo lo necesario para
+              la búsqueda laboral y mejora de skills
+            </p>
+          </div>
+          <ProductsInfiniteScroll initialProducts={products || []} />
+          <Link
+            href="/guias"
+            className="text-white/60 text-center block mx-auto cursor-pointer"
+          >
+            Ver todas las guías
+          </Link>
+        </div>
+
+        <div>
+          <div className="text-center my-24">
+            <h1 className="text-4xl font-bold text-white/90 mb-4">
               Repositorios de Apoyo
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
@@ -151,25 +168,6 @@ export default async function Home() {
               </p>
             </div>
           )}
-        </div>
-
-        <div>
-          <div className="text-center my-24">
-            <h1 className="text-4xl font-bold text-white/90 mb-4">
-              Guías de estudio para ti
-            </h1>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Material enfocado en ayudarte a optimizar todo lo necesario para
-              la búsqueda laboral y mejora de skills
-            </p>
-          </div>
-          <ProductsInfiniteScroll initialProducts={products || []} />
-          <Link
-            href="/guias"
-            className="text-white/60 text-center block mx-auto cursor-pointer"
-          >
-            Ver todas las guías
-          </Link>
         </div>
 
         {session?.user?.isPremium ? null : (

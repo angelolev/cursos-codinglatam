@@ -47,6 +47,7 @@ const addUserFirebase = async (profile: Profile) => {
   if (!userDoc.exists()) {
     const userData = {
       name: profile.name,
+      image: profile.picture || profile.avatar_url || "",
       github: "",
       email: profile?.email || "",
       isPremium: false,
@@ -55,6 +56,16 @@ const addUserFirebase = async (profile: Profile) => {
     };
 
     await setDoc(userDocRef, userData);
+  } else {
+    // Update image if it doesn't exist or has changed
+    const existingData = userDoc.data();
+    if (!existingData.image && (profile.picture || profile.avatar_url)) {
+      await setDoc(
+        userDocRef,
+        { image: profile.picture || profile.avatar_url },
+        { merge: true }
+      );
+    }
   }
 };
 
