@@ -24,10 +24,16 @@ export default function VideoPlayerWithProgress({
   const [isTracking, setIsTracking] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [lessonCompleted, setLessonCompleted] = useState(false);
+  const [origin, setOrigin] = useState('');
   const progressUpdateInterval = useRef<NodeJS.Timeout | undefined>(undefined);
   const lastProgressUpdate = useRef(0);
   const timerFallbackInterval = useRef<NodeJS.Timeout | undefined>(undefined);
   const safetyCompletionInterval = useRef<NodeJS.Timeout | undefined>(undefined);
+
+  // Set origin on client-side only to avoid hydration mismatch
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   // Update progress every 10 seconds
   const updateProgress = useCallback(async (currentTime: number, completed = false) => {
@@ -325,9 +331,7 @@ export default function VideoPlayerWithProgress({
       <div className="w-full relative overflow-hidden bg-gray-800 rounded aspect-video">
         <iframe
           ref={iframeRef}
-          src={`https://iframe.mediadelivery.net/embed/${libraryId}/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true&postMessage=true&controls=true&origin=${encodeURIComponent(
-            typeof window !== 'undefined' ? window.location.origin : ''
-          )}`}
+          src={`https://iframe.mediadelivery.net/embed/${libraryId}/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true&postMessage=true&controls=true&origin=${encodeURIComponent(origin)}`}
           loading="lazy"
           style={{
             border: 0,
