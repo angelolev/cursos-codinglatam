@@ -24,15 +24,15 @@ export default function VideoPlayerWithProgress({
   const [isTracking, setIsTracking] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [lessonCompleted, setLessonCompleted] = useState(false);
-  const [origin, setOrigin] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   const progressUpdateInterval = useRef<NodeJS.Timeout | undefined>(undefined);
   const lastProgressUpdate = useRef(0);
   const timerFallbackInterval = useRef<NodeJS.Timeout | undefined>(undefined);
   const safetyCompletionInterval = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  // Set origin on client-side only to avoid hydration mismatch
+  // Only render iframe after component mounts to avoid Next.js 16 hydration issues
   useEffect(() => {
-    setOrigin(window.location.origin);
+    setIsMounted(true);
   }, []);
 
   // Update progress every 10 seconds
@@ -329,20 +329,24 @@ export default function VideoPlayerWithProgress({
   return (
     <div className="w-full mb-8">
       <div className="w-full relative overflow-hidden bg-gray-800 rounded aspect-video">
-        <iframe
-          ref={iframeRef}
-          src={`https://iframe.mediadelivery.net/embed/${libraryId}/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true&postMessage=true&controls=true&origin=${encodeURIComponent(origin)}`}
-          loading="lazy"
-          style={{
-            border: 0,
-            position: "absolute",
-            top: 0,
-            height: "100%",
-            width: "100%",
-          }}
-          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
-          allowFullScreen
-        />
+        {isMounted && (
+          <iframe
+            ref={iframeRef}
+            src={`https://iframe.mediadelivery.net/embed/${libraryId}/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true&postMessage=true&controls=true&origin=${encodeURIComponent(
+              window.location.origin
+            )}`}
+            loading="lazy"
+            style={{
+              border: 0,
+              position: "absolute",
+              top: 0,
+              height: "100%",
+              width: "100%",
+            }}
+            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+            allowFullScreen
+          />
+        )}
       </div>
 
     </div>
