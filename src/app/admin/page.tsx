@@ -32,14 +32,23 @@ import AddRepoForm from "@/components/admin/AddRepoForm";
 import ReposTable from "@/components/admin/ReposTable";
 import BannerManagement from "@/components/admin/BannerManagement";
 import { StarterRepoProps } from "@/types/starter-repo";
-import { Plus } from "lucide-react";
+import { Plus, Download } from "lucide-react";
 
-type TabType = "usuarios" | "repositorios" | "banner";
+type TabType = "usuarios" | "repositorios" | "banner" | "waitlist";
+
+interface WaitlistEntry {
+  id: string;
+  email: string;
+  timestamp: Date | string;
+  source: string;
+  status: string;
+}
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>("usuarios");
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [repos, setRepos] = useState<(StarterRepoProps & { id: string })[]>([]);
+  const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -67,6 +76,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchUsers();
     fetchRepos();
+    fetchWaitlist();
   }, [session, router]);
 
   const fetchRepos = async () => {
@@ -79,6 +89,19 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       console.error("Failed to fetch repos:", err);
+    }
+  };
+
+  const fetchWaitlist = async () => {
+    try {
+      const response = await fetch("/api/admin/waitlist");
+      const data = await response.json();
+
+      if (response.ok) {
+        setWaitlistEntries(data.entries || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch waitlist:", err);
     }
   };
 
@@ -236,6 +259,62 @@ export default function AdminDashboard() {
     setPagination({ currentPage: 1, itemsPerPage });
   };
 
+  const exportToCSV = () => {
+    // Use filtered users for export
+    const dataToExport = filteredUsers;
+
+    // Define CSV headers
+    const headers = [
+      "Name",
+      "Email",
+      "GitHub",
+      "Premium Status",
+      "Subscription Status",
+      "Premium Since",
+      "Created At",
+      "Updated At",
+      "Ends At",
+      "Subscription ID"
+    ];
+
+    // Convert users to CSV rows
+    const rows = dataToExport.map(user => [
+      user.name || "",
+      user.email || "",
+      user.github || "",
+      user.isPremium ? "Premium" : "Free",
+      user.subscriptionStatus || "",
+      user.premiumSince ? new Date(user.premiumSince).toLocaleDateString() : "",
+      user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "",
+      user.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : "",
+      user.endsAt ? new Date(user.endsAt).toLocaleDateString() : "",
+      user.subscriptionId || ""
+    ]);
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+    ].join("\n");
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute("href", url);
+    link.setAttribute("download", `usuarios_codinglatam_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = "hidden";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Show success message
+    setSuccess(`${dataToExport.length} usuarios exportados exitosamente`);
+    setTimeout(() => setSuccess(null), 3000);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -290,6 +369,16 @@ export default function AdminDashboard() {
               }`}
             >
               Banner
+            </button>
+            <button
+              onClick={() => setActiveTab("waitlist")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "waitlist"
+                  ? "border-indigo-500 text-indigo-400"
+                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
+              }`}
+            >
+              Waitlist
             </button>
           </nav>
         </div>
@@ -417,6 +506,17 @@ export default function AdminDashboard() {
         totalFilteredUsers={filteredUsers.length}
         totalUsers={users.length}
       />
+
+      {/* Export Button */}
+      <div className="mb-4 flex justify-end">
+        <button
+          onClick={exportToCSV}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+        >
+          <Download className="h-5 w-5" />
+          Exportar a CSV ({filteredUsers.length} usuarios)
+        </button>
+      </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
@@ -676,6 +776,136 @@ export default function AdminDashboard() {
             setTimeout(() => setSuccess(null), 3000);
           }}
         />
+      )}
+
+      {/* Waitlist Tab */}
+      {activeTab === "waitlist" && (
+        <div>
+          <div className="mb-6 flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-white/90">
+                Lista de Espera
+              </h2>
+              <p className="text-gray-400 mt-1">
+                {waitlistEntries.length} {waitlistEntries.length === 1 ? 'persona registrada' : 'personas registradas'}
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                // Export waitlist to CSV
+                const headers = ["Email", "Fecha de Registro", "Fuente", "Estado"];
+                const rows = waitlistEntries.map(entry => [
+                  entry.email,
+                  new Date(entry.timestamp).toLocaleString('es-ES'),
+                  entry.source,
+                  entry.status
+                ]);
+                const csvContent = [
+                  headers.join(","),
+                  ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+                ].join("\n");
+                const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", `waitlist_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = "hidden";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setSuccess(`${waitlistEntries.length} entradas exportadas exitosamente`);
+                setTimeout(() => setSuccess(null), 3000);
+              }}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+            >
+              <Download className="h-5 w-5" />
+              Exportar a CSV ({waitlistEntries.length})
+            </button>
+          </div>
+
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Fecha de Registro
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Fuente
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Estado
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {waitlistEntries.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                        No hay entradas en la waitlist aún
+                      </td>
+                    </tr>
+                  ) : (
+                    waitlistEntries.map((entry) => (
+                      <tr key={entry.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-10 w-10">
+                              <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                <span className="text-sm font-medium text-indigo-700">
+                                  {entry.email.charAt(0).toUpperCase()}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">
+                                {entry.email}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {new Date(entry.timestamp).toLocaleDateString('es-ES', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {formatRelativeDate(new Date(entry.timestamp))}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            {entry.source}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            entry.status === 'pending'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : entry.status === 'notified'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-green-100 text-green-800'
+                          }`}>
+                            {entry.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
