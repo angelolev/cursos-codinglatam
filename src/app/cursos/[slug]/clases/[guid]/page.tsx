@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Params }) {
               />
             </div>
 
-            {video.metaTags.map((item: IMetatag) => (
+            {video.metaTags?.map((item: IMetatag) => (
               <p className="text-base text-white/90" key={item.value}>
                 {item.value}
               </p>

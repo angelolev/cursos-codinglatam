@@ -308,6 +308,14 @@ export const getVideosFromCollection = async (collectionId: string) => {
     },
   };
 
+  // Check if the course slug exists in our collection mapping
+  const courseCollection = courseCollections[collectionId as keyof typeof courseCollections];
+
+  if (!courseCollection) {
+    console.warn(`No collection mapping found for course slug: ${collectionId}`);
+    return null;
+  }
+
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
     {
@@ -321,9 +329,7 @@ export const getVideosFromCollection = async (collectionId: string) => {
   const { items } = await data.json();
   const filteredClases = items?.filter(
     (item: { collectionId: string }) =>
-      item.collectionId ===
-      courseCollections[collectionId as keyof typeof courseCollections]
-        .collectionId
+      item.collectionId === courseCollection.collectionId
   );
 
   const clases =
