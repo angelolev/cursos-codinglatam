@@ -352,7 +352,8 @@ export default function WaitlistPage() {
         </form>
 
         <p className="text-center text-gray-500 text-sm mt-6">
-          🔒 Sin spam. Solo información del programa y tu código Early Bird.
+          🔒 Te enviaremos la información por correo. Sin spam. Solo información
+          del programa y tu código Early Bird.
         </p>
       </div>
 
@@ -611,15 +612,9 @@ export default function WaitlistPage() {
             con 40% OFF para la Cohorte 1
           </p>
           <div className="space-y-2 text-white/60 text-sm">
-            <p>
-              📅 Inicia: Febrero 3, 2026 · Duración: 6 semanas
-            </p>
-            <p>
-              🕐 Clases: Martes y Jueves, 8:00 PM - 10:00 PM (8 hrs/semana)
-            </p>
-            <p>
-              🏆 Certificación oficial al finalizar
-            </p>
+            <p>📅 Inicia: Febrero 3, 2026 · Duración: 6 semanas</p>
+            <p>🕐 Clases: Martes y Jueves, 8:00 PM - 10:00 PM (8 hrs/semana)</p>
+            <p>🏆 Certificación oficial al finalizar</p>
           </div>
         </div>
       </div>

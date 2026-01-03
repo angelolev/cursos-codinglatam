@@ -41,7 +41,7 @@ export default function PricingServerSide({
         monthly: { price: 0, label: "/mes" },
         yearly: { price: 0, label: "/año" },
       },
-      description: "Perfect para empezar",
+      description: "Descubre las bases y potencia tu carrera",
       href: "/login",
       features: [
         "Acceso a cursos gratis",
@@ -54,10 +54,10 @@ export default function PricingServerSide({
       name: "Pro",
       pricing: {
         weekly: { price: 1.99, label: "/semana", savings: "Prueba 7 días" },
-        monthly: { price: 4.99, label: "/mes" },
-        yearly: { price: 49.99, label: "/año", savings: "Ahorra $9.89" },
+        monthly: { price: 5.99, label: "/mes" },
+        yearly: { price: 59.99, label: "/año", savings: "Ahorra $11.89" },
       },
-      description: "Todo lo que necesitas para crecer",
+      description: "Se un desarrollador que domina las AI tools",
       href: userSession?.user
         ? "https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/c36b9bc2-a598-4b21-9442-924f771c8e8b"
         : "/login",
@@ -65,44 +65,42 @@ export default function PricingServerSide({
         "Todos los beneficios de la versión gratuita",
         "Acceso a todos los cursos",
         "Mentorías grupales",
-        "Acceso al grupo privado de la comunidad",
-        "Descuentos Exclusivos para Cursos en vivo",
-        "Proyectos y plantillas premium",
+        "Acceso al canal de Discord privado de suscriptores",
         "Figma de proyectos",
-        "Workshops en vivo",
+        "Descuento en programas de certificación",
         "Soporte prioritario",
       ],
       popular: true,
     },
     {
-      name: "Equipos",
+      name: "Elite",
       pricing: {
         weekly: { price: 12.99, label: "/semana" },
         monthly: { price: 39.99, label: "/mes" },
         yearly: { price: 399.99, label: "/año", savings: "Ahorra $79.89" },
       },
-      description: "Para equipos de hasta 5 desarrolladores",
+      description: "Máximo nivel: dominio completo de IA",
       href: "https://wa.link/dnyqus",
       features: [
-        "Todos los beneficios de la versión Pro",
-        "Colaboración en equipo",
-        "Rutas de aprendizaje personalizadas",
-        "Sesiones de Preguntas y Respuestas (Q&A)",
-        "Acceso a una Comunidad de Networking",
-        "Y mucho más...",
+        "Todos los beneficios de Free y Pro",
+        "Sesiones de Pair Programming con IA",
+        "Sesiones 1-on-1 con mentores expertos",
+        "Certificados de finalización para tu LinkedIn",
+        "Revisión de proyectos personales",
+        "Acceso a comunidad Elite de networking",
       ],
     },
   ];
 
   return (
-    <div className="my-12 md:my-24 md:px-4">
-      <div className="text-center mb-12 md:mb-24">
-        <h2 className="text-2xl md:text-4xl font-bold text-white/90 mb-4">
-          Elige tu camino de aprendizaje
+    <div className="my-12 md:my-20 md:px-4">
+      <div className="text-center mb-8 md:mb-12">
+        <h2 className="text-2xl md:text-3xl font-bold text-white/90 mb-3">
+          Invierte en tu futuro con IA
         </h2>
-        <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto px-4">
-          Selecciona el plan que mejor se adapte a tus objetivos y lleva tus
-          skills de programación al siguiente nivel
+        <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto px-4">
+          Domina las herramientas de IA y diferénciate en el mercado laboral.
+          Elige el plan que mejor se adapte a tus objetivos
         </p>
 
         {/* Billing Frequency Toggle */}
@@ -142,37 +140,37 @@ export default function PricingServerSide({
           </div>
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto">
         {pricingPlans.map((plan) => (
           <div
             key={plan.name}
-            className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer ${
+            className={`bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer border ${
               plan.popular
-                ? "ring-2 ring-indigo-600 md:scale-105"
-                : "md:hover:scale-102"
+                ? "border-blue-500/50 ring-2 ring-blue-500/30 md:scale-105"
+                : "border-gray-600/30 hover:border-blue-500/30"
             }`}
           >
             {plan.popular && (
-              <div className="bg-indigo-600 text-white text-center py-2 text-sm font-medium">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-2 text-sm font-medium">
                 Más Popular
               </div>
             )}
-            <div className="p-4 md:p-8">
+            <div className="p-4 md:p-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
                   {plan.name === "Pro" && (
-                    <Crown className="h-6 w-6 text-indigo-600" />
+                    <Crown className="h-5 w-5 text-blue-400" />
                   )}
                   {plan.name}
                 </h3>
                 {plan.pricing[billingFrequency].savings && (
-                  <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
+                  <span className="bg-green-500/20 text-green-300 text-xs font-medium px-2 py-1 rounded-full border border-green-500/30">
                     {plan.pricing[billingFrequency].savings}
                   </span>
                 )}
               </div>
-              <div className="mt-4 flex items-baseline">
-                <span className="text-2xl md:text-4xl font-bold text-gray-900">
+              <div className="mt-3 flex items-baseline">
+                <span className="text-xl md:text-3xl font-bold text-white">
                   {isLoading ? (
                     <span className="animate-pulse">$...</span>
                   ) : plan.name === "Gratis" ? (
@@ -181,12 +179,12 @@ export default function PricingServerSide({
                     convertAndFormatPrice(plan.pricing[billingFrequency].price)
                   )}
                 </span>
-                <span className="text-gray-600 ml-1">
+                <span className="text-gray-300 ml-1">
                   {plan.pricing[billingFrequency].label}
                 </span>
               </div>
               {billingFrequency === "yearly" && plan.name !== "Gratis" && (
-                <div className="mt-1 text-sm text-gray-500">
+                <div className="mt-1 text-sm text-gray-400">
                   {isLoading ? (
                     <span className="animate-pulse">$...</span>
                   ) : (
@@ -198,25 +196,25 @@ export default function PricingServerSide({
                 </div>
               )}
               {billingFrequency === "weekly" && plan.name !== "Gratis" && (
-                <div className="mt-1 text-sm text-blue-600 font-medium">
+                <div className="mt-1 text-sm text-blue-400 font-medium">
                   Acceso completo por 7 días
                 </div>
               )}
-              <p className="mt-2 text-gray-600">{plan.description}</p>
-              <ul className="mt-6 md:mt-8 space-y-3 md:space-y-4">
+              <p className="mt-2 text-sm text-gray-300">{plan.description}</p>
+              <ul className="mt-4 md:mt-5 space-y-2 md:space-y-2.5">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center">
-                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>{feature}</span>
+                    <Check className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
+                    <span className="text-sm text-gray-300">{feature}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href={plan.href}
-                className={`block text-center mt-6 md:mt-8 w-full py-3 px-6 rounded-lg cursor-pointer font-semibold transition-all duration-200 ${
+                className={`block text-center mt-5 md:mt-6 w-full py-2.5 px-5 rounded-lg cursor-pointer font-semibold text-sm transition-all duration-200  ${
                   plan.popular
-                    ? "bg-indigo-600 text-white hover:bg-indigo-700 transform md:hover:scale-105"
-                    : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                    ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                    : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
                 }`}
               >
                 {plan.name === "Gratis"

@@ -17,14 +17,15 @@ import PricingServerSide from "@/components/PricingServerSide";
 import { CourseGridSkeleton } from "@/components/SkeletonLoader";
 import Link from "next/link";
 import StarterRepoCard from "@/components/StarterRepoCard";
+import AICertificationBanner from "@/components/AICertificationBanner";
 
 // Enable revalidation for better performance (ISR)
 export const revalidate = 300; // Revalidate every 5 minutes
 
 export function generateMetadata() {
   return generatePageMetadata(
-    "Aprende a programar HACIENDO proyectos",
-    "Mejora tus habilidades de desarrollo web con nuestros cursos, proyectos y guías impartidos por expertos de la industria",
+    "Domina la IA para destacar como desarrollador",
+    "Aprende a usar herramientas de IA para potenciar tus habilidades y diferenciarte. Cursos, proyectos reales y guías prácticas para la nueva era del desarrollo.",
     "/"
   );
 }
@@ -72,21 +73,29 @@ export default async function Home() {
 
     return (
       <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
-        {session?.user?.isPremium || userHasStartedAnyCourse ? null : <Hero />}
+        {/* {session?.user?.isPremium || userHasStartedAnyCourse ? null : <Hero />} */}
+
+        {/* AI Certification Banner */}
+        <AICertificationBanner />
 
         {/* Show continue learning for logged-in users */}
         <ContinueLearningServerSide recentCourses={recentCourseActivity} />
 
         <div className="text-center mb-24">
           <h1 className="text-4xl font-bold text-white/90 mb-4">
-            Nuestros cursos
+            Cursos potenciados con IA
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto">
-            Mejora tus habilidades de desarrollo web con nuestros cursos
-            impartidos por expertos de la industria
+            Aprende desarrollo moderno integrando herramientas de IA para ser
+            más eficiente y destacar en tu carrera profesional
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {workshops &&
+            workshops.length > 0 &&
+            workshops.map((workshop, index) => (
+              <Workshop key={workshop.id || index} {...workshop} />
+            ))}
           {courses && courses.length > 0 ? (
             courses.map((course, index) => (
               <CourseCard key={course.id || index} {...course} />
@@ -94,11 +103,6 @@ export default async function Home() {
           ) : (
             <CourseGridSkeleton count={8} />
           )}
-          {workshops &&
-            workshops.length > 0 &&
-            workshops.map((workshop, index) => (
-              <Workshop key={workshop.id || index} {...workshop} />
-            ))}
         </div>
 
         {/* <MonthlyEvents /> */}
@@ -121,11 +125,11 @@ export default async function Home() {
         <div>
           <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
-              Guías de estudio para ti
+              Guías para dominar herramientas de IA
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Material enfocado en ayudarte a optimizar todo lo necesario para
-              la búsqueda laboral y mejora de skills
+              Material práctico para integrar IA en tu flujo de trabajo y
+              diferenciarte en la búsqueda laboral
             </p>
           </div>
           <ProductsInfiniteScroll initialProducts={products || []} />
@@ -140,11 +144,11 @@ export default async function Home() {
         <div>
           <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
-              Repositorios de Apoyo
+              Repositorios con IA integrada
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Arranca tus proyectos más rápido con repositorios optimizados y
-              mejores prácticas integradas
+              Arranca tus proyectos con repositorios optimizados que integran
+              herramientas de IA y mejores prácticas modernas
             </p>
           </div>
           {starterRepos && starterRepos.length > 0 ? (

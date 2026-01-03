@@ -20,7 +20,7 @@ export default function CurrencySelector() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white hover:bg-white/20 transition-colors"
+        className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white hover:bg-white/20 transition-colors cursor-pointer"
       >
         <span className="text-sm">{currentCurrency.flag}</span>
         <span className="text-sm font-medium">{currentCurrency.code}</span>
@@ -52,7 +52,7 @@ export default function CurrencySelector() {
                     setCurrency(currency.code);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors cursor-pointer ${
                     currentCurrency.code === currency.code
                       ? 'bg-indigo-50 text-indigo-700'
                       : 'text-gray-700'

@@ -1,4 +1,4 @@
-import { Users, BookOpen, Rocket, Code2 } from "lucide-react";
+import { Users, Sparkles, TrendingUp, Code2 } from "lucide-react";
 import Link from "next/link";
 
 export default function Hero() {
@@ -13,11 +13,12 @@ export default function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6 leading-tight">
-              Transforma tu carrera en programación
+              Domina la IA para destacar como desarrollador
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Únete a otros desarrolladores que aprenden HACIENDO con nuestros
-              cursos, proyectos prácticos y guías escritos por expertos.
+              Aprende a usar herramientas de IA para potenciar tus habilidades y
+              diferenciarte en un mercado competitivo. Proyectos reales, guías
+              prácticas y una comunidad activa.
             </p>
             <div className="flex gap-4">
               <Link
@@ -36,36 +37,36 @@ export default function Hero() {
                   Comunidad
                 </h3>
                 <p className="text-gray-300">
-                  Unidos por el código, juntos en cada error
+                  Devs aprendiendo y aplicando IA en proyectos reales
                 </p>
               </div>
               <div className="bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-gray-600/30 hover:border-green-500/30 transition-all duration-300 group">
-                <BookOpen className="h-8 w-8 text-green-400 mb-3 group-hover:text-green-300 transition-colors" />
+                <Sparkles className="h-8 w-8 text-green-400 mb-3 group-hover:text-green-300 transition-colors" />
                 <h3 className="text-xl font-semibold text-white mb-2">
-                  Recursos
+                  Herramientas IA
                 </h3>
                 <p className="text-gray-300">
-                  Accede a material extra en cada aprendizaje
+                  Aprende las mejores herramientas para potenciar tu código
                 </p>
               </div>
             </div>
             <div className="space-y-6 lg:mt-6">
               <div className="bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-gray-600/30 hover:border-purple-500/30 transition-all duration-300 group">
-                <Rocket className="h-8 w-8 text-purple-400 mb-3 group-hover:text-purple-300 transition-colors" />
+                <TrendingUp className="h-8 w-8 text-purple-400 mb-3 group-hover:text-purple-300 transition-colors" />
                 <h3 className="text-xl font-semibold text-white mb-2">
-                  Crecimiento profesional
+                  Diferenciación
                 </h3>
                 <p className="text-gray-300">
-                  No solo aspectos técnicos, sino también habilidades blandas
+                  Destaca en un mercado donde la IA es el estándar
                 </p>
               </div>
               <div className="bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-gray-600/30 hover:border-orange-500/30 transition-all duration-300 group">
                 <Code2 className="h-8 w-8 text-orange-400 mb-3 group-hover:text-orange-300 transition-colors" />
                 <h3 className="text-xl font-semibold text-white mb-2">
-                  Proyectos
+                  Proyectos con IA
                 </h3>
                 <p className="text-gray-300">
-                  Aprende HACIENDO proyectos REALES
+                  Construye aplicaciones reales usando herramientas de IA
                 </p>
               </div>
             </div>
