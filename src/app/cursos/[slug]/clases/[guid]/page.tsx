@@ -45,45 +45,62 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: { params: Params }) {
-  const { guid, slug } = await params;
+  try {
+    const { guid, slug } = await params;
 
-  // Check authentication server-side before fetching data
-  const session = await auth();
-  if (!session) {
-    const callbackUrl = `/cursos/${slug}/clases/${guid}`;
-    redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
-  }
-
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
-    {
-      headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
-        "Content-Type": "application/json",
-      },
+    // Check authentication server-side before fetching data
+    const session = await auth();
+    if (!session) {
+      const callbackUrl = `/cursos/${slug}/clases/${guid}`;
+      redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
     }
-  );
 
-  const video = await data.json();
-  
+    // Log environment check (will show in Vercel logs)
+    console.log('Environment check:', {
+      hasApiUrl: !!process.env.NEXT_PUBLIC_BUNNYNET_API_URL,
+      hasLibraryId: !!process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID,
+      hasAccessKey: !!process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY,
+    });
 
-  const allVideos = await getVideosFromCollection(slug);
-  
-  // Order videos by title to ensure consistent lesson ordering
-  const orderedVideos = allVideos ? orderVideosByTitle(allVideos) : [];
+    const data = await fetch(
+      `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
+      {
+        headers: {
+          AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  // Find the current video index in ordered list
-  const currentIndex = getLessonIndex(orderedVideos, guid);
+    if (!data.ok) {
+      console.error('BunnyNet API error:', {
+        status: data.status,
+        statusText: data.statusText,
+        guid,
+      });
+      throw new Error(`Failed to fetch video: ${data.status} ${data.statusText}`);
+    }
 
-  // Determine the next video
-  const nextVideo =
-    orderedVideos &&
-    currentIndex !== -1 &&
-    currentIndex < orderedVideos.length - 1
-      ? orderedVideos[currentIndex + 1]
-      : null;
+    const video = await data.json();
 
-  return (
+
+    const allVideos = await getVideosFromCollection(slug);
+
+    // Order videos by title to ensure consistent lesson ordering
+    const orderedVideos = allVideos ? orderVideosByTitle(allVideos) : [];
+
+    // Find the current video index in ordered list
+    const currentIndex = getLessonIndex(orderedVideos, guid);
+
+    // Determine the next video
+    const nextVideo =
+      orderedVideos &&
+      currentIndex !== -1 &&
+      currentIndex < orderedVideos.length - 1
+        ? orderedVideos[currentIndex + 1]
+        : null;
+
+    return (
     <FreemiumGuard 
       lessonIndex={currentIndex}
       lessonTitle={video.title}
@@ -153,5 +170,9 @@ export default async function Page({ params }: { params: Params }) {
         </div>
       </main>
     </FreemiumGuard>
-  );
+    );
+  } catch (error) {
+    console.error('Error in lesson page:', error);
+    throw error; // Re-throw to trigger Next.js error page
+  }
 }
