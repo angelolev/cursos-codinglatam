@@ -326,7 +326,7 @@ export default function VideoPlayerWithProgress({
         <iframe
           ref={iframeRef}
           src={`https://iframe.mediadelivery.net/embed/${libraryId}/${guid}?autoplay=false&loop=false&muted=false&preload=false&responsive=true&postMessage=true&controls=true&origin=${encodeURIComponent(
-            window.location.origin
+            typeof window !== 'undefined' ? window.location.origin : ''
           )}`}
           loading="lazy"
           style={{
