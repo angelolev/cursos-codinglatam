@@ -604,6 +604,15 @@ export default function WaitlistPage() {
                 <span className="text-cyan-400 mt-1">•</span>
                 <span>
                   <strong className="text-white/90">
+                    Modelos Opus, Sonnet & Haiku:
+                  </strong>{" "}
+                  Aprende cuándo usar cada modelo (Opus para tareas complejas, Sonnet balance perfecto, Haiku para velocidad)
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-cyan-400 mt-1">•</span>
+                <span>
+                  <strong className="text-white/90">
                     System prompts efectivos:
                   </strong>{" "}
                   Configura Claude para que genere código en tu style guide
@@ -626,16 +635,6 @@ export default function WaitlistPage() {
                   </strong>{" "}
                   Aprende los prompts exactos para refactoring, debugging, E2E
                   testing con Playwright y documentation
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400 mt-1">•</span>
-                <span>
-                  <strong className="text-white/90">
-                    Error analysis patterns:
-                  </strong>{" "}
-                  Cómo hacer que Claude analice stack traces y sugiera fixes en
-                  segundos
                 </span>
               </li>
             </ul>
