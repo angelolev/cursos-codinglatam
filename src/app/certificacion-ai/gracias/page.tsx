@@ -1,7 +1,16 @@
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { generatePageMetadata } from "@/utils/metadata";
 
 export const dynamic = "force-static";
+
+export const metadata: Metadata = generatePageMetadata(
+  "¡Gracias por tu compra! - Certificación AI Engineer",
+  "Bienvenido a la Certificación AI Engineer Cohorte 1. En 6 semanas dominarás las herramientas de IA que usan los mejores developers del mundo. Inicia Febrero 2026.",
+  "/certificacion-ai/gracias"
+);
+
 import {
   Sparkles,
   Calendar,
