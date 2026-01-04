@@ -145,17 +145,17 @@ export default function WaitlistPage() {
         </div>
 
         <h1 className="text-4xl md:text-5xl font-bold text-white/90 mb-6 leading-tight">
-          Conviértete en
+          Domina
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            AI Engineer
+            Claude Code
           </span>
         </h1>
 
         <p className="text-xl text-white/70 max-w-2xl mx-auto mb-12">
-          Domina el desarrollo profesional con IA en 6 semanas. No es un curso
-          más de ChatGPT, es una certificación que demuestra que sabes usar IA
-          como un profesional.
+          El AI coding assistant más potente del mercado, integrado en tu terminal.
+          Aprende a desarrollar 5x más rápido con MCP, custom skills y workflows profesionales
+          que las empresas tech están usando hoy.
         </p>
       </div>
 
@@ -224,7 +224,7 @@ export default function WaitlistPage() {
           </div>
         </div>
         <p className="text-white/70 text-sm">
-          Únete a más de 79 desarrolladores esperando la Cohorte 1
+          Únete a más de 79 desarrolladores que quieren dominar Claude Code en la Cohorte 1
         </p>
       </div>
 
@@ -313,7 +313,7 @@ export default function WaitlistPage() {
           Asegura tu lugar con 40% OFF
         </h2>
         <p className="text-gray-600 mb-6 text-lg">
-          Paga ahora y comienza tu transformación como AI Engineer
+          Únete a la primera cohorte que dominará Claude Code profesionalmente
         </p>
 
         {/* Discount Code Badge */}
@@ -492,136 +492,199 @@ export default function WaitlistPage() {
       {/* Value Props Section */}
       <div className="mt-20 max-w-4xl mx-auto">
         <h3 className="text-2xl font-bold text-white/90 text-center mb-4">
-          Lo que aprenderás en 6 semanas
+          Domina Claude Code como tu herramienta principal de desarrollo
         </h3>
         <p className="text-white/60 text-center mb-12 max-w-2xl mx-auto">
-          Programa intensivo diseñado para llevarte de developer a AI Engineer
+          El AI coding assistant más poderoso del mercado, integrado
+          directamente en tu terminal y workflow diario
         </p>
 
         {/* Curriculum Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {/* Card 1: Herramientas */}
+          {/* Card 1: Claude Code CLI */}
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <h4 className="font-semibold text-white/90 mb-3 flex items-center gap-2">
-              <span className="text-2xl">🛠️</span>
-              Dominio de Herramientas IA
+              <span className="text-2xl">⚡</span>
+              Claude Code CLI Completo
             </h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
                 <span>
                   <strong className="text-white/90">
-                    Claude Code & Cursor:
+                    Comandos desde terminal:
                   </strong>{" "}
-                  IDEs potenciados con IA
+                  Genera features completas, refactoriza archivos y debuggea
+                  código sin salir de la CLI
                 </span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-cyan-400 mt-1">•</span>
-                <span>
-                  <strong className="text-white/90">MCP & Skills:</strong>{" "}
-                  Personaliza tu flujo de trabajo
-                </span>
-              </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
                 <span>
                   <strong className="text-white/90">
-                    GitHub Copilot & Codeium:
+                    Context window 200K tokens:
                   </strong>{" "}
-                  Autocompletado inteligente
+                  Lee proyectos enteros simultáneamente, entiende toda tu
+                  arquitectura
                 </span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
                 <span>
-                  <strong className="text-white/90">v0, Bolt & Lovable:</strong>{" "}
-                  Generación de UI/UX
+                  <strong className="text-white/90">Interactive mode:</strong>{" "}
+                  Conversaciones multi-turn donde Claude recuerda todo el
+                  contexto del proyecto
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-cyan-400 mt-1">•</span>
+                <span>
+                  <strong className="text-white/90">File operations:</strong>{" "}
+                  Lee, edita, crea y elimina archivos automáticamente basado en
+                  tus instrucciones
                 </span>
               </li>
             </ul>
           </div>
 
-          {/* Card 2: Debugging */}
+          {/* Card 2: MCP & Skills */}
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <h4 className="font-semibold text-white/90 mb-3 flex items-center gap-2">
-              <span className="text-2xl">🐛</span>
-              Debugging Avanzado con IA
+              <span className="text-2xl">🔌</span>
+              MCP Servers & Custom Skills
             </h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
                 <span>
-                  Identifica bugs en{" "}
-                  <strong className="text-white/90">segundos</strong> con
-                  análisis de IA
+                  <strong className="text-white/90">
+                    MCP (Model Context Protocol):
+                  </strong>{" "}
+                  Conecta Claude con filesystem, git, SQLite, Postgres y
+                  cualquier herramienta externa
                 </span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-cyan-400 mt-1">•</span>
-                <span>Stack trace analysis automático</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-cyan-400 mt-1">•</span>
-                <span>Debugging en tiempo real con pair programming IA</span>
-              </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
                 <span>
-                  Prevención de bugs con pre-commit hooks inteligentes
+                  <strong className="text-white/90">Custom Skills:</strong> Crea
+                  comandos slash personalizados (/deploy, /test, /migrate) para
+                  tu stack
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-cyan-400 mt-1">•</span>
+                <span>
+                  <strong className="text-white/90">Hooks & Automation:</strong>{" "}
+                  Ejecuta scripts automáticos antes/después de cada interacción
+                  con Claude
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-cyan-400 mt-1">•</span>
+                <span>
+                  <strong className="text-white/90">
+                    Subagents especializados:
+                  </strong>{" "}
+                  Delega tareas complejas a agentes especializados (explore,
+                  plan, review) que trabajan en paralelo
                 </span>
               </li>
             </ul>
           </div>
 
-          {/* Card 3: Code Review */}
+          {/* Card 3: Advanced Prompting */}
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <h4 className="font-semibold text-white/90 mb-3 flex items-center gap-2">
-              <span className="text-2xl">🔄</span>
-              Code Review & Refactoring
+              <span className="text-2xl">🎯</span>
+              Prompt Engineering Avanzado
             </h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Mejora código legacy con IA en minutos</span>
+                <span>
+                  <strong className="text-white/90">
+                    System prompts efectivos:
+                  </strong>{" "}
+                  Configura Claude para que genere código en tu style guide
+                  específico
+                </span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Code reviews automáticos antes de cada commit</span>
+                <span>
+                  <strong className="text-white/90">Context management:</strong>{" "}
+                  Técnicas para maximizar los 200K tokens y procesar codebases
+                  enormes
+                </span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Aprende best practices de código limpio</span>
+                <span>
+                  <strong className="text-white/90">
+                    Prompts por tipo de tarea:
+                  </strong>{" "}
+                  Aprende los prompts exactos para refactoring, debugging, E2E
+                  testing con Playwright y documentation
+                </span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Refactoring inteligente que mantiene funcionalidad</span>
+                <span>
+                  <strong className="text-white/90">
+                    Error analysis patterns:
+                  </strong>{" "}
+                  Cómo hacer que Claude analice stack traces y sugiera fixes en
+                  segundos
+                </span>
               </li>
             </ul>
           </div>
 
-          {/* Card 4: Comunidad */}
+          {/* Card 4: Real Development Workflows */}
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <h4 className="font-semibold text-white/90 mb-3 flex items-center gap-2">
-              <span className="text-2xl">👥</span>
-              Comunidad & Networking
+              <span className="text-2xl">🚀</span>
+              Workflows Profesionales
             </h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Grupo privado de AI Engineers certificados</span>
+                <span>
+                  <strong className="text-white/90">
+                    Feature development completo:
+                  </strong>{" "}
+                  Desde diseño hasta tests E2E con Playwright, usando Claude en
+                  cada paso del proceso
+                </span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Sesiones en vivo con expertos de la industria</span>
+                <span>
+                  <strong className="text-white/90">Code review con AI:</strong>{" "}
+                  Revisa PRs completos, detecta bugs y mejora code quality antes
+                  de merge
+                </span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Networking con developers de Latam y USA</span>
+                <span>
+                  <strong className="text-white/90">
+                    Legacy code modernization:
+                  </strong>{" "}
+                  Migra proyectos viejos a TypeScript, actualiza dependencies,
+                  moderniza patterns
+                </span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-1">•</span>
-                <span>Acceso de por vida a la comunidad</span>
+                <span>
+                  <strong className="text-white/90">
+                    AI pair programming:
+                  </strong>{" "}
+                  Debugging interactivo, explicaciones de código y pair
+                  programming 24/7
+                </span>
               </li>
             </ul>
           </div>
@@ -630,45 +693,56 @@ export default function WaitlistPage() {
         {/* Curriculum Week by Week */}
         <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/10 backdrop-blur-sm rounded-2xl p-8 border border-cyan-500/20 mb-16">
           <h4 className="text-xl font-bold text-white/90 mb-6 text-center">
-            📅 Curriculum Semana por Semana
+            📅 Tu roadmap de developer tradicional a Claude Code expert en 6
+            semanas
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Week 1-2 */}
             <div>
-              <div className="text-cyan-400 font-bold mb-2">
+              <div className="text-cyan-400 font-bold mb-3">
                 Semanas 1-2: Fundamentos
               </div>
-              <ul className="space-y-1 text-sm text-white/70">
-                <li>• Setup de herramientas IA</li>
-                <li>• Prompting profesional</li>
-                <li>• Workflows básicos</li>
-                <li>• Primer proyecto guiado</li>
+              <ul className="space-y-2 text-sm text-white/70">
+                <li>• Instalación y configuración de Claude Code</li>
+                <li>• Comandos esenciales y modo interactivo</li>
+                <li>• Prompting efectivo para desarrollo</li>
+                <li>
+                  • <strong className="text-white/90">Proyecto:</strong> Genera
+                  tu primer feature completo con Claude
+                </li>
               </ul>
             </div>
 
             {/* Week 3-4 */}
             <div>
-              <div className="text-cyan-400 font-bold mb-2">
-                Semanas 3-4: Avanzado
+              <div className="text-cyan-400 font-bold mb-3">
+                Semanas 3-4: MCP & Automatización
               </div>
-              <ul className="space-y-1 text-sm text-white/70">
-                <li>• Custom agents & MCP</li>
-                <li>• Debugging avanzado</li>
-                <li>• Code review </li>
-                <li>• Proyecto individual</li>
+              <ul className="space-y-2 text-sm text-white/70">
+                <li>• Configuración de MCP servers</li>
+                <li>• Custom Skills para tu workflow</li>
+                <li>• Hooks y automatización avanzada</li>
+                <li>
+                  • <strong className="text-white/90">Proyecto:</strong>{" "}
+                  Automatiza code review y testing E2E con Playwright usando
+                  Claude
+                </li>
               </ul>
             </div>
 
             {/* Week 5-6 */}
             <div>
-              <div className="text-cyan-400 font-bold mb-2">
-                Semanas 5-6: Certificación
+              <div className="text-cyan-400 font-bold mb-3">
+                Semanas 5-6: Production Ready
               </div>
-              <ul className="space-y-1 text-sm text-white/70">
-                <li>• Proyecto final</li>
-                <li>• Mejores prácticas de producción</li>
-                <li>• Certificación</li>
-                <li>• Portafolio profesional</li>
+              <ul className="space-y-2 text-sm text-white/70">
+                <li>• Feature development end-to-end</li>
+                <li>• Refactoring de proyectos legacy</li>
+                <li>• Best practices y workflows profesionales</li>
+                <li>
+                  • <strong className="text-white/90">Certificación:</strong>{" "}
+                  Proyecto final
+                </li>
               </ul>
             </div>
           </div>
@@ -714,7 +788,7 @@ export default function WaitlistPage() {
             con 40% OFF para la Cohorte 1
           </p>
           <div className="space-y-2 text-white/60 text-sm">
-            <p>📅 Inicia: Febrero 3, 2026 · Duración: 6 semanas</p>
+            <p>📅 Inicia: Febrero 17, 2026 · Duración: 6 semanas</p>
             <p>🕐 Clases: Martes y Jueves, 8:00 PM - 10:00 PM (8 hrs/semana)</p>
             <p>🏆 Certificación oficial al finalizar</p>
           </div>
