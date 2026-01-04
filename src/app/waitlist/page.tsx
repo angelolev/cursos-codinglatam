@@ -6,6 +6,28 @@ import { CheckCircle2, AlertCircle, Mail, ArrowRight } from "lucide-react";
 import { WaitlistAvatar } from "@/types/waitlist";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import CurrencySelector from "@/components/CurrencySelector";
+import paypalImage from "@/assets/paypal.svg";
+import visaImage from "@/assets/visa.svg";
+import cardImage from "@/assets/card.svg";
+import americanExpressImage from "@/assets/amex.svg";
+import yapeImage from "@/assets/yape.svg";
+import plinImage from "@/assets/plin.svg";
+import yapeQR from "@/assets/yape-qr.png";
+
+// Peru Flag Component
+const PEFlag = () => {
+  return (
+    <svg
+      className="w-5 h-5 inline-block"
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect y="0" width="512" height="512" fill="#fff" />
+      <rect y="0" width="170.67" height="512" fill="#D80027" />
+      <rect x="341.33" width="170.67" height="512" fill="#D80027" />
+    </svg>
+  );
+};
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
@@ -25,8 +47,8 @@ export default function WaitlistPage() {
   } = useCurrency();
 
   // Precios en USD (moneda base del sistema)
-  const REGULAR_PRICE_USD = 220; // ~800 PEN
-  const EARLY_BIRD_PRICE_USD = 132; // 40% OFF
+  const REGULAR_PRICE_USD = 299; // ~800 PEN
+  const EARLY_BIRD_PRICE_USD = 179.4; // 40% OFF
   const DISCOUNT_PERCENTAGE = 40;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,7 +91,7 @@ export default function WaitlistPage() {
       setSubmitStatus({
         type: "success",
         message:
-          "¡Listo! Recibirás todos los detalles del programa y tu código Early Bird por email.",
+          "¡Listo! Recibirás información del programa y futuras versiones por email.",
       });
       setEmail("");
 
@@ -285,15 +307,97 @@ export default function WaitlistPage() {
         </div>
       </div>
 
-      {/* Form Card */}
-      <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto">
+      {/* Direct Checkout CTA */}
+      <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto text-center">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+          Asegura tu lugar con 40% OFF
+        </h2>
+        <p className="text-gray-600 mb-6 text-lg">
+          Paga ahora y comienza tu transformación como AI Engineer
+        </p>
+
+        {/* Discount Code Badge */}
+        <div className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-50 to-blue-50 border-2 border-cyan-400 rounded-lg px-6 py-3 mb-8">
+          <span className="text-gray-700 font-medium">Usa el código:</span>
+          <span className="bg-gradient-to-r from-cyan-600 to-blue-700 text-white px-4 py-1.5 rounded-md font-bold text-lg tracking-wide">
+            AIDEV40
+          </span>
+        </div>
+
+        <Link
+          href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/6ca73d5c-90e2-4340-aeb9-5f1e842f64ab"
+          className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white px-10 py-5 rounded-lg font-bold text-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] cursor-pointer"
+        >
+          <CheckCircle2 className="h-6 w-6" />
+          Pagar y Asegurar mi Lugar (40% OFF)
+          <ArrowRight className="h-6 w-6" />
+        </Link>
+        <p className="text-gray-500 text-sm mt-4">
+          💳 Pago seguro procesado por Lemon Squeezy
+        </p>
+      </div>
+
+      {/* Payment Methods Section */}
+      <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Paga con</h3>
+            <div className="flex items-center gap-2 flex-wrap mb-6">
+              <Image src={visaImage} alt="Visa" width={50} height={50} />
+              <Image src={cardImage} alt="Card" width={60} height={60} />
+              <Image src={paypalImage} alt="Paypal" width={50} height={50} />
+              <Image
+                src={americanExpressImage}
+                alt="American Express"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div className="bg-gradient-to-r from-red-50 to-white border-2 border-red-500 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <PEFlag />
+                <h4 className="text-lg font-bold text-gray-900">
+                  Opciones para Perú
+                </h4>
+              </div>
+              <div className="flex items-center gap-4 mb-4">
+                <Image src={yapeImage} alt="Yape" width={50} height={50} />
+                <Image src={plinImage} alt="Plin" width={50} height={50} />
+              </div>
+              <p className="text-gray-700 text-sm font-medium">
+                Envía tu voucher al <b>+51 964225808</b> para completar tu
+                registro
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-6 shadow-lg">
+              <div className="bg-white rounded-xl p-4 mb-4">
+                <Image
+                  src={yapeQR}
+                  alt="Yape QR"
+                  width={280}
+                  height={280}
+                  className="w-full h-auto"
+                />
+              </div>
+              <button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                Paga aquí con Yape
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Card - Hidden for now */}
+      {/* <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Asegura tu lugar con 40% OFF
+            Recibe información del programa
           </h2>
           <p className="text-gray-600">
-            Los primeros 15 inscritos obtienen Early Bird. Regístrate ahora y
-            recibe todos los detalles.
+            Regístrate para recibir información del programa y futuras
+            versiones.
           </p>
         </div>
 
@@ -321,22 +425,21 @@ export default function WaitlistPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-primary-300 text-white px-8 py-4 rounded-lg hover:bg-primary-400 transition-colors font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full bg-gray-100 text-gray-700 border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
           >
             {isSubmitting ? (
               <>
-                <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+                <div className="animate-spin h-5 w-5 border-2 border-gray-700 border-t-transparent rounded-full" />
                 Enviando...
               </>
             ) : (
               <>
-                Asegurar mi Early Bird (40% OFF)
-                <ArrowRight className="h-5 w-5" />
+                Recibir Información
+                <ArrowRight className="h-4 w-4" />
               </>
             )}
           </button>
 
-          {/* Success/Error Messages */}
           {submitStatus.type === "success" && (
             <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-lg">
               <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
@@ -353,40 +456,9 @@ export default function WaitlistPage() {
         </form>
 
         <p className="text-center text-gray-500 text-sm mt-6">
-          🔒 Te enviaremos la información por correo. Sin spam. Solo información
-          del programa y tu código Early Bird.
+          🔒 Te enviaremos información del programa por correo. Sin spam.
         </p>
-
-        {/* Divider with OR */}
-        <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-white px-4 text-sm text-gray-500 font-medium">
-              O
-            </span>
-          </div>
-        </div>
-
-        {/* Direct Checkout CTA */}
-        <div className="text-center">
-          <p className="text-gray-700 font-semibold mb-4">
-            Paga ahora mismo y asegura tu lugar con descuento
-          </p>
-          <Link
-            href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/6ca73d5c-90e2-4340-aeb9-5f1e842f64ab"
-            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] cursor-pointer"
-          >
-            <CheckCircle2 className="h-5 w-5" />
-            Pagar y Asegurar mi Lugar (40% OFF)
-            <ArrowRight className="h-5 w-5" />
-          </Link>
-          <p className="text-gray-500 text-xs mt-3">
-            💳 Pago seguro procesado por Lemon Squeezy
-          </p>
-        </div>
-      </div>
+      </div> */}
 
       {/* Benefits Section */}
       <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
@@ -424,7 +496,6 @@ export default function WaitlistPage() {
         </h3>
         <p className="text-white/60 text-center mb-12 max-w-2xl mx-auto">
           Programa intensivo diseñado para llevarte de developer a AI Engineer
-          certificado
         </p>
 
         {/* Curriculum Grid */}

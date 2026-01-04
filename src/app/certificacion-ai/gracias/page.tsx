@@ -140,7 +140,6 @@ export default function GraciasCertificacionAI() {
           </div>
           <h1 className="text-4xl font-bold text-white/90 mb-4">
             ¡Bienvenido(a) a AI Engineer Cohorte 1!{" "}
-            <PartyPopper className="h-8 w-8 inline-block text-yellow-500" />
           </h1>
           <p className="text-xl text-white/70 max-w-2xl mx-auto mb-6">
             Felicidades por dar el paso más importante de tu carrera. En 6
@@ -158,7 +157,6 @@ export default function GraciasCertificacionAI() {
         {/* Benefits Grid */}
         <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900 rounded-2xl shadow-lg p-8 mb-12 border border-gray-700/50">
           <div className="flex items-center gap-3 mb-8">
-            <Target className="h-7 w-7 text-cyan-400" />
             <h2 className="text-2xl font-bold text-white/90">
               Todo lo que obtienes
             </h2>
@@ -184,7 +182,6 @@ export default function GraciasCertificacionAI() {
         {/* Next Steps Section */}
         <div className="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-2xl shadow-lg p-8 text-white mb-12">
           <div className="flex items-center gap-3 mb-8">
-            <Zap className="h-7 w-7" />
             <h2 className="text-2xl font-bold">Primeros pasos</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -213,7 +210,6 @@ export default function GraciasCertificacionAI() {
         {/* Curriculum Section */}
         <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900 rounded-2xl shadow-lg p-8 border border-gray-700/50 mb-12">
           <div className="flex items-center gap-3 mb-8">
-            <BookOpen className="h-7 w-7 text-cyan-400" />
             <h2 className="text-2xl font-bold text-white/90">
               Qué aprenderás en 6 semanas
             </h2>
@@ -256,7 +252,17 @@ export default function GraciasCertificacionAI() {
           </p>
           <div className="text-white/60 text-sm space-y-1">
             <p>📧 Revisa tu email (incluyendo spam) para más detalles</p>
-            <p>💬 Únete al Discord para conocer a tus compañeros</p>
+            <p>
+              💬 Únete al{" "}
+              <Link
+                target="_blank"
+                href="https://chat.whatsapp.com/Gh91Z1WS2EfKOPxu4gHUp8"
+                className="text-cyan-400 hover:text-cyan-300 text-underline"
+              >
+                grupo de Whatsapp
+              </Link>{" "}
+              para conocer a tus compañeros
+            </p>
             <p>🚀 Nos vemos el 3 de Febrero, 2026</p>
           </div>
         </div>
