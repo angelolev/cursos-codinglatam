@@ -4,6 +4,11 @@ import { Comments } from "@/components/Comments";
 import ContentAccessGuard from "@/components/ContentAccessGuard";
 import LikeMaterial from "@/components/LikeMaterial";
 import { getWorkshopByslug } from "@/utils/common";
+import { redirect } from "next/navigation";
+import { auth } from "@/app/auth";
+
+// Force dynamic rendering for auth checks and redirects
+export const dynamic = 'force-dynamic';
 
 type Params = Promise<{ guid: string; slug: string }>;
 
@@ -21,43 +26,39 @@ interface IMetatag {
   value: string;
 }
 
-export async function generateStaticParams() {
-  const videos = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
-    {
-      headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
-        "Content-Type": "application/json",
-      },
-    }
-  ).then((res) => res.json());
-
-  return videos?.items?.map((video: IVideo) => ({
-    guid: video.guid,
-  }));
-}
-
 export default async function Page({ params }: { params: Params }) {
-  const { guid, slug } = await params;
+  try {
+    const { guid, slug } = await params;
 
-  // Fetch workshop data to get isFree property
-  const workshop = await getWorkshopByslug(slug);
-  
-  if (!workshop) {
-    throw new Error(`Workshop not found: ${slug}`);
-  }
-
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
-    {
-      headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
-        "Content-Type": "application/json",
-      },
+    // Check authentication server-side before fetching data
+    const session = await auth();
+    if (!session) {
+      const callbackUrl = `/workshops/${slug}/videos/${guid}`;
+      redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
     }
-  );
 
-  const video = await data.json();
+    // Fetch workshop data to get isFree property
+    const workshop = await getWorkshopByslug(slug);
+
+    if (!workshop) {
+      throw new Error(`Workshop not found: ${slug}`);
+    }
+
+    const data = await fetch(
+      `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
+      {
+        headers: {
+          AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!data.ok) {
+      throw new Error(`Failed to fetch video: ${data.status} ${data.statusText}`);
+    }
+
+    const video = await data.json();
 
   return (
     <ContentAccessGuard
@@ -92,7 +93,7 @@ export default async function Page({ params }: { params: Params }) {
               <LikeMaterial guid={guid} label="¿Te gustó este workshop?" />
             </div>
 
-            {video.metaTags.map((item: IMetatag) => (
+            {video.metaTags?.map((item: IMetatag) => (
               <p className="text-base text-white/90" key={item.value}>
                 {item.value}
               </p>
@@ -115,5 +116,9 @@ export default async function Page({ params }: { params: Params }) {
         </div>
       </main>
     </ContentAccessGuard>
-  );
+    );
+  } catch (error) {
+    // Re-throw to trigger Next.js error page
+    throw error;
+  }
 }
