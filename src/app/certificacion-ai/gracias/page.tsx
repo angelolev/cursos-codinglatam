@@ -94,7 +94,7 @@ const nextSteps = [
     icon: <Calendar className="h-6 w-6" />,
     title: "Revisa el Calendario",
     description:
-      "Marca las fechas: Febrero 3, 2026. Clases Mar/Jue 8PM-10PM durante 6 semanas",
+      "Marca las fechas: Febrero 10, 2026. Clases Mar/Jue 8PM-10PM durante 6 semanas",
     link: "/waitlist",
     linkText: "Ver cronograma",
   },
@@ -158,7 +158,7 @@ export default function GraciasCertificacionAI() {
           <div className="inline-flex items-center gap-2 bg-cyan-500/20 backdrop-blur-sm rounded-full px-6 py-3 border border-cyan-400/30">
             <Brain className="h-5 w-5 text-cyan-300" />
             <span className="text-cyan-300 font-semibold">
-              Inicia: Febrero 3, 2026 · Mar/Jue 8PM-10PM
+              Inicia: Febrero 10, 2026 · Mar/Jue 8PM-10PM
             </span>
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function GraciasCertificacionAI() {
               </Link>{" "}
               para conocer a tus compañeros
             </p>
-            <p>🚀 Nos vemos el 3 de Febrero, 2026</p>
+            <p>🚀 Nos vemos el 10 de Febrero, 2026</p>
           </div>
         </div>
       </div>

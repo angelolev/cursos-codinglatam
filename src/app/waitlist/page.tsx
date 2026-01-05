@@ -153,9 +153,9 @@ export default function WaitlistPage() {
         </h1>
 
         <p className="text-xl text-white/70 max-w-2xl mx-auto mb-12">
-          El AI coding assistant más potente del mercado, integrado en tu terminal.
-          Aprende a desarrollar 5x más rápido con MCP, custom skills y workflows profesionales
-          que las empresas tech están usando hoy.
+          El AI coding assistant más potente del mercado, integrado en tu
+          terminal. Aprende a desarrollar 5x más rápido con MCP, custom skills y
+          workflows profesionales que las empresas tech están usando hoy.
         </p>
       </div>
 
@@ -224,7 +224,8 @@ export default function WaitlistPage() {
           </div>
         </div>
         <p className="text-white/70 text-sm">
-          Únete a más de 79 desarrolladores que quieren dominar Claude Code en la Cohorte 1
+          Únete a más de 79 desarrolladores que quieren dominar Claude Code en
+          la Cohorte 1
         </p>
       </div>
 
@@ -381,9 +382,9 @@ export default function WaitlistPage() {
                   className="w-full h-auto"
                 />
               </div>
-              <button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                Paga aquí con Yape
-              </button>
+              <p className="w-full  text-white font-bold rounded-lg transition-colors text-center">
+                Paga con QR
+              </p>
             </div>
           </div>
         </div>
@@ -606,7 +607,8 @@ export default function WaitlistPage() {
                   <strong className="text-white/90">
                     Modelos Opus, Sonnet & Haiku:
                   </strong>{" "}
-                  Aprende cuándo usar cada modelo (Opus para tareas complejas, Sonnet balance perfecto, Haiku para velocidad)
+                  Aprende cuándo usar cada modelo (Opus para tareas complejas,
+                  Sonnet balance perfecto, Haiku para velocidad)
                 </span>
               </li>
               <li className="flex items-start gap-2">

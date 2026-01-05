@@ -66,7 +66,7 @@ export default function AICertificationBanner() {
               <div className="bg-gray-800/60 backdrop-blur-sm rounded-xl p-5 border border-gray-600/30 hover:border-cyan-500/30 transition-all duration-300">
                 <Calendar className="h-6 w-6 text-cyan-400 mb-3" />
                 <h3 className="text-base font-semibold text-white mb-1">
-                  Inicia Febrero 3
+                  Inicia Febrero 10
                 </h3>
                 <p className="text-sm text-gray-300">
                   Mar/Jue 8PM-10PM

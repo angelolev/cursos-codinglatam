@@ -325,7 +325,7 @@ Un programa intensivo de 6-8 semanas donde certificas que dominas el desarrollo 
 
 ### **Cohorte 1 - Q1 2026**
 
-- **Inicio:** Febrero 3, 2026
+- **Inicio:** Febrero 10, 2026
 - **Fin:** Marzo 28, 2026 (8 semanas)
 - **Cupos:** 30 personas (limitado)
 - **Early Bird:** 40% OFF (primeros 15 inscritos)
