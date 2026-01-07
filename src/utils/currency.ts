@@ -136,10 +136,10 @@ export function convertPrice(usdPrice: number, targetCurrency: string, rates: Ex
   const currency = SUPPORTED_CURRENCIES[targetCurrency] || SUPPORTED_CURRENCIES.USD;
   const rate = rates[targetCurrency] || 1;
   const rawConverted = usdPrice * rate;
-  
-  // Apply smart rounding for better psychological pricing
-  const converted = targetCurrency === 'USD' ? rawConverted : smartRoundPrice(rawConverted, targetCurrency);
-  
+
+  // Apply smart rounding for better psychological pricing (including USD)
+  const converted = smartRoundPrice(rawConverted, targetCurrency);
+
   return {
     original: usdPrice,
     converted,
