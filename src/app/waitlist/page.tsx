@@ -294,7 +294,7 @@ export default function WaitlistPage() {
                 {currencyLoading
                   ? "..."
                   : convertAndFormatPrice(
-                      REGULAR_PRICE_USD - EARLY_BIRD_PRICE_USD
+                      REGULAR_PRICE_USD - EARLY_BIRD_PRICE_USD,
                     )}
               </span>
             </div>
@@ -790,7 +790,7 @@ export default function WaitlistPage() {
           </p>
           <div className="space-y-2 text-white/60 text-sm">
             <p>📅 Inicia: Febrero 17, 2026 · Duración: 6 semanas</p>
-            <p>🕐 Clases: Martes y Jueves, 8:00 PM - 10:00 PM (8 hrs/semana)</p>
+            <p>🕐 Clases: Martes y Jueves, 8:00 PM - 10:00 PM (4 hrs/semana)</p>
             <p>🏆 Certificación oficial al finalizar</p>
           </div>
         </div>

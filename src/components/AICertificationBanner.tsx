@@ -70,7 +70,7 @@ export default function AICertificationBanner() {
                 </h3>
                 <p className="text-sm text-gray-300">
                   Mar/Jue 8PM-10PM
-                  <br />8 hrs/semana
+                  <br />4 hrs/semana
                 </p>
               </div>
 
