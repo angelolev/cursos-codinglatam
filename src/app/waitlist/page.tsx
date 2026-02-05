@@ -47,9 +47,8 @@ export default function WaitlistPage() {
   } = useCurrency();
 
   // Precios en USD (moneda base del sistema)
-  const REGULAR_PRICE_USD = 299; // ~800 PEN
-  const EARLY_BIRD_PRICE_USD = 179.4; // 40% OFF
-  const DISCOUNT_PERCENTAGE = 40;
+  const REGULAR_PRICE_USD = 238; // ~S/799
+  const EARLY_BIRD_PRICE_USD = 149; // ~S/499
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,7 +139,7 @@ export default function WaitlistPage() {
       <div className="text-center mb-16">
         <div className="inline-flex items-center bg-blue-500/20 backdrop-blur-sm rounded-full px-4 py-2 text-blue-300 mb-8 border border-blue-400/30">
           <span className="text-sm font-medium">
-            Cohorte 1 · Febrero 2026 · 40% OFF Primeros 15
+            Cohorte 1 · Febrero 2026 · Descuento Primeros 10
           </span>
         </div>
 
@@ -240,7 +239,7 @@ export default function WaitlistPage() {
             {/* Early Bird Badge */}
             <div className="inline-flex items-center bg-blue-600/30 backdrop-blur-sm rounded-full px-4 py-2 mb-4 border border-blue-400/30">
               <span className="text-sm font-semibold text-cyan-300">
-                🎯 Early Bird - Solo primeros 15
+                🎯 Early Bird - Solo primeros 10
               </span>
             </div>
 
@@ -287,10 +286,10 @@ export default function WaitlistPage() {
               </div>
             </div>
 
-            {/* Discount Badge */}
+            {/* Savings Badge */}
             <div className="text-center">
               <span className="inline-block bg-cyan-500/20 text-cyan-300 px-4 py-2 rounded-full text-sm font-bold border border-cyan-400/30">
-                Ahorras {DISCOUNT_PERCENTAGE}% ={" "}
+                Ahorras{" "}
                 {currencyLoading
                   ? "..."
                   : convertAndFormatPrice(
@@ -311,26 +310,19 @@ export default function WaitlistPage() {
       {/* Direct Checkout CTA */}
       <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-          Asegura tu lugar con 40% OFF
+          Asegura tu lugar con descuento
         </h2>
         <p className="text-gray-600 mb-6 text-lg">
           Únete a la primera cohorte que dominará Claude Code profesionalmente
         </p>
 
         {/* Discount Code Badge */}
-        <div className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-50 to-blue-50 border-2 border-cyan-400 rounded-lg px-6 py-3 mb-8">
-          <span className="text-gray-700 font-medium">Usa el código:</span>
-          <span className="bg-gradient-to-r from-cyan-600 to-blue-700 text-white px-4 py-1.5 rounded-md font-bold text-lg tracking-wide">
-            AIDEV40
-          </span>
-        </div>
-
         <Link
           href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/6ca73d5c-90e2-4340-aeb9-5f1e842f64ab"
           className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white px-10 py-5 rounded-lg font-bold text-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] cursor-pointer"
         >
           <CheckCircle2 className="h-6 w-6" />
-          Pagar y Asegurar mi Lugar (40% OFF)
+          Pagar y Asegurar mi Lugar
           <ArrowRight className="h-6 w-6" />
         </Link>
         <p className="text-gray-500 text-sm mt-4">
@@ -786,7 +778,7 @@ export default function WaitlistPage() {
             <span className="font-bold text-cyan-400">
               Solo quedan pocos lugares
             </span>{" "}
-            con 40% OFF para la Cohorte 1
+            con descuento para la Cohorte 1
           </p>
           <div className="space-y-2 text-white/60 text-sm">
             <p>📅 Inicia: Febrero 17, 2026 · Duración: 6 semanas</p>
