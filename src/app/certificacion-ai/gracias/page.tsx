@@ -95,7 +95,7 @@ const nextSteps = [
     title: "Revisa el Calendario",
     description:
       "Marca las fechas: Febrero 10, 2026. Clases Mar/Jue 8PM-10PM durante 6 semanas",
-    link: "/waitlist",
+    link: "/claude",
     linkText: "Ver cronograma",
   },
   {

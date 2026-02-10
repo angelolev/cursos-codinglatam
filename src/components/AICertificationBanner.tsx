@@ -53,7 +53,7 @@ export default function AICertificationBanner() {
 
               {/* CTA Button */}
               <Link
-                href="/waitlist"
+                href="/claude"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
               >
                 <Award className="h-5 w-5" />
