@@ -139,6 +139,14 @@ export default function Footer() {
                   Guías
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/claude"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Certificación Claude Code
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
