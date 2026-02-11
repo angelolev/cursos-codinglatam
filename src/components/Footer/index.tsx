@@ -196,7 +196,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
-          <p>© 2025 Coding Latam. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} Coding Latam. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
