@@ -18,6 +18,7 @@ import { CourseGridSkeleton } from "@/components/SkeletonLoader";
 import Link from "next/link";
 import StarterRepoCard from "@/components/StarterRepoCard";
 import AICertificationBanner from "@/components/AICertificationBanner";
+import CompanyLogos from "@/components/CompanyLogos";
 
 // Enable revalidation for better performance (ISR)
 export const revalidate = 300; // Revalidate every 5 minutes
@@ -26,7 +27,7 @@ export function generateMetadata() {
   return generatePageMetadata(
     "Domina la IA para destacar como desarrollador",
     "Aprende a usar herramientas de IA para potenciar tus habilidades y diferenciarte. Cursos, proyectos reales y guías prácticas para la nueva era del desarrollo.",
-    "/"
+    "/",
   );
 }
 
@@ -73,10 +74,10 @@ export default async function Home() {
 
     return (
       <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
-        {/* {session?.user?.isPremium || userHasStartedAnyCourse ? null : <Hero />} */}
+        {session?.user?.isPremium || userHasStartedAnyCourse ? null : <Hero />}
 
         {/* AI Certification Banner */}
-        <AICertificationBanner />
+        {/* <AICertificationBanner /> */}
 
         {/* Show continue learning for logged-in users */}
         <ContinueLearningServerSide recentCourses={recentCourseActivity} />
@@ -105,6 +106,8 @@ export default async function Home() {
           )}
         </div>
 
+        <CompanyLogos />
+
         {/* <MonthlyEvents /> */}
 
         {/* <div className="text-center my-24">
@@ -124,9 +127,9 @@ export default async function Home() {
 
         <div>
           <div className="text-center my-24">
-            <h1 className="text-4xl font-bold text-white/90 mb-4">
+            <h2 className="text-4xl font-bold text-white/90 mb-4">
               Guías para dominar herramientas de IA
-            </h1>
+            </h2>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
               Material práctico para integrar IA en tu flujo de trabajo y
               diferenciarte en la búsqueda laboral
@@ -141,7 +144,7 @@ export default async function Home() {
           </Link>
         </div>
 
-        <div>
+        {/* <div>
           <div className="text-center my-24">
             <h1 className="text-4xl font-bold text-white/90 mb-4">
               Repositorios con IA integrada
@@ -172,7 +175,7 @@ export default async function Home() {
               </p>
             </div>
           )}
-        </div>
+        </div> */}
 
         {session?.user?.isPremium ? null : (
           <PricingServerSide userSession={session} />
@@ -184,9 +187,9 @@ export default async function Home() {
     return (
       <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
         <div className="text-center py-20">
-          <h1 className="text-2xl font-bold text-red-300 mb-4">
+          <h2 className="text-2xl font-bold text-red-300 mb-4">
             Error cargando la página
-          </h1>
+          </h2>
           <p className="text-red-200 mb-6">
             Ocurrió un error inesperado. Por favor, recarga la página.
           </p>
