@@ -23,7 +23,7 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="es">
+    <html lang="es" className="overflow-x-hidden">
       <head>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=G-3WYMKRCHYH`}
@@ -50,7 +50,7 @@ export default async function RootLayout({
         </Script>
       </head>
       <body
-        className={`bg-light-black ${firaCode.className} relative min-h-screen flex flex-col`}
+        className={`bg-light-black ${firaCode.className} relative min-h-screen flex flex-col overflow-x-hidden`}
       >
         <SessionProvider session={session}>
           <CurrencyProvider>
@@ -63,7 +63,7 @@ export default async function RootLayout({
             <Footer />
           </CurrencyProvider>
         </SessionProvider>
-        <div className="bg-white rounded-full max-w-16 fixed w-full bottom-5 right-4">
+        <div className="bg-white rounded-full w-16 fixed bottom-5 right-4">
           <WhastappButton />
         </div>
       </body>

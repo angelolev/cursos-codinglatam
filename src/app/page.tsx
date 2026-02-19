@@ -73,7 +73,7 @@ export default async function Home() {
       : [false, []];
 
     return (
-      <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
+      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
         {session?.user?.isPremium || userHasStartedAnyCourse ? null : <Hero />}
 
         {/* AI Certification Banner */}
@@ -185,7 +185,7 @@ export default async function Home() {
   } catch (error) {
     console.error("Home page error:", error);
     return (
-      <main className="pt-24 mx-auto max-w-7xl sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
+      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
         <div className="text-center py-20">
           <h2 className="text-2xl font-bold text-red-300 mb-4">
             Error cargando la página
