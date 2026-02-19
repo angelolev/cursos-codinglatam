@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 import alignet from "@/assets/logos/alignet.webp";
-import ayesa from "@/assets/logos/ayesa.webp";
-import aynitech from "@/assets/logos/aynitech.png";
+import ayesa from "@/assets/logos/ayesa.svg";
+import aynitech from "@/assets/logos/aynitech.svg";
 import bw2 from "@/assets/logos/bw2.svg";
 import crehana from "@/assets/logos/crehana.webp";
 import culqi from "@/assets/logos/culqi-logo.png";
@@ -65,7 +65,7 @@ const row2 = logos.slice(12);
 
 function LogoItem({ logo }: { logo: Logo }) {
   return (
-    <div className="flex-none flex items-center justify-center w-[120px] h-[60px] mx-3 sm:w-[180px] sm:h-[80px] sm:mx-8">
+    <div className="flex-none flex items-center justify-center h-[80px] mx-8">
       <Image
         src={logo.src}
         alt={logo.alt}
@@ -81,7 +81,7 @@ function LogoItem({ logo }: { logo: Logo }) {
 export default function CompanyLogos() {
   return (
     <section className="my-12 sm:my-24 py-8 sm:py-16">
-      <div className="text-center mb-16">
+      <div className="text-center mb-24">
         <h2 className="text-4xl font-bold text-white/90 mb-4">
           Nuestros graduados trabajan en
         </h2>

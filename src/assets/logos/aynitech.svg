@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200" viewBox="0 0 600 200">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d2ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(100, 100)" fill="url(#grad1)">
+    <path d="M0,-30 L26,-15 L26,15 L0,30 L-26,15 L-26,-15 Z" />
+    
+    <g transform="rotate(30)">
+       <path d="M0,-60 L13,-52 L13,-38 L0,-30 L-13,-38 L-13,-52 Z" transform="translate(0, -10)"/>
+       <path d="M0,-60 L13,-52 L13,-38 L0,-30 L-13,-38 L-13,-52 Z" transform="rotate(72) translate(0, -10)"/>
+       <path d="M0,-60 L13,-52 L13,-38 L0,-30 L-13,-38 L-13,-52 Z" transform="rotate(144) translate(0, -10)"/>
+       <path d="M0,-60 L13,-52 L13,-38 L0,-30 L-13,-38 L-13,-52 Z" transform="rotate(216) translate(0, -10)"/>
+       <path d="M0,-60 L13,-52 L13,-38 L0,-30 L-13,-38 L-13,-52 Z" transform="rotate(288) translate(0, -10)"/>
+    </g>
+    
+    <circle cx="0" cy="-85" r="5" />
+    <circle cx="81" cy="-26" r="5" />
+    <circle cx="50" cy="69" r="5" />
+    <circle cx="-50" cy="69" r="5" />
+    <circle cx="-81" cy="-26" r="5" />
+  </g>
+
+  <g fill="#FFFFFF" font-family="Verdana, Geneva, sans-serif">
+    <text x="220" y="110" font-size="52" font-weight="bold" letter-spacing="4">AYNITECH</text>
+    <text x="350" y="145" font-size="24" letter-spacing="10">GROUP</text>
+  </g>
+</svg>
