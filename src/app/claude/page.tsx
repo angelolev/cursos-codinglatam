@@ -139,7 +139,7 @@ export default function WaitlistPage() {
       <div className="text-center mb-16">
         <div className="inline-flex items-center bg-blue-500/20 backdrop-blur-sm rounded-full px-4 py-2 text-blue-300 mb-8 border border-blue-400/30">
           <span className="text-sm font-medium">
-            Cohorte 1 · Febrero 2026 · Descuento Primeros 10
+            Cohorte 2 · Abril 2026 · Descuento Primeros 10
           </span>
         </div>
 
@@ -224,7 +224,7 @@ export default function WaitlistPage() {
         </div>
         <p className="text-white/70 text-sm">
           Únete a más de 79 desarrolladores que quieren dominar Claude Code en
-          la Cohorte 1
+          la Cohorte 2
         </p>
       </div>
 
@@ -313,7 +313,7 @@ export default function WaitlistPage() {
           Asegura tu lugar con descuento
         </h2>
         <p className="text-gray-600 mb-6 text-lg">
-          Únete a la primera cohorte que dominará Claude Code profesionalmente
+          Únete a la segunda cohorte que dominará Claude Code profesionalmente
         </p>
 
         {/* Discount Code Badge */}
@@ -686,14 +686,14 @@ export default function WaitlistPage() {
         {/* Curriculum Week by Week */}
         <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/10 backdrop-blur-sm rounded-2xl p-8 border border-cyan-500/20 mb-16">
           <h4 className="text-xl font-bold text-white/90 mb-6 text-center">
-            📅 Tu roadmap de developer tradicional a Claude Code expert en 6
+            📅 Tu roadmap de developer tradicional a Claude Code expert en 4
             semanas
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Week 1-2 */}
             <div>
               <div className="text-cyan-400 font-bold mb-3">
-                Semanas 1-2: Fundamentos
+                Semana 1: Fundamentos
               </div>
               <ul className="space-y-2 text-sm text-white/70">
                 <li>• Instalación y configuración de Claude Code</li>
@@ -706,10 +706,10 @@ export default function WaitlistPage() {
               </ul>
             </div>
 
-            {/* Week 3-4 */}
+            {/* Week 2-3 */}
             <div>
               <div className="text-cyan-400 font-bold mb-3">
-                Semanas 3-4: MCP & Automatización
+                Semanas 2-3: MCP & Automatización
               </div>
               <ul className="space-y-2 text-sm text-white/70">
                 <li>• Configuración de MCP servers</li>
@@ -723,10 +723,10 @@ export default function WaitlistPage() {
               </ul>
             </div>
 
-            {/* Week 5-6 */}
+            {/* Week 4 */}
             <div>
               <div className="text-cyan-400 font-bold mb-3">
-                Semanas 5-6: Production Ready
+                Semana 4: Production Ready
               </div>
               <ul className="space-y-2 text-sm text-white/70">
                 <li>• Feature development end-to-end</li>
@@ -778,10 +778,10 @@ export default function WaitlistPage() {
             <span className="font-bold text-cyan-400">
               Solo quedan pocos lugares
             </span>{" "}
-            con descuento para la Cohorte 1
+            con descuento para la Cohorte 2
           </p>
           <div className="space-y-2 text-white/60 text-sm">
-            <p>📅 Inicia: Febrero 17, 2026 · Duración: 6 semanas</p>
+            <p>📅 Inicia: Abril 07, 2026 · Duración: 4 semanas</p>
             <p>🕐 Clases: Martes y Jueves, 8:00 PM - 10:00 PM (4 hrs/semana)</p>
             <p>🏆 Certificación oficial al finalizar</p>
           </div>
