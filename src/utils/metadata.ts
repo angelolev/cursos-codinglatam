@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CourseProps } from "@/types/course";
 import { ProjectProps } from "@/types/project";
 import { WorkshopProps } from "@/types/workshop";
+import { CertificateProps } from "@/types/certificate";
 
 const SITE_NAME = "Coding Latam";
 const SITE_URL = "https://codinglatam.dev";
@@ -118,6 +119,37 @@ export function generateWorkshopMetadata(workshop: WorkshopProps): Metadata {
       title: workshop.title,
       description: workshop.description,
       images: [workshop.image],
+    },
+  };
+}
+
+export function generateCertificateMetadata(certificate: CertificateProps): Metadata {
+  const title = `Certificado de ${certificate.studentName} | ${certificate.courseName}`;
+  const description = `${certificate.studentName} completó el curso ${certificate.courseName} en Coding Latam`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/certificados/${certificate.code}`,
+      siteName: SITE_NAME,
+      images: [
+        {
+          url: DEFAULT_IMAGE,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [DEFAULT_IMAGE],
     },
   };
 }

@@ -6,6 +6,7 @@ import { WorkshopProps } from "@/types/workshop";
 import { ProjectProps } from "@/types/project";
 import { ProjectCommentsProps } from "@/types/project-comments";
 import { StarterRepoProps } from "@/types/starter-repo";
+import { CertificateProps } from "@/types/certificate";
 
 export async function getCourseBySlug(
   slug: string
@@ -517,6 +518,31 @@ export async function getStarterRepos(limitCount?: number): Promise<StarterRepoP
     return limitCount ? sortedRepos.slice(0, limitCount) : sortedRepos;
   } catch (error) {
     console.error("Failed to fetch starter repos:", error);
+    return null;
+  }
+}
+
+export async function getCertificateByCode(
+  code: string
+): Promise<CertificateProps | null> {
+  try {
+    const certificatesRef = collection(db, "certificates");
+    const q = query(certificatesRef, where("code", "==", code));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return null;
+    }
+
+    const certDoc = querySnapshot.docs[0];
+
+    return {
+      id: certDoc.id,
+      ...certDoc.data(),
+    } as CertificateProps;
+  } catch (error) {
+    console.error("Failed to fetch certificate:", error);
     return null;
   }
 }

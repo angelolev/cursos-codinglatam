@@ -32,9 +32,19 @@ import AddRepoForm from "@/components/admin/AddRepoForm";
 import ReposTable from "@/components/admin/ReposTable";
 import BannerManagement from "@/components/admin/BannerManagement";
 import { StarterRepoProps } from "@/types/starter-repo";
-import { Plus, Download } from "lucide-react";
+import { Plus, Download, Copy, Check, ExternalLink } from "lucide-react";
 
-type TabType = "usuarios" | "repositorios" | "banner" | "waitlist";
+type TabType = "usuarios" | "repositorios" | "banner" | "waitlist" | "certificados";
+
+interface CertificateEntry {
+  id: string;
+  code: string;
+  studentName: string;
+  courseName: string;
+  completionDate: string;
+  certificateUrl?: string;
+  isValid: boolean;
+}
 
 interface WaitlistEntry {
   id: string;
@@ -49,6 +59,9 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [repos, setRepos] = useState<(StarterRepoProps & { id: string })[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
+  const [certificates, setCertificates] = useState<CertificateEntry[]>([]);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [certSearch, setCertSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -77,6 +90,7 @@ export default function AdminDashboard() {
     fetchUsers();
     fetchRepos();
     fetchWaitlist();
+    fetchCertificates();
   }, [session, router]);
 
   const fetchRepos = async () => {
@@ -104,6 +118,37 @@ export default function AdminDashboard() {
       console.error("Failed to fetch waitlist:", err);
     }
   };
+
+  const fetchCertificates = async () => {
+    try {
+      const certsCollection = collection(db, "certificates");
+      const certsSnapshot = await getDocs(certsCollection);
+      const data: CertificateEntry[] = certsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as CertificateEntry[];
+      setCertificates(data);
+    } catch (err) {
+      console.error("Failed to fetch certificates:", err);
+    }
+  };
+
+  const copyLink = (code: string) => {
+    navigator.clipboard.writeText(`https://codinglatam.dev/certificados/${code}`);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2000);
+  };
+
+  const filteredCertificates = useMemo(() => {
+    if (!certSearch) return certificates;
+    const search = certSearch.toLowerCase();
+    return certificates.filter(
+      (c) =>
+        c.studentName.toLowerCase().includes(search) ||
+        c.courseName.toLowerCase().includes(search) ||
+        c.code.toLowerCase().includes(search)
+    );
+  }, [certificates, certSearch]);
 
   const fetchUsers = async () => {
     try {
@@ -379,6 +424,16 @@ export default function AdminDashboard() {
               }`}
             >
               Waitlist
+            </button>
+            <button
+              onClick={() => setActiveTab("certificados")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "certificados"
+                  ? "border-indigo-500 text-indigo-400"
+                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
+              }`}
+            >
+              Certificados
             </button>
           </nav>
         </div>
@@ -776,6 +831,122 @@ export default function AdminDashboard() {
             setTimeout(() => setSuccess(null), 3000);
           }}
         />
+      )}
+
+      {/* Certificados Tab */}
+      {activeTab === "certificados" && (
+        <div>
+          <div className="mb-6 flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-white/90">
+                Certificados
+              </h2>
+              <p className="text-gray-400 mt-1">
+                {certificates.length} {certificates.length === 1 ? 'certificado emitido' : 'certificados emitidos'}
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <input
+              type="text"
+              value={certSearch}
+              onChange={(e) => setCertSearch(e.target.value)}
+              placeholder="Buscar por nombre, curso o código..."
+              className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            />
+          </div>
+
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Estudiante
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Curso
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Fecha
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Link
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      PDF
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredCertificates.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                        {certSearch ? "No se encontraron certificados" : "No hay certificados aún"}
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredCertificates.map((cert) => (
+                      <tr key={cert.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            {cert.studentName}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                            {cert.courseName}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {new Date(cert.completionDate).toLocaleDateString("es-ES", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => copyLink(cert.code)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          >
+                            {copiedCode === cert.code ? (
+                              <>
+                                <Check className="h-4 w-4 text-green-600" />
+                                <span className="text-green-600">Copiado</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="h-4 w-4" />
+                                Copiar link
+                              </>
+                            )}
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {cert.certificateUrl ? (
+                            <a
+                              href={cert.certificateUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                              Ver PDF
+                            </a>
+                          ) : (
+                            <span className="text-sm text-gray-400">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Waitlist Tab */}
