@@ -140,13 +140,18 @@ export default function AdminDashboard() {
   };
 
   const filteredCertificates = useMemo(() => {
-    if (!certSearch) return certificates;
-    const search = certSearch.toLowerCase();
-    return certificates.filter(
-      (c) =>
-        c.studentName.toLowerCase().includes(search) ||
-        c.courseName.toLowerCase().includes(search) ||
-        c.code.toLowerCase().includes(search)
+    let result = [...certificates];
+    if (certSearch) {
+      const search = certSearch.toLowerCase();
+      result = result.filter(
+        (c) =>
+          c.studentName.toLowerCase().includes(search) ||
+          c.courseName.toLowerCase().includes(search) ||
+          c.code.toLowerCase().includes(search)
+      );
+    }
+    return result.sort((a, b) =>
+      a.studentName.localeCompare(b.studentName, "es")
     );
   }, [certificates, certSearch]);
 
