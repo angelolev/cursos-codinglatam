@@ -8,6 +8,7 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  addDoc,
 } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import {
@@ -32,9 +33,10 @@ import AddRepoForm from "@/components/admin/AddRepoForm";
 import ReposTable from "@/components/admin/ReposTable";
 import BannerManagement from "@/components/admin/BannerManagement";
 import { StarterRepoProps } from "@/types/starter-repo";
-import { Plus, Download, Copy, Check, ExternalLink } from "lucide-react";
+import { WorkshopProps } from "@/types/workshop";
+import { Plus, Download, Copy, Check, ExternalLink, Pencil, Save } from "lucide-react";
 
-type TabType = "usuarios" | "repositorios" | "banner" | "waitlist" | "certificados";
+type TabType = "usuarios" | "repositorios" | "banner" | "waitlist" | "certificados" | "workshops";
 
 interface CertificateEntry {
   id: string;
@@ -62,6 +64,18 @@ export default function AdminDashboard() {
   const [certificates, setCertificates] = useState<CertificateEntry[]>([]);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [certSearch, setCertSearch] = useState("");
+  const [showCertForm, setShowCertForm] = useState(false);
+  const [certForm, setCertForm] = useState({
+    studentName: "",
+    courseName: "",
+    completionDate: "",
+    certificateUrl: "",
+  });
+  const [savingCert, setSavingCert] = useState(false);
+  const [workshops, setWorkshops] = useState<(WorkshopProps & { id: string })[]>([]);
+  const [editingWorkshopId, setEditingWorkshopId] = useState<string | null>(null);
+  const [editingAbout, setEditingAbout] = useState("");
+  const [savingAbout, setSavingAbout] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -91,6 +105,7 @@ export default function AdminDashboard() {
     fetchRepos();
     fetchWaitlist();
     fetchCertificates();
+    fetchWorkshops();
   }, [session, router]);
 
   const fetchRepos = async () => {
@@ -133,10 +148,75 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchWorkshops = async () => {
+    try {
+      const workshopsCollection = collection(db, "workshops");
+      const workshopsSnapshot = await getDocs(workshopsCollection);
+      const data = workshopsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as (WorkshopProps & { id: string })[];
+      setWorkshops(data);
+    } catch (err) {
+      console.error("Failed to fetch workshops:", err);
+    }
+  };
+
+  const handleSaveAbout = async (workshopId: string) => {
+    setSavingAbout(true);
+    try {
+      const paragraphs = editingAbout
+        .split("\n")
+        .map((p) => p.trim())
+        .filter((p) => p.length > 0);
+      await updateDoc(doc(db, "workshops", workshopId), {
+        about: paragraphs,
+      });
+      setEditingWorkshopId(null);
+      setEditingAbout("");
+      setSuccess("About del workshop actualizado");
+      setTimeout(() => setSuccess(null), 3000);
+      fetchWorkshops();
+    } catch (err) {
+      console.error("Failed to save about:", err);
+      setError("Error al guardar el about");
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setSavingAbout(false);
+    }
+  };
+
   const copyLink = (code: string) => {
     navigator.clipboard.writeText(`https://codinglatam.dev/certificados/${code}`);
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 2000);
+  };
+
+  const handleCreateCertificate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingCert(true);
+    try {
+      const code = Math.random().toString(36).substring(2, 10);
+      await addDoc(collection(db, "certificates"), {
+        code,
+        studentName: certForm.studentName,
+        courseName: certForm.courseName,
+        completionDate: certForm.completionDate,
+        certificateUrl: certForm.certificateUrl || null,
+        isValid: true,
+      });
+      setCertForm({ studentName: "", courseName: "", completionDate: "", certificateUrl: "" });
+      setShowCertForm(false);
+      setSuccess("Certificado creado exitosamente");
+      setTimeout(() => setSuccess(null), 3000);
+      fetchCertificates();
+    } catch (err) {
+      console.error("Failed to create certificate:", err);
+      setError("Error al crear el certificado");
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setSavingCert(false);
+    }
   };
 
   const filteredCertificates = useMemo(() => {
@@ -439,6 +519,16 @@ export default function AdminDashboard() {
               }`}
             >
               Certificados
+            </button>
+            <button
+              onClick={() => setActiveTab("workshops")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "workshops"
+                  ? "border-indigo-500 text-indigo-400"
+                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
+              }`}
+            >
+              Workshops
             </button>
           </nav>
         </div>
@@ -850,7 +940,91 @@ export default function AdminDashboard() {
                 {certificates.length} {certificates.length === 1 ? 'certificado emitido' : 'certificados emitidos'}
               </p>
             </div>
+            <button
+              onClick={() => setShowCertForm(true)}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+            >
+              <Plus className="h-5 w-5" />
+              Nuevo Certificado
+            </button>
           </div>
+
+          {showCertForm && (
+            <div className="mb-6 bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Crear Certificado</h3>
+              <form onSubmit={handleCreateCertificate} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nombre del estudiante *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={certForm.studentName}
+                    onChange={(e) => setCertForm({ ...certForm, studentName: e.target.value })}
+                    placeholder="Juan Pérez"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nombre del curso *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={certForm.courseName}
+                    onChange={(e) => setCertForm({ ...certForm, courseName: e.target.value })}
+                    placeholder="Curso de Claude Code"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Fecha de finalización *
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={certForm.completionDate}
+                    onChange={(e) => setCertForm({ ...certForm, completionDate: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    URL del PDF (opcional)
+                  </label>
+                  <input
+                    type="url"
+                    value={certForm.certificateUrl}
+                    onChange={(e) => setCertForm({ ...certForm, certificateUrl: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                </div>
+                <div className="md:col-span-2 flex gap-3 justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCertForm(false);
+                      setCertForm({ studentName: "", courseName: "", completionDate: "", certificateUrl: "" });
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={savingCert}
+                    className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                  >
+                    {savingCert ? "Guardando..." : "Crear Certificado"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
 
           <div className="mb-4">
             <input
@@ -951,6 +1125,127 @@ export default function AdminDashboard() {
               </table>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Workshops Tab */}
+      {activeTab === "workshops" && (
+        <div>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-white/90">Workshops</h2>
+            <p className="text-gray-400 mt-1">
+              {workshops.length} {workshops.length === 1 ? "workshop" : "workshops"}
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Título
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Estado
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      About
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {workshops.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                        No hay workshops aún
+                      </td>
+                    </tr>
+                  ) : (
+                    workshops.map((ws) => (
+                      <tr key={ws.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-900">{ws.title}</div>
+                          <div className="text-xs text-gray-500">{ws.slug}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              ws.available
+                                ? "bg-green-100 text-green-800"
+                                : "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {ws.available ? "Disponible" : "Próximamente"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-sm text-gray-500">
+                            {ws.about && ws.about.length > 0
+                              ? `${ws.about.length} párrafo${ws.about.length === 1 ? "" : "s"}`
+                              : "Sin personalizar"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => {
+                              setEditingWorkshopId(ws.id);
+                              setEditingAbout(ws.about?.join("\n") || "");
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                          >
+                            <Pencil className="h-4 w-4" />
+                            Editar About
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {editingWorkshopId && (
+            <div className="mt-6 bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Editar About — {workshops.find((w) => w.id === editingWorkshopId)?.title}
+              </h3>
+              <p className="text-sm text-gray-500 mb-4">
+                Escribe cada párrafo en una línea separada.
+              </p>
+              <textarea
+                value={editingAbout}
+                onChange={(e) => setEditingAbout(e.target.value)}
+                rows={8}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder={"Primer párrafo del about...\n\nSegundo párrafo..."}
+              />
+              <div className="mt-4 flex gap-3 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingWorkshopId(null);
+                    setEditingAbout("");
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => handleSaveAbout(editingWorkshopId)}
+                  disabled={savingAbout}
+                  className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                >
+                  <Save className="h-4 w-4" />
+                  {savingAbout ? "Guardando..." : "Guardar"}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
