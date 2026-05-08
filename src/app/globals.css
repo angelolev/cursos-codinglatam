@@ -14,3 +14,36 @@
   --color-primary-950: #401908;
   --color-light-black: #1e1e1e;
 }
+
+body {
+  background-color: #161616;
+  background-image:
+    radial-gradient(ellipse 70% 45% at 50% -10%, rgba(238, 192, 72, 0.10), transparent 60%),
+    radial-gradient(ellipse 55% 40% at 90% 20%, rgba(238, 192, 72, 0.05), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 10% 100%, rgba(236, 176, 51, 0.04), transparent 60%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+@layer base {
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+::selection {
+  background: rgba(238, 192, 72, 0.30);
+  color: #fff;
+}

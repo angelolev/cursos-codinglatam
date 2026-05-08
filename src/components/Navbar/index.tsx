@@ -91,7 +91,7 @@ export function Navbar() {
             </Link>
             {session?.user ? (
               <div className="hidden md:flex items-center gap-4 ">
-                <CurrencySelector />
+                {!session.user.isPremium && <CurrencySelector />}
                 <div className="relative">
                   <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}

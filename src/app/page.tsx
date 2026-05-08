@@ -84,15 +84,14 @@ export default async function Home() {
 
         <div className="text-center mb-24">
           <h1 className="text-4xl font-bold text-white/90 mb-4">
-            Cursos potenciados con IA
+            Aprende haciendo proyectos reales
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto">
-            Aprende desarrollo moderno integrando herramientas de IA para ser
-            más eficiente y destacar en tu carrera profesional
+            Te enseño a integrar IA en tu día a día como dev, con proyectos
+            reales y todo lo que he aprendido construyendo en producción.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          
           {courses && courses.length > 0 ? (
             courses.map((course, index) => (
               <CourseCard key={course.id || index} {...course} />
@@ -129,11 +128,11 @@ export default async function Home() {
         <div>
           <div className="text-center my-24">
             <h2 className="text-4xl font-bold text-white/90 mb-4">
-              Guías para dominar herramientas de IA
+              Guías prácticas para devs
             </h2>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Material práctico para integrar IA en tu flujo de trabajo y
-              diferenciarte en la búsqueda laboral
+              Recursos prácticos sobre desarrollo, herramientas modernas e IA.
+              Pensados para que apliques lo aprendido el mismo día.
             </p>
           </div>
           <ProductsInfiniteScroll initialProducts={products || []} />
