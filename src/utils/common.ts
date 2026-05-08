@@ -307,6 +307,9 @@ export const getVideosFromCollection = async (collectionId: string) => {
     web: {
       collectionId: "80e121f4-0083-444c-bb22-10b89383114d",
     },
+    "claude-code": {
+      collectionId: "5e0e93f7-2737-42b5-ba0a-deeb313a1946",
+    },
   };
 
   // Check if the course slug exists in our collection mapping
@@ -340,14 +343,18 @@ export const getVideosFromCollection = async (collectionId: string) => {
 };
 
 export const formatTime = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
 
-  // Pad with leading zeros if needed
-  const formattedMinutes = String(minutes).padStart(2, "0");
   const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
-  return `${formattedMinutes}:${formattedSeconds}`;
+  if (hours > 0) {
+    const formattedMinutes = String(minutes).padStart(2, "0");
+    return `${hours}h ${formattedMinutes}m`;
+  }
+
+  return `${minutes}:${formattedSeconds}`;
 };
 
 

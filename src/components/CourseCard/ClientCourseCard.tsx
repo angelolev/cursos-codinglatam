@@ -14,14 +14,14 @@ export function ClientCourseCard({
   isPremium,
 }: CourseProps) {
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative">
+    <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg relative flex flex-col h-full">
       {isPremium && (
         <div className="absolute top-2 right-2 z-10 bg-gradient-to-r from-indigo-600 to-indigo-800 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
           <Crown className="h-3 w-3" />
           PREMIUM
         </div>
       )}
-      <Link href={`cursos/${slug}`}>
+      <Link href={`cursos/${slug}`} className="flex flex-col flex-1">
         <div className="h-48 w-full overflow-hidden relative">
           <Image
             className="w-full h-full object-cover"
@@ -31,10 +31,10 @@ export function ClientCourseCard({
             height={193}
           />
         </div>
-        <div className="p-6">
+        <div className="p-6 flex flex-col flex-1">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-          <p className="text-gray-600 mb-4 text-sm">{shortDescription}</p>
-          <div className="flex justify-between items-center text-sm text-gray-500">
+          <p className="text-gray-600 mb-4 text-sm flex-1">{shortDescription}</p>
+          <div className="flex justify-between items-center text-sm text-gray-500 mt-auto">
             <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">
               {level}
             </span>

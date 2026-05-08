@@ -92,11 +92,7 @@ export default async function Home() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {workshops &&
-            workshops.length > 0 &&
-            workshops.map((workshop, index) => (
-              <Workshop key={workshop.id || index} {...workshop} />
-            ))}
+          
           {courses && courses.length > 0 ? (
             courses.map((course, index) => (
               <CourseCard key={course.id || index} {...course} />
@@ -104,6 +100,11 @@ export default async function Home() {
           ) : (
             <CourseGridSkeleton count={8} />
           )}
+          {workshops &&
+            workshops.length > 0 &&
+            workshops.map((workshop, index) => (
+              <Workshop key={workshop.id || index} {...workshop} />
+            ))}
         </div>
 
         <CompanyLogos />
