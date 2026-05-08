@@ -23,7 +23,7 @@ function StarRating({
           key={star}
           type="button"
           className={`transition-transform ${
-            onRatingChange ? "hover:scale-110" : ""
+            onRatingChange ? "hover:scale-110 cursor-pointer" : ""
           } focus:outline-none`}
           onMouseEnter={() => onRatingChange && setHoverRating(star)}
           onMouseLeave={() => onRatingChange && setHoverRating(0)}
@@ -175,7 +175,7 @@ export function AddReview({ reviewId }: ReviewsProps) {
               </div>
               <button
                 type="submit"
-                className="bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors font-semibold"
+                className="bg-primary-300 text-white px-6 py-3 rounded-md hover:bg-primary-400 transition-colors font-semibold cursor-pointer"
               >
                 Comentar
               </button>

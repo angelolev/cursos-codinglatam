@@ -2,7 +2,7 @@
  * Freemium access utilities for course content
  */
 
-export const FREE_LESSON_LIMIT = 4;
+export const FREE_LESSON_LIMIT = 2;
 
 /**
  * Check if a lesson is free based on its index (0-based)
@@ -27,7 +27,7 @@ export function canAccessLesson(lessonIndex: number, isPremium: boolean): boolea
     return true;
   }
   
-  // Non-premium users can only access first 4 lessons
+  // Non-premium users can only access first 2 lessons
   return isLessonFree(lessonIndex);
 }
 

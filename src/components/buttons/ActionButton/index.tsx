@@ -17,7 +17,7 @@ export default function ActionButton({ href, label }: ActionButtonProps) {
       <div className="flex flex-col text-center gap-2">
         <LoginButton />
         <p className="text-xs text-gray-600">
-          Inicia sesión para acceder a las primeras 4 lecciones gratis
+          Inicia sesión para acceder a las primeras 2 lecciones gratis
         </p>
       </div>
     );

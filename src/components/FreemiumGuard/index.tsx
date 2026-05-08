@@ -103,7 +103,7 @@ export default function FreemiumGuard({
             </span>
           </div>
           <p className="text-white/80">
-            Puedes acceder a las primeras 4 lecciones de cualquier curso de
+            Puedes acceder a las primeras 2 lecciones de cualquier curso de
             forma gratuita. Solo necesitas estar registrado.
           </p>
         </div>

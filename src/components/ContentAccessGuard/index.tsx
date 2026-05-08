@@ -146,7 +146,7 @@ export default function ContentAccessGuard({
             {contentType === 'workshop' && 'Algunos workshops están disponibles gratuitamente. '}
             {contentType === 'product' && 'Algunos productos están disponibles gratuitamente. '}
             {contentType === 'guide' && 'Algunas guías están disponibles gratuitamente. '}
-            Además, puedes acceder a las primeras 4 lecciones de cualquier curso.
+            Además, puedes acceder a las primeras 2 lecciones de cualquier curso.
           </p>
         </div>
 

@@ -15,11 +15,12 @@ import {
   orderVideosByTitle,
 } from "@/utils/common";
 import { VideoProps } from "@/types/video";
-import ActionButton from "@/components/buttons/ActionButton";
+import CourseStartButton from "@/components/buttons/CourseStartButton";
 import WatchButton from "@/components/buttons/WatchButton";
 import { AverageRating } from "@/components/AverageRating";
 import BackButton from "@/components/buttons/BackButton";
 import { isLessonFree } from "@/utils/freemium";
+import { auth } from "@/app/auth";
 
 type Params = Promise<{ slug: string }>;
 
@@ -70,6 +71,9 @@ export default async function CoursePage({ params }: { params: Params }) {
   const clases = await getVideosFromCollection(slug);
   const orderedClases = clases ? orderVideosByTitle(clases) : null;
 
+  const session = await auth();
+  const isPremium = session?.user?.isPremium || false;
+
   return (
     <div className="container max-w-7xl mx-auto px-4 md:px-0 pt-0 pb-8">
       <div className="pt-24 px-0 md:px-6 lg:px-0">
@@ -113,8 +117,16 @@ export default async function CoursePage({ params }: { params: Params }) {
                         <Link
                           key={item.guid}
                           href={`/cursos/${course.slug}/clases/${item.guid}`}
-                          className={`grid grid-cols-[20px_1fr_60px] md:grid-cols-[20px_minmax(400px,_1fr)_80px_60px] gap-2 items-center py-3 rounded-lg transition-colors mb-0 ${
-                            isFree ? "hover:bg-green-50" : "hover:bg-amber-50"
+                          className={`grid grid-cols-[20px_1fr_60px] ${
+                            isPremium
+                              ? "md:grid-cols-[20px_minmax(400px,_1fr)_80px]"
+                              : "md:grid-cols-[20px_minmax(400px,_1fr)_80px_60px]"
+                          } gap-2 items-center py-3 rounded-lg transition-colors mb-0 ${
+                            isPremium
+                              ? "hover:bg-gray-50"
+                              : isFree
+                              ? "hover:bg-green-50"
+                              : "hover:bg-amber-50"
                           }`}
                         >
                           <div className="flex items-center">
@@ -128,27 +140,37 @@ export default async function CoursePage({ params }: { params: Params }) {
                           </div>
                           <span
                             className={`text-sm md:text-base ${
-                              isFree ? "text-gray-900" : "text-gray-600"
+                              isPremium
+                                ? "text-gray-900"
+                                : isFree
+                                ? "text-gray-900"
+                                : "text-gray-600"
                             }`}
                           >
                             {item.title}
                           </span>
                           <span
                             className={`justify-self-end text-sm md:text-base ${
-                              isFree ? "text-green-600" : "text-amber-600"
+                              isPremium
+                                ? "text-gray-900"
+                                : isFree
+                                ? "text-green-600"
+                                : "text-amber-600"
                             }`}
                           >
                             {formatTime(item.length)}
                           </span>
-                          <span
-                            className={`hidden md:block text-xs px-2 py-1 rounded-full text-center ${
-                              isFree
-                                ? "bg-green-100 text-green-800"
-                                : "bg-amber-100 text-amber-800"
-                            }`}
-                          >
-                            {isFree ? "Gratis" : "Pro"}
-                          </span>
+                          {!isPremium && (
+                            <span
+                              className={`hidden md:block text-xs px-2 py-1 rounded-full text-center ${
+                                isFree
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-amber-100 text-amber-800"
+                              }`}
+                            >
+                              {isFree ? "Gratis" : "Pro"}
+                            </span>
+                          )}
                         </Link>
                       );
                     })}
@@ -168,30 +190,32 @@ export default async function CoursePage({ params }: { params: Params }) {
 
               <Reviews reviewId={course.id} />
 
-              <div className="mt-16">
-                <h2 className="text-2xl font-bold text-white/90 mb-8">
-                  Testimonios de los estudiantes
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                    <div className="aspect-video">
-                      <iframe
-                        className="w-full h-full"
-                        src={course.testimonialVideo}
-                        title="Student Testimonial 1"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-semibold text-gray-900">
-                        Conoce la experiencia de otros desarrolladores
-                      </h3>
-                      <p className="text-gray-600 text-sm"></p>
+              {course.testimonialVideo && (
+                <div className="mt-16">
+                  <h2 className="text-2xl font-bold text-white/90 mb-8">
+                    Testimonios de los estudiantes
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                      <div className="aspect-video">
+                        <iframe
+                          className="w-full h-full"
+                          src={course.testimonialVideo}
+                          title="Student Testimonial 1"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold text-gray-900">
+                          Conoce la experiencia de otros desarrolladores
+                        </h3>
+                        <p className="text-gray-600 text-sm"></p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="lg:col-span-1">
@@ -216,9 +240,9 @@ export default async function CoursePage({ params }: { params: Params }) {
                 </div>
                 <div className="space-y-4">
                   {orderedClases && (
-                    <ActionButton
-                      href={`/cursos/${course.slug}/clases/${orderedClases[0].guid}`}
-                      label="Empezar curso"
+                    <CourseStartButton
+                      courseSlug={course.slug}
+                      lessonGuids={orderedClases.map((c) => c.guid)}
                     />
                   )}
 
@@ -229,6 +253,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                     />
                   )}
                 </div>
+                {!isPremium && (
                 <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-amber-50 rounded-lg border border-gray-200">
                   <div className="text-center mb-3">
                     <h4 className="font-semibold text-gray-800 mb-2">
@@ -239,7 +264,7 @@ export default async function CoursePage({ params }: { params: Params }) {
                     <div className="flex items-center">
                       <Play className="h-4 w-4 text-green-600 mr-2" />
                       <span className="text-green-700">
-                        4 lecciones gratuitas
+                        2 lecciones gratuitas
                       </span>
                     </div>
                     <div className="flex items-center">
@@ -249,9 +274,10 @@ export default async function CoursePage({ params }: { params: Params }) {
                   </div>
                   <p className="text-xs text-gray-600 text-center mt-3">
                     Solo necesitas estar registrado para acceder a las primeras
-                    4 lecciones
+                    2 lecciones
                   </p>
                 </div>
+                )}
                 </div>
               </div>
             </div>
