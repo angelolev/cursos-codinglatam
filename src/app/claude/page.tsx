@@ -1147,6 +1147,40 @@ export default function WaitlistPage() {
             </span>
           </div>
 
+          {/* Video testimonial — opinión de alumnos en YouTube */}
+          <div className="relative max-w-3xl mx-auto mb-12 px-4">
+            <figure className="group/video relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:border-claude/40 hover:shadow-[0_16px_50px_-12px_rgba(217,119,87,0.4)]">
+              {/* Accent line */}
+              <div className="absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-claude/80 via-claude/20 to-transparent transition-opacity duration-300 group-hover/video:via-claude/60" />
+
+              {/* Editor-tab chrome bar */}
+              <figcaption className="flex items-center gap-2 border-b border-white/10 bg-black/40 px-4 py-2.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full bg-claude/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+                </span>
+                <span className="ml-1 truncate text-xs text-white/40">
+                  opiniones-alumnos.mp4
+                </span>
+                <Video className="ml-auto h-3.5 w-3.5 text-claude/70 transition-colors duration-300 group-hover/video:text-claude" />
+              </figcaption>
+
+              {/* YouTube embed — responsive 16:9 */}
+              <div className="relative aspect-video w-full bg-black">
+                <iframe
+                  src="https://www.youtube.com/embed/Y3AMU4OMpX0"
+                  title="Opinión de alumnos del curso de Claude Code"
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
+            </figure>
+          </div>
+
           {/* Full-bleed infinite marquee. Pausa en hover para leer/interactuar. */}
           <div
             className="group relative overflow-hidden rounded-xl"
