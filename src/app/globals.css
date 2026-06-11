@@ -13,6 +13,10 @@
   --color-primary-900: #713316;
   --color-primary-950: #401908;
   --color-light-black: #1e1e1e;
+  /* Claude Code brochure palette */
+  --color-claude: #d97757;
+  --color-claude-deep: #c15f3c;
+  --color-terminal-green: #87a96b;
 }
 
 body {
@@ -46,4 +50,66 @@ body::before {
 ::selection {
   background: rgba(238, 192, 72, 0.30);
   color: #fff;
+}
+
+/* Infinite marquee (testimonios) — la pista contiene los items duplicados 2x,
+   así translateX(-50%) recorre exactamente una copia y el loop es continuo. */
+@keyframes testimonial-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-testimonial-marquee {
+  animation: testimonial-marquee var(--marquee-duration, 50s) linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-testimonial-marquee {
+    animation: none;
+  }
+}
+
+/* Scroll-reveal — el estado oculto se aplica vía JS (clase reveal-init),
+   así sin JS el contenido siempre se ve. */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init,
+  .reveal-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Terminal caret blink */
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-caret {
+  animation: caret-blink 1.1s steps(1) infinite;
 }
