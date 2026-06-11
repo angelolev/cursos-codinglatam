@@ -443,7 +443,7 @@ export default function WaitlistPage() {
   return (
     <main
       ref={mainRef}
-      className="pt-24 pb-16 mx-auto max-w-4xl sm:px-6 px-4 lg:px-0 flex-grow"
+      className="pt-24 pb-16 mx-auto w-full max-w-4xl sm:px-6 px-4 lg:px-0 flex-grow min-w-0"
     >
       {/* Hero Section */}
       <div className="relative text-center mb-16">
@@ -1149,7 +1149,7 @@ export default function WaitlistPage() {
 
           {/* Full-bleed infinite marquee. Pausa en hover para leer/interactuar. */}
           <div
-            className="group relative left-1/2 w-screen -translate-x-1/2 overflow-hidden"
+            className="group relative overflow-hidden rounded-xl"
             style={{
               maskImage:
                 "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
