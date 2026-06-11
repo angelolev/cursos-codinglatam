@@ -704,7 +704,7 @@ export default function WaitlistPage() {
         </p>
 
         <Link
-          href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/6ca73d5c-90e2-4340-aeb9-5f1e842f64ab"
+          href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/5e5924f2-44e3-43f5-b244-d68446726556"
           className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-claude-deep to-claude px-10 py-5 text-xl font-bold text-white shadow-lg shadow-claude-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-claude/40 cursor-pointer"
         >
           <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
@@ -1314,7 +1314,7 @@ export default function WaitlistPage() {
             </div>
 
             <Link
-              href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/6ca73d5c-90e2-4340-aeb9-5f1e842f64ab"
+              href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/5e5924f2-44e3-43f5-b244-d68446726556"
               className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-claude-deep to-claude px-10 py-5 text-xl font-bold text-white shadow-lg shadow-claude-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-claude/40 cursor-pointer"
             >
               <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
