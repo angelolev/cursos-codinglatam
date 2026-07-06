@@ -21,8 +21,6 @@ import {
   Clock,
 } from "lucide-react";
 import { WaitlistAvatar } from "@/types/waitlist";
-import { useCurrency } from "@/contexts/CurrencyContext";
-import CurrencySelector from "@/components/CurrencySelector";
 import angeloImage from "@/assets/angelo.jpeg";
 import paypalImage from "@/assets/paypal.svg";
 import visaImage from "@/assets/visa.svg";
@@ -169,17 +167,10 @@ export default function WaitlistPage() {
   const [avatars, setAvatars] = useState<WaitlistAvatar[]>([]);
   const [avatarsLoading, setAvatarsLoading] = useState(true);
 
-  // Currency hook for dynamic price conversion
-  const {
-    convertAndFormatPrice,
-    currentCurrency,
-    isLoading: currencyLoading,
-  } = useCurrency();
-
-  // Precios en USD (moneda base del sistema). Equivalentes a S/129 y S/99
-  // con la tasa PEN ≈ 3.43 (el sistema aplica precios psicológicos .99 al convertir).
-  const REGULAR_PRICE_USD = 37.25; // ~S/129
-  const EARLY_BIRD_PRICE_USD = 28.5; // ~S/99
+  // Precios fijos en soles peruanos (PEN)
+  const REGULAR_PRICE_PEN = "S/ 129";
+  const EARLY_BIRD_PRICE_PEN = "S/ 99";
+  const SAVINGS_PEN = "S/ 30";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -264,10 +255,10 @@ export default function WaitlistPage() {
     fetchAvatars();
   }, []);
 
-  // Programa completo: 8 clases en vivo repartidas en 2 sábados (9:00 AM - 12:00 PM)
+  // Programa completo: 8 clases en vivo los sábados 18 y 25 de julio (9:00 AM - 12:00 PM)
   const program = [
     {
-      block: "Sábado 1",
+      block: "Sábado 18 de julio",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -319,7 +310,7 @@ export default function WaitlistPage() {
       ],
     },
     {
-      block: "Sábado 2",
+      block: "Sábado 25 de julio",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -630,54 +621,34 @@ export default function WaitlistPage() {
               </span>
             </div>
 
-            {/* Selector de moneda */}
-            <div className="flex justify-center mb-5">
-              <CurrencySelector />
-            </div>
-
             {/* Renglones del recibo */}
             <div className="border-t border-dashed border-white/15 pt-4 space-y-3">
               <div className="flex items-baseline justify-between">
                 <span className="text-xs uppercase tracking-[0.12em] text-white/40">
                   Precio regular
                 </span>
-                {currencyLoading ? (
-                  <div className="h-6 w-20 bg-white/10 animate-pulse rounded" />
-                ) : (
-                  <span className="text-lg text-white/40 line-through">
-                    {convertAndFormatPrice(REGULAR_PRICE_USD)}
-                  </span>
-                )}
+                <span className="text-lg text-white/40 line-through">
+                  {REGULAR_PRICE_PEN}
+                </span>
               </div>
 
               <div className="flex items-end justify-between">
                 <span className="text-xs font-semibold uppercase tracking-[0.12em] text-claude-deep">
                   Precio Early Bird
                 </span>
-                {currencyLoading ? (
-                  <div className="h-12 w-32 bg-white/10 animate-pulse rounded" />
-                ) : (
-                  <span className="flex items-baseline gap-1.5">
-                    <span className="text-4xl sm:text-5xl font-bold text-white drop-shadow-[0_0_24px_rgba(217,119,87,0.3)]">
-                      {convertAndFormatPrice(EARLY_BIRD_PRICE_USD)}
-                    </span>
-                    <span className="text-sm text-white/50">
-                      {currentCurrency.code}
-                    </span>
+                <span className="flex items-baseline gap-1.5">
+                  <span className="text-4xl sm:text-5xl font-bold text-white drop-shadow-[0_0_24px_rgba(217,119,87,0.3)]">
+                    {EARLY_BIRD_PRICE_PEN}
                   </span>
-                )}
+                  <span className="text-sm text-white/50">soles</span>
+                </span>
               </div>
             </div>
 
             {/* Ahorro + cupos */}
             <div className="mt-4 flex items-center justify-between border-t border-dashed border-white/15 pt-4">
               <span className="inline-flex items-center rounded-full border border-claude/30 bg-claude/10 px-3 py-1 text-xs font-bold text-claude">
-                Ahorras{" "}
-                {currencyLoading
-                  ? "..."
-                  : convertAndFormatPrice(
-                    REGULAR_PRICE_USD - EARLY_BIRD_PRICE_USD
-                  )}
+                Ahorras {SAVINGS_PEN}
               </span>
               <span className="text-[10px] uppercase tracking-[0.15em] text-white/30">
                 Solo primeros 10
@@ -686,8 +657,7 @@ export default function WaitlistPage() {
 
             {/* Nota de pago */}
             <p className="text-center text-white/40 text-xs mt-4">
-              Los pagos se procesan en USD. Precio mostrado en{" "}
-              {currentCurrency.name} es referencial.
+              Precio en soles peruanos (PEN).
             </p>
           </div>
         </div>
@@ -919,9 +889,9 @@ export default function WaitlistPage() {
             ¿Qué vas a dominar?
           </h3>
           <p className="text-white/50 max-w-2xl mx-auto">
-            Un programa intensivo de 2 sábados (9:00 AM – 12:00 PM) donde pasarás
-            de cero con Claude Code a construir proyectos completos con agentes
-            autónomos de IA.
+            Un programa intensivo los sábados 18 y 25 de julio (9:00 AM – 12:00
+            PM) donde pasarás de cero con Claude Code a construir proyectos
+            completos con agentes autónomos de IA.
           </p>
         </div>
 
@@ -999,11 +969,15 @@ export default function WaitlistPage() {
         <div className={`${cardClass} p-8`}>
           <TopAccent />
           <p className="text-white/60 mb-6">
-            Solo necesitas saber programar en algún lenguaje (Python,
-            JavaScript, Java, etc). No importa si nunca usaste herramientas de
-            IA. Arrancamos desde cero con Claude Code y al final vas a poder
-            construir proyectos completos{" "}
-            <strong className="text-claude">3-5x más rápido</strong>.
+            Se recomienda tener conocimientos de programación en algún lenguaje
+            (Python, JavaScript, Java, etc) con la finalidad de sacarle el
+            máximo provecho al curso, pero{" "}
+            <strong className="text-white/90">
+              aun sin ellos puedes matricularte
+            </strong>
+            . No importa si nunca usaste herramientas de IA: arrancamos desde
+            cero con Claude Code y al final vas a poder construir proyectos
+            completos <strong className="text-claude">3-5x más rápido</strong>.
           </p>
           <div className="border-t border-white/10 pt-5 flex items-start gap-3">
             <AlertTriangle className="h-5 w-5 text-claude shrink-0 mt-0.5" />
@@ -1335,7 +1309,8 @@ export default function WaitlistPage() {
             {/* Chips de logística */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
-                <Calendar className="h-4 w-4 text-claude" />2 sábados · Julio 2026
+                <Calendar className="h-4 w-4 text-claude" />
+                Sábados 18 y 25 de julio
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Clock className="h-4 w-4 text-claude" />
