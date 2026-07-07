@@ -21,15 +21,17 @@ export async function isUserPremium(userId: string): Promise<boolean> {
       return false;
     }
     
-    // If subscription is cancelled, check if grace period has ended
+    // If subscription is cancelled, check if grace period has ended.
+    // This is a read-only gating decision: we return false once the grace
+    // period is over. Persisting the "expired" status is handled server-side
+    // by the Lemon Squeezy webhook (Admin SDK) — the client must not write to
+    // `users` (Firestore rules deny it, and it would be a paywall-bypass vector).
     if (userData.subscriptionStatus === 'cancelled' && userData.endsAt) {
       try {
         const endDate = new Date(userData.endsAt);
         const now = new Date();
-        
-        // If grace period has ended, update database and return false
+
         if (now > endDate) {
-          await updateExpiredSubscription(userId);
           return false;
         }
       } catch (error) {
@@ -37,32 +39,12 @@ export async function isUserPremium(userId: string): Promise<boolean> {
         // If date parsing fails, assume subscription is still valid
       }
     }
-    
+
     // For other statuses, trust the database value
     return userData.isPremium;
   } catch (error) {
     console.error("Error checking user premium status:", error);
     return false;
-  }
-}
-
-/**
- * Update user subscription to expired status
- */
-async function updateExpiredSubscription(userId: string) {
-  try {
-    const userDocRef = doc(db, "users", userId);
-    const { updateDoc } = await import("firebase/firestore");
-    
-    await updateDoc(userDocRef, {
-      isPremium: false,
-      subscriptionStatus: 'expired',
-      updatedAt: new Date().toISOString()
-    });
-    
-    console.log(`Auto-expired subscription for user ${userId}`);
-  } catch (error) {
-    console.error("Error updating expired subscription:", error);
   }
 }
 

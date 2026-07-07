@@ -21,12 +21,16 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // --- Paywall-critical: user profiles hold isPremium + subscription data ---
-    // Read is needed by the app (Navbar, review/comment gates). Writes happen
-    // exclusively server-side via the Admin SDK, so client writes are denied —
-    // this is what prevents a user from self-granting isPremium from devtools.
+    // Read is needed by the app (Navbar, review/comment gates).
+    // create: allowed from the client (first-login in auth.ts) ONLY when the new
+    //   doc is not self-granting premium (isPremium must be false).
+    // update/delete: denied — isPremium and profile edits go through the server
+    //   (Admin SDK, which bypasses these rules). This blocks a user from setting
+    //   isPremium:true on their own doc from devtools.
     match /users/{userId} {
       allow read: if true;
-      allow write: if false;
+      allow create: if request.resource.data.isPremium == false;
+      allow update, delete: if false;
 
       // Learning progress is written by /api/progress/* which currently uses the
       // client SDK (so it is governed by these rules). Allow until progress is

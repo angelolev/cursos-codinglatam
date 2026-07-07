@@ -61,6 +61,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 });
 
+// Create the user's Firestore doc on first sign-in. This runs in the Node
+// auth route (not middleware/edge), but auth.ts is imported by the edge
+// middleware, so we must NOT pull in firebase-admin here. Instead this stays on
+// the client SDK and is a CREATE with isPremium:false — Firestore rules allow
+// `create` only when isPremium is false and deny all `update`, which blocks a
+// user from self-granting premium while still permitting first-login creation.
 const addUserFirebase = async (profile: Profile) => {
   const userDocRef = doc(db, "users", profile.sub || "");
   const userDoc = await getDoc(userDocRef);
@@ -77,16 +83,6 @@ const addUserFirebase = async (profile: Profile) => {
     };
 
     await setDoc(userDocRef, userData);
-  } else {
-    // Update image if it doesn't exist or has changed
-    const existingData = userDoc.data();
-    if (!existingData.image && (profile.picture || profile.avatar_url)) {
-      await setDoc(
-        userDocRef,
-        { image: profile.picture || profile.avatar_url },
-        { merge: true }
-      );
-    }
   }
 };
 
