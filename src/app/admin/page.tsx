@@ -2,14 +2,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  addDoc,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import {
   AdminUser,
@@ -169,9 +162,12 @@ export default function AdminDashboard() {
         .split("\n")
         .map((p) => p.trim())
         .filter((p) => p.length > 0);
-      await updateDoc(doc(db, "workshops", workshopId), {
-        about: paragraphs,
+      const res = await fetch("/api/admin/workshops", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: workshopId, about: paragraphs }),
       });
+      if (!res.ok) throw new Error("Failed to update workshop");
       setEditingWorkshopId(null);
       setEditingAbout("");
       setSuccess("About del workshop actualizado");
@@ -196,15 +192,17 @@ export default function AdminDashboard() {
     e.preventDefault();
     setSavingCert(true);
     try {
-      const code = Math.random().toString(36).substring(2, 10);
-      await addDoc(collection(db, "certificates"), {
-        code,
-        studentName: certForm.studentName,
-        courseName: certForm.courseName,
-        completionDate: certForm.completionDate,
-        certificateUrl: certForm.certificateUrl || null,
-        isValid: true,
+      const res = await fetch("/api/admin/certificates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentName: certForm.studentName,
+          courseName: certForm.courseName,
+          completionDate: certForm.completionDate,
+          certificateUrl: certForm.certificateUrl || null,
+        }),
       });
+      if (!res.ok) throw new Error("Failed to create certificate");
       setCertForm({ studentName: "", courseName: "", completionDate: "", certificateUrl: "" });
       setShowCertForm(false);
       setSuccess("Certificado creado exitosamente");
@@ -291,39 +289,32 @@ export default function AdminDashboard() {
       setError(null);
       setSuccess(null);
 
-      const docRef = doc(db, "users", aud);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
+      const currentUser = users.find((u) => u.aud === aud);
+      if (!currentUser) {
         throw new Error("Usuario no encontrado");
       }
 
-      const userData = docSnap.data();
-      const currentIsPremium = userData.isPremium;
-      const userName = userData.name || userData.email || "Usuario";
-      const now = new Date();
+      const currentIsPremium = currentUser.isPremium;
+      const userName = currentUser.name || currentUser.email || "Usuario";
+      const nextIsPremium = !currentIsPremium;
 
-      if (!currentIsPremium) {
-        // Making user premium
-        await updateDoc(docRef, {
-          isPremium: true,
-          premiumSince: now,
-          updatedAt: now,
-          subscriptionStatus: "active",
-        });
-        setSuccess(`${userName} ahora tiene acceso premium`);
-      } else {
-        // Removing premium status
-        await updateDoc(docRef, {
-          isPremium: false,
-          premiumSince: null,
-          updatedAt: now,
-          subscriptionStatus: "cancelled",
-          subscriptionId: null,
-          endsAt: null,
-        });
-        setSuccess(`Acceso premium removido para ${userName}`);
+      // Premium writes go through the server (Admin SDK) so client writes to
+      // `users` can be denied by Firestore rules (blocks self-granting isPremium).
+      const res = await fetch("/api/admin/users", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ aud, isPremium: nextIsPremium }),
+      });
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({ error: "" }));
+        throw new Error(error || "Error al actualizar el estado premium");
       }
+
+      setSuccess(
+        nextIsPremium
+          ? `${userName} ahora tiene acceso premium`
+          : `Acceso premium removido para ${userName}`
+      );
 
       await fetchUsers();
 

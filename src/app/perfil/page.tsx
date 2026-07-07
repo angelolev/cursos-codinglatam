@@ -7,7 +7,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../utils/firebase";
@@ -155,10 +154,20 @@ export default function CompleteProfile() {
 
     try {
       setLoading(true);
-      if (session?.user?.aud) {
-        await setDoc(doc(db, "users", session.user.aud), formData);
-      } else {
+      if (!session?.user?.aud) {
         throw new Error("User ID is undefined");
+      }
+      // Profile writes go through the server (Admin SDK) so that client writes to
+      // the `users` collection can be denied by Firestore rules — this prevents a
+      // user from self-granting isPremium from devtools.
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: formData.name, github: formData.github }),
+      });
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({ error: "" }));
+        throw new Error(error || "Failed to update profile");
       }
       await updateReviewName(session?.user?.aud, `${formData.name}`);
       await updateCommetsName(session?.user?.aud, `${formData.name}`);

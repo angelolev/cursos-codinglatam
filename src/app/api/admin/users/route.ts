@@ -45,7 +45,9 @@ export async function GET() {
   }
 }
 
-// Update premium status
+// Update a user's premium status (manual admin toggle).
+// Writes the Firestore `users` doc via the Admin SDK — auth.ts reads isPremium
+// from here — so client writes to `users` can be denied by Firestore rules.
 export async function PUT(request: Request) {
   try {
     const session = await auth();
@@ -57,13 +59,10 @@ export async function PUT(request: Request) {
       );
     }
 
-    const { uid, isPremium } = await request.json();
+    const { aud, isPremium } = await request.json();
 
-    if (typeof uid !== "string" || uid.trim() === "") {
-      return NextResponse.json(
-        { error: "Invalid uid" },
-        { status: 400 }
-      );
+    if (typeof aud !== "string" || aud.trim() === "") {
+      return NextResponse.json({ error: "Invalid aud" }, { status: 400 });
     }
 
     if (typeof isPremium !== "boolean") {
@@ -73,16 +72,24 @@ export async function PUT(request: Request) {
       );
     }
 
-    await adminAuth.setCustomUserClaims(uid, { isPremium });
+    const now = admin.firestore.FieldValue.serverTimestamp();
+    const update = isPremium
+      ? {
+          isPremium: true,
+          premiumSince: now,
+          updatedAt: now,
+          subscriptionStatus: "active",
+        }
+      : {
+          isPremium: false,
+          premiumSince: null,
+          updatedAt: now,
+          subscriptionStatus: "cancelled",
+          subscriptionId: null,
+          endsAt: null,
+        };
 
-    // Update Firestore
-    await adminDb.collection("users").doc(uid).set(
-      {
-        isPremium,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      },
-      { merge: true }
-    );
+    await adminDb.collection("users").doc(aud).set(update, { merge: true });
 
     return NextResponse.json({
       success: true,
