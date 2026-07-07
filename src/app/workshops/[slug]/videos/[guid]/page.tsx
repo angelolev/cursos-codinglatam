@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Params }) {
       `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos/${guid}`,
       {
         headers: {
-          AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+          AccessKey: process.env.BUNNYNET_ACCESS_KEY || "",
           "Content-Type": "application/json",
         },
       }

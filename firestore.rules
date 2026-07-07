@@ -1,0 +1,79 @@
+rules_version = '2';
+
+// IMPORTANT CONTEXT (read before editing):
+// This app authenticates users with NextAuth, NOT Firebase Auth. The browser
+// talks to Firestore WITHOUT a Firebase identity, so `request.auth` is always
+// null here. That is why these rules cannot enforce per-user ownership on the
+// social collections yet — doing so would block the app entirely.
+//
+// The real hardening (future work) is to mint a Firebase custom token after
+// NextAuth login and signInWithCustomToken() on the client, then gate writes on
+// request.auth.uid. Until then, these rules do the protection that is possible
+// WITHOUT client auth: lock down the paywall-critical data (users.isPremium and
+// admin-managed catalog content), which is only ever written by the backend via
+// the Admin SDK (the Admin SDK bypasses these rules entirely).
+//
+// TEST before deploying: `firebase deploy --only firestore:rules` after
+// verifying likes / reviews / comments / navbar still work with the emulator or
+// a staging project.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Paywall-critical: user profiles hold isPremium + subscription data ---
+    // Read is needed by the app (Navbar, review/comment gates). Writes happen
+    // exclusively server-side via the Admin SDK, so client writes are denied —
+    // this is what prevents a user from self-granting isPremium from devtools.
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if false;
+
+      // Learning progress is written by /api/progress/* which currently uses the
+      // client SDK (so it is governed by these rules). Allow until progress is
+      // migrated to the Admin SDK; then tighten to `if false`.
+      match /{document=**} {
+        allow read, write: if true;
+      }
+    }
+
+    // --- Admin-managed catalog content: public read, no client writes ---
+    match /courses/{doc}          { allow read: if true; allow write: if false; }
+    match /liveCourses/{doc}       { allow read: if true; allow write: if false; }
+    match /workshops/{doc}         { allow read: if true; allow write: if false; }
+    match /products/{doc}          { allow read: if true; allow write: if false; }
+    match /projects/{doc}          { allow read: if true; allow write: if false; }
+    match /starterRepos/{doc}      { allow read: if true; allow write: if false; }
+    match /certificates/{doc}      { allow read: if true; allow write: if false; }
+    match /resources/{doc}         { allow read: if true; allow write: if false; }
+    match /config/{doc}            { allow read: if true; allow write: if false; }
+
+    // projectsComments and waitlist are now written by authenticated API routes
+    // via the Admin SDK — deny direct client writes.
+    match /projectsComments/{doc}  { allow read: if true; allow write: if false; }
+    match /waitlist/{doc}          { allow read: if false; allow write: if false; }
+
+    // --- Social features still written directly from the browser ---
+    // Ownership cannot be enforced without Firebase Auth (see header). Public
+    // read; creates/updates allowed; deletes denied to limit tampering.
+    match /reviews/{doc} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if false;
+    }
+    match /comments/{doc} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if false;
+    }
+    match /likes/{doc} {
+      allow read: if true;
+      allow create, delete: if true;
+      allow update: if false;
+    }
+
+    // --- Default deny for anything not matched above ---
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

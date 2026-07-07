@@ -52,8 +52,8 @@ export default function GuiasClient({ products }: GuiasClientProps) {
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {filteredProducts.length > 0 ? (
-          filteredProducts.map((product, index) => (
-            <ClientProductCard key={index} {...product} />
+          filteredProducts.map((product) => (
+            <ClientProductCard key={product.slug} {...product} />
           ))
         ) : (
           <div className="col-span-full text-center py-10">

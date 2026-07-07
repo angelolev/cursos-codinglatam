@@ -1,19 +1,18 @@
 import { NextResponse } from "next/server";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { adminDb } from "@/utils/firebaseAdmin";
 import { auth } from "@/app/auth";
 import sanitizeHtml from 'sanitize-html';
 
-const ADMIN_EMAIL = "angelokta7@gmail.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "angelokta7@gmail.com";
 const BANNER_DOC_PATH = "config/banner";
 
 // GET - Fetch banner config (public)
 export async function GET() {
   try {
-    const docRef = doc(db, BANNER_DOC_PATH);
-    const docSnap = await getDoc(docRef);
+    const docRef = adminDb.doc(BANNER_DOC_PATH);
+    const docSnap = await docRef.get();
 
-    if (!docSnap.exists()) {
+    if (!docSnap.exists) {
       return NextResponse.json({
         banner: {
           message: "",
@@ -24,7 +23,7 @@ export async function GET() {
       });
     }
 
-    const data = docSnap.data();
+    const data = docSnap.data()!;
     return NextResponse.json({
       banner: {
         id: docSnap.id,
@@ -70,11 +69,10 @@ export async function PUT(request: Request) {
       );
     }
 
-    const docRef = doc(db, BANNER_DOC_PATH);
+    const docRef = adminDb.doc(BANNER_DOC_PATH);
     const now = new Date();
 
-    await setDoc(
-      docRef,
+    await docRef.set(
       {
         message: sanitizedMessage,
         isActive,

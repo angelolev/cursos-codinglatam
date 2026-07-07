@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/utils/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { adminDb } from "@/utils/firebaseAdmin";
 
 // Cache por 1 hora (3600 segundos)
 export const revalidate = 3600;
@@ -8,9 +7,10 @@ export const revalidate = 3600;
 export async function GET() {
   try {
     // 1. Query usuarios con imagen (Google OAuth usuarios tienen imagen)
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, where("image", "!=", null));
-    const snapshot = await getDocs(q);
+    const snapshot = await adminDb
+      .collection("users")
+      .where("image", "!=", null)
+      .get();
 
     // 2. Mapear a datos seguros (solo nombre e imagen)
     const users = snapshot.docs

@@ -10,6 +10,7 @@ const DEFAULT_IMAGE = "https://codinglatam.dev/og.png";
 
 export function generateSiteMetadata(): Metadata {
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
       template: `%s | ${SITE_NAME}`,
       default: `Aprende a programar HACIENDO proyectos | ${SITE_NAME}`,

@@ -9,6 +9,17 @@ interface CommentsProps {
   onReply?: (parentId: string) => void;
 }
 
+// Only render links that point to https://github.com. Guards against stored
+// XSS from legacy comments saved before server-side validation existed.
+const isSafeGithubLink = (link: string): boolean => {
+  try {
+    const url = new URL(link);
+    return url.protocol === "https:" && url.hostname === "github.com";
+  } catch {
+    return false;
+  }
+};
+
 // Comment component to handle both top-level and nested comments
 const Comment = ({
   comment,
@@ -47,7 +58,7 @@ const Comment = ({
             </span>
           </div>
           <p className="mt-2 text-gray-600">{comment.comment}</p>
-          {comment.githubLink && (
+          {comment.githubLink && isSafeGithubLink(comment.githubLink) && (
             <a
               href={comment.githubLink}
               target="_blank"

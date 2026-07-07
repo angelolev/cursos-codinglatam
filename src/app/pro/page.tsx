@@ -12,9 +12,7 @@ import {
   GitBranch,
 } from "lucide-react";
 import SubscriptionButton from "@/components/buttons/SubscriptionButton";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
 type BillingFrequency = "weekly" | "monthly" | "yearly";
@@ -83,7 +81,6 @@ const benefits = [
 ];
 
 export default function ProPage() {
-  const { data: session } = useSession();
   const { convertAndFormatPrice, currentCurrency, isLoading } = useCurrency();
   const [billingFrequency, setBillingFrequency] =
     useState<BillingFrequency>("monthly");
@@ -94,16 +91,9 @@ export default function ProPage() {
     yearly: { price: 59.99, label: "/año", savings: "Ahorra $11.89" },
   };
 
-  useEffect(() => {
-    if (session === null) {
-      redirect("/login");
-    }
-  }, [session]);
-
-  if (session === undefined) {
-    return null; // Loading state
-  }
-
+  // /pro is a public sales page: anonymous visitors must be able to see pricing
+  // (SEO + conversion). Checkout via SubscriptionButton goes straight to Lemon
+  // Squeezy and needs no session, so there is nothing to gate here.
   return (
     <main className="pt-32 mx-auto max-w-7xl sm:px-6 px-4 lg:px-0 flex-grow">
       <div className="max-w-7xl mx-auto">

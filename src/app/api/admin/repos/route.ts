@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { adminDb } from "@/utils/firebaseAdmin";
 import { auth } from "@/app/auth";
 import { generateSlug } from "@/utils/slugify";
 
-const ADMIN_EMAIL = "angelokta7@gmail.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "angelokta7@gmail.com";
 
 // POST - Create new repository
 export async function POST(request: Request) {
@@ -50,7 +49,7 @@ export async function POST(request: Request) {
       createdAt: new Date(),
     };
 
-    const docRef = await addDoc(collection(db, "starterRepos"), repoData);
+    const docRef = await adminDb.collection("starterRepos").add(repoData);
 
     return NextResponse.json(
       {
@@ -81,8 +80,7 @@ export async function GET() {
       );
     }
 
-    const reposCollection = collection(db, "starterRepos");
-    const querySnapshot = await getDocs(reposCollection);
+    const querySnapshot = await adminDb.collection("starterRepos").get();
 
     const repos = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -153,8 +151,7 @@ export async function PUT(request: Request) {
       updatedAt: new Date(),
     };
 
-    const docRef = doc(db, "starterRepos", id);
-    await updateDoc(docRef, repoData);
+    await adminDb.collection("starterRepos").doc(id).update(repoData);
 
     return NextResponse.json(
       {
@@ -195,7 +192,7 @@ export async function DELETE(request: Request) {
       );
     }
 
-    await deleteDoc(doc(db, "starterRepos", id));
+    await adminDb.collection("starterRepos").doc(id).delete();
 
     return NextResponse.json(
       { message: "Repository deleted successfully" },

@@ -1,5 +1,12 @@
 import { LiveCourseCard } from "@/components/LiveCourseCard";
 import { getLiveCourses } from "@/utils/common";
+import { generatePageMetadata } from "@/utils/metadata";
+
+export const metadata = generatePageMetadata(
+  "Cursos en vivo",
+  "Aprende en cohortes en vivo con mentoría grupal en Coding Latam.",
+  "/en-vivo"
+);
 
 export default async function EnVivo() {
   const courses = await getLiveCourses();
@@ -17,8 +24,8 @@ export default async function EnVivo() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses?.map((course, index) => (
-            <LiveCourseCard key={index} {...course} />
+          {courses?.map((course) => (
+            <LiveCourseCard key={course.slug} {...course} />
           ))}
         </div>
       </div>

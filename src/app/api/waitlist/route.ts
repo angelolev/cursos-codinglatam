@@ -1,5 +1,4 @@
-import { db } from "@/utils/firebase";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { adminDb } from "@/utils/firebaseAdmin";
 import { NextResponse } from "next/server";
 
 interface RequestBody {
@@ -29,9 +28,10 @@ export async function POST(request: Request) {
     const normalizedEmail = email.toLowerCase().trim();
 
     // Check for duplicates
-    const waitlistRef = collection(db, "waitlist");
-    const q = query(waitlistRef, where("email", "==", normalizedEmail));
-    const existingDocs = await getDocs(q);
+    const waitlistRef = adminDb.collection("waitlist");
+    const existingDocs = await waitlistRef
+      .where("email", "==", normalizedEmail)
+      .get();
 
     if (!existingDocs.empty) {
       return NextResponse.json(
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       status: "pending",
     };
 
-    const docRef = await addDoc(waitlistRef, docData);
+    const docRef = await waitlistRef.add(docData);
 
     return NextResponse.json(
       { id: docRef.id, message: "Email registrado exitosamente" },

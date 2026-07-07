@@ -1,9 +1,8 @@
-import { db } from "@/utils/firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { adminDb } from "@/utils/firebaseAdmin";
 import { NextResponse } from "next/server";
 import { auth } from "@/app/auth";
 
-const ADMIN_EMAIL = "angelokta7@gmail.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "angelokta7@gmail.com";
 
 export async function GET() {
   try {
@@ -16,9 +15,10 @@ export async function GET() {
       );
     }
 
-    const waitlistRef = collection(db, "waitlist");
-    const q = query(waitlistRef, orderBy("timestamp", "desc"));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await adminDb
+      .collection("waitlist")
+      .orderBy("timestamp", "desc")
+      .get();
 
     const waitlistEntries = querySnapshot.docs.map((doc) => {
       const data = doc.data();

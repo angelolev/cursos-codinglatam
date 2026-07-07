@@ -4,10 +4,14 @@ import NextAuth, { Profile } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
+// How long (ms) a cached isPremium value is trusted before we re-check Firestore.
+const PREMIUM_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub, Google],
   callbacks: {
     async jwt({ token, user, profile }) {
+      // On sign-in: capture identity and fetch initial premium status.
       if (user) {
         token.id = user.id;
         token.profile = profile?.sub;
@@ -17,6 +21,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           : false;
 
         token.isPremium = userIsPremium;
+        token.premiumCheckedAt = Date.now();
+        return token;
+      }
+
+      // On subsequent requests: refresh isPremium once the TTL expires so that
+      // cancellations/expirations take effect without requiring a re-login.
+      // Wrapped in try/catch: if the read fails (e.g. edge runtime), we keep the
+      // cached value — never worse than the previous behaviour.
+      const checkedAt = (token.premiumCheckedAt as number) ?? 0;
+      const userId = token.profile as string | undefined;
+      if (userId && Date.now() - checkedAt > PREMIUM_TTL_MS) {
+        try {
+          token.isPremium = await fecthIsPremiumFirebase(userId);
+          token.premiumCheckedAt = Date.now();
+        } catch (error) {
+          console.error("Failed to refresh isPremium; keeping cached value:", error);
+        }
       }
       return token;
     },

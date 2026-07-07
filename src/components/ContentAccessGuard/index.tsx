@@ -162,7 +162,7 @@ export default function ContentAccessGuard({
           </p>
           
           <div className="text-3xl font-bold text-white mb-6">
-            $4.99<span className="text-lg text-indigo-200">/mes</span>
+            $5.99<span className="text-lg text-indigo-200">/mes</span>
           </div>
           
           <button

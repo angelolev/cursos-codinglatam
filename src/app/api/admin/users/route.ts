@@ -1,30 +1,29 @@
 // app/api/admin/users/route.ts
 import { NextResponse } from "next/server";
-import * as admin from "firebase-admin";
+import { adminAuth, adminDb, admin } from "@/utils/firebaseAdmin";
+import { auth } from "@/app/auth";
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      clientEmail: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_CLIENT_EMAIL,
-      privateKey: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PRIVATE_KEY?.replace(
-        /\\n/g,
-        "\n"
-      ),
-    }),
-  });
-}
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "angelokta7@gmail.com";
 
 // Get all users
 export async function GET() {
   try {
+    const session = await auth();
+
+    if (!session || session.user?.email !== ADMIN_EMAIL) {
+      return NextResponse.json(
+        { error: "Unauthorized - Admin access only" },
+        { status: 403 }
+      );
+    }
+
     // Get users from Firebase Auth
-    const userRecords = await admin.auth().listUsers();
+    const userRecords = await adminAuth.listUsers();
 
     // Get premium status from custom claims
     const users = await Promise.all(
       userRecords.users.map(async (user) => {
-        const { customClaims } = await admin.auth().getUser(user.uid);
+        const { customClaims } = await adminAuth.getUser(user.uid);
         return {
           uid: user.uid,
           email: user.email,
@@ -49,12 +48,35 @@ export async function GET() {
 // Update premium status
 export async function PUT(request: Request) {
   try {
+    const session = await auth();
+
+    if (!session || session.user?.email !== ADMIN_EMAIL) {
+      return NextResponse.json(
+        { error: "Unauthorized - Admin access only" },
+        { status: 403 }
+      );
+    }
+
     const { uid, isPremium } = await request.json();
 
-    await admin.auth().setCustomUserClaims(uid, { isPremium });
+    if (typeof uid !== "string" || uid.trim() === "") {
+      return NextResponse.json(
+        { error: "Invalid uid" },
+        { status: 400 }
+      );
+    }
+
+    if (typeof isPremium !== "boolean") {
+      return NextResponse.json(
+        { error: "isPremium must be a boolean" },
+        { status: 400 }
+      );
+    }
+
+    await adminAuth.setCustomUserClaims(uid, { isPremium });
 
     // Update Firestore
-    await admin.firestore().collection("users").doc(uid).set(
+    await adminDb.collection("users").doc(uid).set(
       {
         isPremium,
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),

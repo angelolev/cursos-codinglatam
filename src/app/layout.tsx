@@ -10,10 +10,20 @@ import { auth } from "./auth";
 import Footer from "@/components/Footer";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { generateSiteMetadata } from "@/utils/metadata";
+import JsonLd from "@/components/JsonLd";
 
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
 export const metadata: Metadata = generateSiteMetadata();
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Coding Latam",
+  url: "https://codinglatam.dev",
+  logo: "https://codinglatam.dev/og.png",
+  description: "Aprende a programar HACIENDO proyectos reales.",
+};
 
 export default async function RootLayout({
   children,
@@ -25,6 +35,7 @@ export default async function RootLayout({
   return (
     <html lang="es" className="overflow-x-hidden">
       <head>
+        <JsonLd data={organizationSchema} />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=G-3WYMKRCHYH`}
           strategy="afterInteractive"

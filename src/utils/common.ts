@@ -154,7 +154,7 @@ export async function getWorkshopByslug(
 export async function getCourses(limitCount?: number): Promise<CourseProps[] | null> {
   try {
     const coursesCollection = collection(db, "courses");
-    const q = limitCount 
+    const q = limitCount
       ? query(coursesCollection, orderBy("title"), limit(limitCount))
       : coursesCollection;
     const querySnapshot = await getDocs(q);
@@ -310,6 +310,9 @@ export const getVideosFromCollection = async (collectionId: string) => {
     "claude-code": {
       collectionId: "5e0e93f7-2737-42b5-ba0a-deeb313a1946",
     },
+    hermes: {
+      collectionId: "b2b62c2e-22b4-47ec-9a9a-3321a5e20e7d",
+    },
   };
 
   // Check if the course slug exists in our collection mapping
@@ -324,7 +327,7 @@ export const getVideosFromCollection = async (collectionId: string) => {
     `${process.env.NEXT_PUBLIC_BUNNYNET_API_URL}/${process.env.NEXT_PUBLIC_BUNNYNET_LIBRARY_ID}/videos`,
     {
       headers: {
-        AccessKey: process.env.NEXT_PUBLIC_BUNNYNET_ACCESS_KEY || "",
+        AccessKey: process.env.BUNNYNET_ACCESS_KEY || "",
         "Content-Type": "application/json",
       },
     }

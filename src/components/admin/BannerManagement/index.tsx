@@ -3,7 +3,16 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import DOMPurify from 'dompurify';
-import RichTextEditor from './RichTextEditor';
+import dynamic from "next/dynamic";
+
+// TipTap is heavy and only needed in this admin editor, so load it on demand
+// (client-only) instead of shipping it in the shared bundle.
+const RichTextEditor = dynamic(() => import("./RichTextEditor"), {
+  ssr: false,
+  loading: () => (
+    <div className="min-h-[120px] rounded-md bg-gray-100 animate-pulse" />
+  ),
+});
 
 interface BannerManagementProps {
   onSuccess: () => void;

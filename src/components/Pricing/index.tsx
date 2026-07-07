@@ -49,8 +49,8 @@ export default function Pricing() {
       name: "Pro",
       pricing: {
         weekly: { price: 1.99, label: "/semana", savings: "Prueba 7 días" },
-        monthly: { price: 4.99, label: "/mes" },
-        yearly: { price: 49.99, label: "/año", savings: "Ahorra $9.89" },
+        monthly: { price: 5.99, label: "/mes" },
+        yearly: { price: 59.99, label: "/año", savings: "Ahorra $11.89" },
       },
       description: "Todo lo que necesitas para crecer",
       href: session?.user

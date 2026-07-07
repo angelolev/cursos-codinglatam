@@ -21,6 +21,7 @@ import { AverageRating } from "@/components/AverageRating";
 import BackButton from "@/components/buttons/BackButton";
 import { isLessonFree } from "@/utils/freemium";
 import { auth } from "@/app/auth";
+import JsonLd from "@/components/JsonLd";
 
 type Params = Promise<{ slug: string }>;
 
@@ -74,8 +75,23 @@ export default async function CoursePage({ params }: { params: Params }) {
   const session = await auth();
   const isPremium = session?.user?.isPremium || false;
 
+  const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.shortDescription || course.description,
+    provider: {
+      "@type": "Organization",
+      name: "Coding Latam",
+      sameAs: "https://codinglatam.dev",
+    },
+    image: course.image,
+    url: `https://codinglatam.dev/cursos/${course.slug}`,
+  };
+
   return (
     <div className="container max-w-7xl mx-auto px-4 md:px-0 pt-0 pb-8">
+      <JsonLd data={courseSchema} />
       <div className="pt-24 px-0 md:px-6 lg:px-0">
         <div className="max-w-7xl mx-auto">
           <BackButton label="Volver a los cursos" />
