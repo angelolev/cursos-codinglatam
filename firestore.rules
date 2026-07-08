@@ -35,7 +35,10 @@ service cloud.firestore {
       // Learning progress is written by /api/progress/* which currently uses the
       // client SDK (so it is governed by these rules). Allow until progress is
       // migrated to the Admin SDK; then tighten to `if false`.
-      match /{document=**} {
+      // Scoped to /progress explicitly: a bare `match /{document=**}` also
+      // matches ZERO segments in rules v2, i.e. the user doc itself, which
+      // would re-open client writes to isPremium.
+      match /progress/{document=**} {
         allow read, write: if true;
       }
     }
