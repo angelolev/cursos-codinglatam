@@ -12,31 +12,11 @@ interface MetricsCardProps {
 }
 
 const colorVariants = {
-  blue: {
-    bg: 'bg-blue-50',
-    text: 'text-blue-600',
-    iconBg: 'bg-blue-100',
-  },
-  green: {
-    bg: 'bg-green-50',
-    text: 'text-green-600',
-    iconBg: 'bg-green-100',
-  },
-  purple: {
-    bg: 'bg-purple-50',
-    text: 'text-purple-600',
-    iconBg: 'bg-purple-100',
-  },
-  yellow: {
-    bg: 'bg-yellow-50',
-    text: 'text-yellow-600',
-    iconBg: 'bg-yellow-100',
-  },
-  red: {
-    bg: 'bg-red-50',
-    text: 'text-red-600',
-    iconBg: 'bg-red-100',
-  },
+  blue: 'bg-sky-500/10 text-sky-400',
+  green: 'bg-emerald-500/10 text-emerald-400',
+  purple: 'bg-indigo-500/10 text-indigo-400',
+  yellow: 'bg-amber-500/10 text-amber-400',
+  red: 'bg-red-500/10 text-red-400',
 };
 
 export default function MetricsCard({
@@ -47,73 +27,50 @@ export default function MetricsCard({
   icon,
   color,
 }: MetricsCardProps) {
-  const colors = colorVariants[color];
-
   return (
-    <div className="bg-white overflow-hidden shadow rounded-lg">
-      <div className="p-5">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <div className={`w-8 h-8 ${colors.iconBg} rounded-md flex items-center justify-center`}>
-              <div className={`w-5 h-5 ${colors.text}`}>
-                {icon}
-              </div>
-            </div>
-          </div>
-          <div className="ml-5 w-0 flex-1">
-            <dl>
-              <dt className="text-sm font-medium text-gray-500 truncate">
-                {title}
-              </dt>
-              <dd className="flex items-baseline">
-                <div className="text-2xl font-semibold text-gray-900">
-                  {typeof value === 'number' ? value.toLocaleString() : value}
-                </div>
-                {trend && (
-                  <div className="ml-2 flex items-baseline text-sm font-semibold">
-                    <div className={`${trend.isPositive ? 'text-green-600' : 'text-red-600'} flex items-center`}>
-                      {trend.isPositive ? (
-                        <svg className="w-3 h-3 mr-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.5-4.25a.75.75 0 01.02-1.06z"
-                            clipRule="evenodd"
-                            transform="rotate(180)"
-                          />
-                        </svg>
-                      ) : (
-                        <svg className="w-3 h-3 mr-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.5-4.25a.75.75 0 01.02-1.06z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                      {Math.abs(trend.value)}%
-                    </div>
-                    <div className="text-gray-500 ml-1">
-                      {trend.period}
-                    </div>
-                  </div>
-                )}
-              </dd>
-              {subtitle && (
-                <dd className="text-sm text-gray-600 mt-1">
-                  {subtitle}
-                </dd>
-              )}
-            </dl>
-          </div>
+    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-white/20">
+      <div className="flex items-center justify-between">
+        <dt className="text-sm font-medium text-zinc-400 truncate">{title}</dt>
+        <div
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${colorVariants[color]}`}
+        >
+          <div className="h-5 w-5">{icon}</div>
         </div>
       </div>
+      <dd className="mt-2 flex items-baseline gap-2">
+        <span className="text-3xl font-semibold tabular-nums text-white">
+          {typeof value === 'number' ? value.toLocaleString() : value}
+        </span>
+        {trend && (
+          <span
+            className={`flex items-center text-sm font-medium tabular-nums ${
+              trend.isPositive ? 'text-emerald-400' : 'text-red-400'
+            }`}
+          >
+            <svg
+              className={`mr-0.5 h-3 w-3 ${trend.isPositive ? 'rotate-180' : ''}`}
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.5-4.25a.75.75 0 01.02-1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {Math.abs(trend.value)}%
+            <span className="ml-1 font-normal text-zinc-500">{trend.period}</span>
+          </span>
+        )}
+      </dd>
+      {subtitle && <dd className="mt-1 text-sm text-zinc-500">{subtitle}</dd>}
     </div>
   );
 }
 
 export function MetricsGrid({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
       {children}
     </div>
   );

@@ -1,7 +1,6 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useState, useEffect, useMemo, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import {
@@ -18,6 +17,7 @@ import {
   calculateMetrics,
   formatRelativeDate,
   getSubscriptionStatusColor,
+  downloadCSV,
 } from "@/utils/adminHelpers";
 import FilterBar from "@/components/admin/FilterBar";
 import Pagination from "@/components/admin/Pagination";
@@ -25,11 +25,25 @@ import MetricsCard, { MetricsGrid } from "@/components/admin/MetricsCard";
 import AddRepoForm from "@/components/admin/AddRepoForm";
 import ReposTable from "@/components/admin/ReposTable";
 import BannerManagement from "@/components/admin/BannerManagement";
+import Toast from "@/components/admin/Toast";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
+import TabSkeleton from "@/components/admin/Skeleton";
+import SortableHeader from "@/components/admin/SortableHeader";
+import { ui, badge } from "@/components/admin/ui";
 import { StarterRepoProps } from "@/types/starter-repo";
 import { WorkshopProps } from "@/types/workshop";
-import { Plus, Download, Copy, Check, ExternalLink, Pencil, Save } from "lucide-react";
+import { Plus, Download, Copy, Check, ExternalLink, Pencil, Save, X } from "lucide-react";
 
 type TabType = "usuarios" | "repositorios" | "banner" | "waitlist" | "certificados" | "workshops";
+
+const TABS: { id: TabType; label: string }[] = [
+  { id: "usuarios", label: "Usuarios" },
+  { id: "repositorios", label: "Repositorios" },
+  { id: "banner", label: "Banner" },
+  { id: "waitlist", label: "Waitlist" },
+  { id: "certificados", label: "Certificados" },
+  { id: "workshops", label: "Workshops" },
+];
 
 interface CertificateEntry {
   id: string;
@@ -49,8 +63,31 @@ interface WaitlistEntry {
   status: string;
 }
 
-export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<TabType>("usuarios");
+// useSearchParams exige un límite de Suspense en el build de Next.
+export default function AdminPage() {
+  return (
+    <Suspense fallback={null}>
+      <AdminDashboard />
+    </Suspense>
+  );
+}
+
+function AdminDashboard() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // La tab activa vive en la URL (?tab=...): sobrevive a refresh, es
+  // compartible y el botón atrás funciona.
+  const tabParam = searchParams.get("tab");
+  const activeTab: TabType = TABS.some((t) => t.id === tabParam)
+    ? (tabParam as TabType)
+    : "usuarios";
+  const setActiveTab = (tab: TabType) => {
+    router.replace(tab === "usuarios" ? "/admin" : `/admin?tab=${tab}`, {
+      scroll: false,
+    });
+  };
+
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [repos, setRepos] = useState<(StarterRepoProps & { id: string })[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
@@ -69,10 +106,13 @@ export default function AdminDashboard() {
   const [editingWorkshopId, setEditingWorkshopId] = useState<string | null>(null);
   const [editingAbout, setEditingAbout] = useState("");
   const [savingAbout, setSavingAbout] = useState(false);
-  const [loading, setLoading] = useState(true);
+  // Cada tab hace su fetch la primera vez que se abre, no todos al montar.
+  const [loadedTabs, setLoadedTabs] = useState<Set<TabType>>(new Set());
+  const [tabLoading, setTabLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [updatingUser, setUpdatingUser] = useState<string | null>(null);
+  const [confirmUser, setConfirmUser] = useState<AdminUser | null>(null);
   const [showRepoForm, setShowRepoForm] = useState(false);
   const [editingRepo, setEditingRepo] = useState<(StarterRepoProps & { id: string }) | null>(null);
   const [filters, setFilters] = useState<FilterState>({
@@ -85,21 +125,40 @@ export default function AdminDashboard() {
     currentPage: 1,
     itemsPerPage: 25,
   });
+  const [certPagination, setCertPagination] = useState<PaginationState>({
+    currentPage: 1,
+    itemsPerPage: 25,
+  });
+  const [waitlistPagination, setWaitlistPagination] = useState<PaginationState>({
+    currentPage: 1,
+    itemsPerPage: 25,
+  });
   const [sortConfig, setSortConfig] = useState<{
     field: SortField;
     direction: SortDirection;
   }>({ field: "updatedAt", direction: "desc" });
 
-  const router = useRouter();
-  const { data: session } = useSession();
-
   useEffect(() => {
-    fetchUsers();
-    fetchRepos();
-    fetchWaitlist();
-    fetchCertificates();
-    fetchWorkshops();
-  }, [session, router]);
+    // "banner" hace su propio fetch dentro de BannerManagement.
+    if (activeTab === "banner" || loadedTabs.has(activeTab)) return;
+
+    const fetchers: Partial<Record<TabType, () => Promise<void>>> = {
+      usuarios: fetchUsers,
+      repositorios: fetchRepos,
+      waitlist: fetchWaitlist,
+      certificados: fetchCertificates,
+      workshops: fetchWorkshops,
+    };
+    const fetcher = fetchers[activeTab];
+    if (!fetcher) return;
+
+    setTabLoading(true);
+    fetcher().finally(() => {
+      setTabLoading(false);
+      setLoadedTabs((prev) => new Set(prev).add(activeTab));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, loadedTabs]);
 
   const fetchRepos = async () => {
     try {
@@ -154,6 +213,20 @@ export default function AdminDashboard() {
       console.error("Failed to fetch workshops:", err);
     }
   };
+
+  const closeWorkshopEditor = () => {
+    setEditingWorkshopId(null);
+    setEditingAbout("");
+  };
+
+  useEffect(() => {
+    if (!editingWorkshopId) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeWorkshopEditor();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [editingWorkshopId]);
 
   const handleSaveAbout = async (workshopId: string) => {
     setSavingAbout(true);
@@ -233,6 +306,17 @@ export default function AdminDashboard() {
     );
   }, [certificates, certSearch]);
 
+  const paginatedCertificates = useMemo(() => {
+    const start = (certPagination.currentPage - 1) * certPagination.itemsPerPage;
+    return filteredCertificates.slice(start, start + certPagination.itemsPerPage);
+  }, [filteredCertificates, certPagination]);
+
+  const paginatedWaitlist = useMemo(() => {
+    const start =
+      (waitlistPagination.currentPage - 1) * waitlistPagination.itemsPerPage;
+    return waitlistEntries.slice(start, start + waitlistPagination.itemsPerPage);
+  }, [waitlistEntries, waitlistPagination]);
+
   const fetchUsers = async () => {
     try {
       const usersCollection = collection(db, "users");
@@ -278,8 +362,6 @@ export default function AdminDashboard() {
       setUsers(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch users");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -381,10 +463,7 @@ export default function AdminDashboard() {
   };
 
   const exportToCSV = () => {
-    // Use filtered users for export
-    const dataToExport = filteredUsers;
-
-    // Define CSV headers
+    // Exporta lo filtrado, no todo el dataset
     const headers = [
       "Name",
       "Email",
@@ -398,8 +477,7 @@ export default function AdminDashboard() {
       "Subscription ID"
     ];
 
-    // Convert users to CSV rows
-    const rows = dataToExport.map(user => [
+    const rows = filteredUsers.map(user => [
       user.name || "",
       user.email || "",
       user.github || "",
@@ -412,41 +490,11 @@ export default function AdminDashboard() {
       user.subscriptionId || ""
     ]);
 
-    // Combine headers and rows
-    const csvContent = [
-      headers.join(","),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
-    ].join("\n");
+    downloadCSV(headers, rows, "usuarios_codinglatam");
 
-    // Create blob and download
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-
-    link.setAttribute("href", url);
-    link.setAttribute("download", `usuarios_codinglatam_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = "hidden";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Show success message
-    setSuccess(`${dataToExport.length} usuarios exportados exitosamente`);
+    setSuccess(`${filteredUsers.length} usuarios exportados exitosamente`);
     setTimeout(() => setSuccess(null), 3000);
   };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  if (error && !users.length) {
-    return <div className="p-4 text-red-500">Error: {error}</div>;
-  }
 
   return (
     <div className="container mx-auto max-w-7xl px-4 md:px-6 lg:px-0 pt-24 pb-6">
@@ -459,96 +507,29 @@ export default function AdminDashboard() {
         </p>
 
         {/* Tabs Navigation */}
-        <div className="mt-6 border-b border-gray-700">
-          <nav className="-mb-px flex space-x-8">
-            <button
-              onClick={() => setActiveTab("usuarios")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "usuarios"
-                  ? "border-indigo-500 text-indigo-400"
-                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
-              }`}
-            >
-              Usuarios
-            </button>
-            <button
-              onClick={() => setActiveTab("repositorios")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "repositorios"
-                  ? "border-indigo-500 text-indigo-400"
-                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
-              }`}
-            >
-              Repositorios
-            </button>
-            <button
-              onClick={() => setActiveTab("banner")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "banner"
-                  ? "border-indigo-500 text-indigo-400"
-                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
-              }`}
-            >
-              Banner
-            </button>
-            <button
-              onClick={() => setActiveTab("waitlist")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "waitlist"
-                  ? "border-indigo-500 text-indigo-400"
-                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
-              }`}
-            >
-              Waitlist
-            </button>
-            <button
-              onClick={() => setActiveTab("certificados")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "certificados"
-                  ? "border-indigo-500 text-indigo-400"
-                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
-              }`}
-            >
-              Certificados
-            </button>
-            <button
-              onClick={() => setActiveTab("workshops")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "workshops"
-                  ? "border-indigo-500 text-indigo-400"
-                  : "border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300"
-              }`}
-            >
-              Workshops
-            </button>
+        <div className="mt-6 border-b border-white/10">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === tab.id
+                    ? "border-indigo-500 text-indigo-400"
+                    : "border-transparent text-zinc-500 hover:text-zinc-300 hover:border-white/20"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </nav>
         </div>
-        
-        {/* Success Message */}
-        {success && (
-          <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-            <div className="flex items-center">
-              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              {success}
-            </div>
-          </div>
-        )}
-        
-        {/* Error Message */}
-        {error && (
-          <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-            <div className="flex items-center">
-              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-              {error}
-            </div>
-          </div>
-        )}
       </div>
 
+      {tabLoading ? (
+        <TabSkeleton withMetrics={activeTab === "usuarios"} />
+      ) : (
+        <>
       {/* Usuarios Tab */}
       {activeTab === "usuarios" && (
         <>
@@ -557,11 +538,6 @@ export default function AdminDashboard() {
           title="Usuarios Totales"
           value={metrics.totalUsers}
           subtitle={`${metrics.newUsersThisMonth} nuevos este mes`}
-          trend={{
-            value: 12.5,
-            isPositive: true,
-            period: "vs el mes pasado",
-          }}
           icon={
             <svg fill="currentColor" viewBox="0 0 20 20">
               <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
@@ -573,11 +549,6 @@ export default function AdminDashboard() {
           title="Usuarios Premium"
           value={metrics.premiumUsers}
           subtitle={`${metrics.conversionRate.toFixed(1)}% tasa de conversión`}
-          trend={{
-            value: 8.2,
-            isPositive: true,
-            period: "vs el mes pasado",
-          }}
           icon={
             <svg fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -593,11 +564,6 @@ export default function AdminDashboard() {
           title="Suscripciones Activas"
           value={metrics.activeSubscriptions}
           subtitle={`${metrics.churnRate.toFixed(1)}% tasa de cancelación`}
-          trend={{
-            value: 2.1,
-            isPositive: false,
-            period: "vs el mes pasado",
-          }}
           icon={
             <svg fill="currentColor" viewBox="0 0 20 20">
               <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zM14 6a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h8zM6 8a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 012-2h2z" />
@@ -609,11 +575,6 @@ export default function AdminDashboard() {
           title="Ingresos Mensuales"
           value={`${metrics.monthlyRecurringRevenue.toLocaleString()}`}
           subtitle="MRR Estimado"
-          trend={{
-            value: 15.3,
-            isPositive: true,
-            period: "vs el mes pasado",
-          }}
           icon={
             <svg fill="currentColor" viewBox="0 0 20 20">
               <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
@@ -652,188 +613,120 @@ export default function AdminDashboard() {
       <div className="mb-4 flex justify-end">
         <button
           onClick={exportToCSV}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+          className={ui.btnPrimary}
         >
           <Download className="h-5 w-5" />
           Exportar a CSV ({filteredUsers.length} usuarios)
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className={ui.card}>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className={ui.table}>
+            <thead className={ui.thead}>
               <tr>
-                <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSort("name")}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Usuario</span>
-                    {sortConfig.field === "name" && (
-                      <svg
-                        className={`w-3 h-3 ${
-                          sortConfig.direction === "asc" ? "rotate-180" : ""
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.5-4.25a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                </th>
-                <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSort("email")}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Correo</span>
-                    {sortConfig.field === "email" && (
-                      <svg
-                        className={`w-3 h-3 ${
-                          sortConfig.direction === "asc" ? "rotate-180" : ""
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.5-4.25a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <SortableHeader
+                  label="Usuario"
+                  field="name"
+                  sortConfig={sortConfig}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  label="Correo"
+                  field="email"
+                  sortConfig={sortConfig}
+                  onSort={handleSort}
+                />
+                <th scope="col" className={ui.th}>
                   Suscripción
                 </th>
-                <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSort("premiumSince")}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Premium Desde</span>
-                    {sortConfig.field === "premiumSince" && (
-                      <svg
-                        className={`w-3 h-3 ${
-                          sortConfig.direction === "asc" ? "rotate-180" : ""
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.5-4.25a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                </th>
-                <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSort("updatedAt")}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Última Actualización</span>
-                    {sortConfig.field === "updatedAt" && (
-                      <svg
-                        className={`w-3 h-3 ${
-                          sortConfig.direction === "asc" ? "rotate-180" : ""
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.5-4.25a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <SortableHeader
+                  label="Premium Desde"
+                  field="premiumSince"
+                  sortConfig={sortConfig}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  label="Última Actualización"
+                  field="updatedAt"
+                  sortConfig={sortConfig}
+                  onSort={handleSort}
+                />
+                <th scope="col" className={ui.th}>
                   Acciones
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className={ui.tbody}>
               {paginatedUsers.map((user) => (
-                <tr key={user.aud} className="hover:bg-gray-50">
+                <tr key={user.aud} className={ui.tr}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                          <span className="text-sm font-medium text-gray-700">
+                        <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center">
+                          <span className="text-sm font-medium text-zinc-300">
                             {user.name?.charAt(0)?.toUpperCase() || "?"}
                           </span>
                         </div>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-zinc-100">
                           {user.name || "Sin nombre"}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-zinc-500">
                           Se unió {formatRelativeDate(user.createdAt || null)}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-zinc-300">
                       {user.email || "Sin correo"}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex flex-col space-y-1">
+                    <div className="flex flex-col items-start space-y-1">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          user.isPremium
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
+                        className={user.isPremium ? badge("emerald") : badge("zinc")}
                       >
                         {user.isPremium ? "Premium" : "Gratis"}
                       </span>
                       {user.subscriptionStatus && (
                         <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getSubscriptionStatusColor(
+                          className={getSubscriptionStatusColor(
                             user.subscriptionStatus
-                          )}`}
+                          )}
                         >
                           {user.subscriptionStatus}
                         </span>
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className={ui.td}>
                     {formatRelativeDate(user.premiumSince)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className={ui.td}>
                     {formatRelativeDate(user.updatedAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
-                      onClick={() => togglePremiumStatus(user.aud)}
+                      onClick={() =>
+                        user.isPremium
+                          ? setConfirmUser(user)
+                          : togglePremiumStatus(user.aud)
+                      }
                       disabled={updatingUser === user.aud}
-                      className={`px-3 py-1 rounded text-sm font-medium transition-colors flex items-center ${
+                      className={
                         updatingUser === user.aud
-                          ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+                          ? ui.btnGhost
                           : user.isPremium
-                          ? "bg-red-100 text-red-700 hover:bg-red-200"
-                          : "bg-green-100 text-green-700 hover:bg-green-200"
-                      }`}
+                          ? ui.btnDanger
+                          : ui.btnSuccess
+                      }
                     >
                       {updatingUser === user.aud ? (
                         <>
-                          <svg className="w-4 h-4 mr-1 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
@@ -873,7 +766,7 @@ export default function AdminDashboard() {
                 setShowRepoForm(!showRepoForm);
                 setEditingRepo(null);
               }}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+              className={ui.btnPrimary}
             >
               <Plus className="h-5 w-5" />
               {showRepoForm || editingRepo ? "Cancelar" : "Nuevo Repositorio"}
@@ -933,7 +826,7 @@ export default function AdminDashboard() {
             </div>
             <button
               onClick={() => setShowCertForm(true)}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+              className={ui.btnPrimary}
             >
               <Plus className="h-5 w-5" />
               Nuevo Certificado
@@ -941,11 +834,11 @@ export default function AdminDashboard() {
           </div>
 
           {showCertForm && (
-            <div className="mb-6 bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Crear Certificado</h3>
+            <div className={`${ui.cardPadded} mb-6`}>
+              <h3 className="text-lg font-semibold text-white mb-4">Crear Certificado</h3>
               <form onSubmit={handleCreateCertificate} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={ui.label}>
                     Nombre del estudiante *
                   </label>
                   <input
@@ -954,11 +847,11 @@ export default function AdminDashboard() {
                     value={certForm.studentName}
                     onChange={(e) => setCertForm({ ...certForm, studentName: e.target.value })}
                     placeholder="Juan Pérez"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className={ui.input}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={ui.label}>
                     Nombre del curso *
                   </label>
                   <input
@@ -967,11 +860,11 @@ export default function AdminDashboard() {
                     value={certForm.courseName}
                     onChange={(e) => setCertForm({ ...certForm, courseName: e.target.value })}
                     placeholder="Curso de Claude Code"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className={ui.input}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={ui.label}>
                     Fecha de finalización *
                   </label>
                   <input
@@ -979,11 +872,11 @@ export default function AdminDashboard() {
                     required
                     value={certForm.completionDate}
                     onChange={(e) => setCertForm({ ...certForm, completionDate: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className={`${ui.input} [color-scheme:dark]`}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={ui.label}>
                     URL del PDF (opcional)
                   </label>
                   <input
@@ -991,7 +884,7 @@ export default function AdminDashboard() {
                     value={certForm.certificateUrl}
                     onChange={(e) => setCertForm({ ...certForm, certificateUrl: e.target.value })}
                     placeholder="https://..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className={ui.input}
                   />
                 </div>
                 <div className="md:col-span-2 flex gap-3 justify-end">
@@ -1001,14 +894,14 @@ export default function AdminDashboard() {
                       setShowCertForm(false);
                       setCertForm({ studentName: "", courseName: "", completionDate: "", certificateUrl: "" });
                     }}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                    className={ui.btnGhost}
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     disabled={savingCert}
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                    className={ui.btnPrimary}
                   >
                     {savingCert ? "Guardando..." : "Crear Certificado"}
                   </button>
@@ -1021,55 +914,59 @@ export default function AdminDashboard() {
             <input
               type="text"
               value={certSearch}
-              onChange={(e) => setCertSearch(e.target.value)}
+              onChange={(e) => {
+                setCertSearch(e.target.value);
+                setCertPagination((prev) => ({ ...prev, currentPage: 1 }));
+              }}
               placeholder="Buscar por nombre, curso o código..."
-              className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              aria-label="Buscar certificados por nombre, curso o código"
+              className={`${ui.input} max-w-md`}
             />
           </div>
 
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className={ui.card}>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className={ui.table}>
+                <thead className={ui.thead}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Estudiante
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Curso
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Fecha
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Link
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       PDF
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className={ui.tbody}>
                   {filteredCertificates.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                      <td colSpan={5} className={ui.tdEmpty}>
                         {certSearch ? "No se encontraron certificados" : "No hay certificados aún"}
                       </td>
                     </tr>
                   ) : (
-                    filteredCertificates.map((cert) => (
-                      <tr key={cert.id} className="hover:bg-gray-50">
+                    paginatedCertificates.map((cert) => (
+                      <tr key={cert.id} className={ui.tr}>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-zinc-100">
                             {cert.studentName}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                          <span className={badge("indigo")}>
                             {cert.courseName}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className={ui.td}>
                           {new Date(cert.completionDate).toLocaleDateString("es-ES", {
                             year: "numeric",
                             month: "short",
@@ -1079,12 +976,12 @@ export default function AdminDashboard() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <button
                             onClick={() => copyLink(cert.code)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5"
                           >
                             {copiedCode === cert.code ? (
                               <>
-                                <Check className="h-4 w-4 text-green-600" />
-                                <span className="text-green-600">Copiado</span>
+                                <Check className="h-4 w-4 text-emerald-400" />
+                                <span className="text-emerald-400">Copiado</span>
                               </>
                             ) : (
                               <>
@@ -1100,13 +997,13 @@ export default function AdminDashboard() {
                               href={cert.certificateUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800"
+                              className="inline-flex items-center gap-1 text-sm text-indigo-400 transition-colors hover:text-indigo-300"
                             >
                               <ExternalLink className="h-4 w-4" />
                               Ver PDF
                             </a>
                           ) : (
-                            <span className="text-sm text-gray-400">—</span>
+                            <span className="text-sm text-zinc-600">—</span>
                           )}
                         </td>
                       </tr>
@@ -1115,6 +1012,18 @@ export default function AdminDashboard() {
                 </tbody>
               </table>
             </div>
+
+            <Pagination
+              currentPage={certPagination.currentPage}
+              totalItems={filteredCertificates.length}
+              itemsPerPage={certPagination.itemsPerPage}
+              onPageChange={(page) =>
+                setCertPagination((prev) => ({ ...prev, currentPage: page }))
+              }
+              onItemsPerPageChange={(itemsPerPage) =>
+                setCertPagination({ currentPage: 1, itemsPerPage })
+              }
+            />
           </div>
         </div>
       )}
@@ -1129,52 +1038,48 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className={ui.card}>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className={ui.table}>
+                <thead className={ui.thead}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Título
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Estado
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       About
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Acciones
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className={ui.tbody}>
                   {workshops.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                      <td colSpan={4} className={ui.tdEmpty}>
                         No hay workshops aún
                       </td>
                     </tr>
                   ) : (
                     workshops.map((ws) => (
-                      <tr key={ws.id} className="hover:bg-gray-50">
+                      <tr key={ws.id} className={ui.tr}>
                         <td className="px-6 py-4">
-                          <div className="text-sm font-medium text-gray-900">{ws.title}</div>
-                          <div className="text-xs text-gray-500">{ws.slug}</div>
+                          <div className="text-sm font-medium text-zinc-100">{ws.title}</div>
+                          <div className="text-xs text-zinc-500">{ws.slug}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              ws.available
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
+                            className={ws.available ? badge("emerald") : badge("amber")}
                           >
                             {ws.available ? "Disponible" : "Próximamente"}
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-zinc-500">
                             {ws.about && ws.about.length > 0
                               ? `${ws.about.length} párrafo${ws.about.length === 1 ? "" : "s"}`
                               : "Sin personalizar"}
@@ -1186,7 +1091,7 @@ export default function AdminDashboard() {
                               setEditingWorkshopId(ws.id);
                               setEditingAbout(ws.about?.join("\n") || "");
                             }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                            className={ui.btnGhost}
                           >
                             <Pencil className="h-4 w-4" />
                             Editar About
@@ -1201,39 +1106,66 @@ export default function AdminDashboard() {
           </div>
 
           {editingWorkshopId && (
-            <div className="mt-6 bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Editar About — {workshops.find((w) => w.id === editingWorkshopId)?.title}
-              </h3>
-              <p className="text-sm text-gray-500 mb-4">
-                Escribe cada párrafo en una línea separada.
-              </p>
-              <textarea
-                value={editingAbout}
-                onChange={(e) => setEditingAbout(e.target.value)}
-                rows={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder={"Primer párrafo del about...\n\nSegundo párrafo..."}
+            <div
+              className="fixed inset-0 z-50"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="workshop-drawer-title"
+            >
+              <div
+                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                onClick={closeWorkshopEditor}
               />
-              <div className="mt-4 flex gap-3 justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingWorkshopId(null);
-                    setEditingAbout("");
-                  }}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={() => handleSaveAbout(editingWorkshopId)}
-                  disabled={savingAbout}
-                  className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50"
-                >
-                  <Save className="h-4 w-4" />
-                  {savingAbout ? "Guardando..." : "Guardar"}
-                </button>
+              <div className="absolute inset-y-0 right-0 flex w-full max-w-lg flex-col overflow-y-auto border-l border-white/10 bg-light-black p-6 shadow-2xl shadow-black/50 animate-[admin-drawer-in_0.25s_ease-out]">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3
+                      id="workshop-drawer-title"
+                      className="text-lg font-semibold text-white"
+                    >
+                      Editar About
+                    </h3>
+                    <p className="mt-1 text-sm text-zinc-400">
+                      {workshops.find((w) => w.id === editingWorkshopId)?.title}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={closeWorkshopEditor}
+                    aria-label="Cerrar editor"
+                    className="text-zinc-500 transition-colors hover:text-zinc-300"
+                  >
+                    <X className="h-6 w-6" />
+                  </button>
+                </div>
+                <p className="mt-4 text-sm text-zinc-500">
+                  Escribe cada párrafo en una línea separada.
+                </p>
+                <textarea
+                  value={editingAbout}
+                  onChange={(e) => setEditingAbout(e.target.value)}
+                  rows={14}
+                  autoFocus
+                  className={`${ui.input} mt-2 flex-1 resize-none`}
+                  placeholder={"Primer párrafo del about...\n\nSegundo párrafo..."}
+                />
+                <div className="mt-4 flex gap-3 justify-end">
+                  <button
+                    type="button"
+                    onClick={closeWorkshopEditor}
+                    className={ui.btnGhost}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={() => handleSaveAbout(editingWorkshopId)}
+                    disabled={savingAbout}
+                    className={ui.btnPrimary}
+                  >
+                    <Save className="h-4 w-4" />
+                    {savingAbout ? "Guardando..." : "Guardar"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -1254,84 +1186,73 @@ export default function AdminDashboard() {
             </div>
             <button
               onClick={() => {
-                // Export waitlist to CSV
-                const headers = ["Email", "Fecha de Registro", "Fuente", "Estado"];
-                const rows = waitlistEntries.map(entry => [
-                  entry.email,
-                  new Date(entry.timestamp).toLocaleString('es-ES'),
-                  entry.source,
-                  entry.status
-                ]);
-                const csvContent = [
-                  headers.join(","),
-                  ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
-                ].join("\n");
-                const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-                const link = document.createElement("a");
-                const url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", `waitlist_${new Date().toISOString().split('T')[0]}.csv`);
-                link.style.visibility = "hidden";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                downloadCSV(
+                  ["Email", "Fecha de Registro", "Fuente", "Estado"],
+                  waitlistEntries.map(entry => [
+                    entry.email,
+                    new Date(entry.timestamp).toLocaleString('es-ES'),
+                    entry.source,
+                    entry.status
+                  ]),
+                  "waitlist"
+                );
                 setSuccess(`${waitlistEntries.length} entradas exportadas exitosamente`);
                 setTimeout(() => setSuccess(null), 3000);
               }}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2 font-medium"
+              className={ui.btnPrimary}
             >
               <Download className="h-5 w-5" />
               Exportar a CSV ({waitlistEntries.length})
             </button>
           </div>
 
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className={ui.card}>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className={ui.table}>
+                <thead className={ui.thead}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Email
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Fecha de Registro
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Fuente
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={ui.th}>
                       Estado
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className={ui.tbody}>
                   {waitlistEntries.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                      <td colSpan={4} className={ui.tdEmpty}>
                         No hay entradas en la waitlist aún
                       </td>
                     </tr>
                   ) : (
-                    waitlistEntries.map((entry) => (
-                      <tr key={entry.id} className="hover:bg-gray-50">
+                    paginatedWaitlist.map((entry) => (
+                      <tr key={entry.id} className={ui.tr}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-10 w-10">
-                              <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                <span className="text-sm font-medium text-indigo-700">
+                              <div className="h-10 w-10 rounded-full bg-indigo-500/10 flex items-center justify-center">
+                                <span className="text-sm font-medium text-indigo-400">
                                   {entry.email.charAt(0).toUpperCase()}
                                 </span>
                               </div>
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
+                              <div className="text-sm font-medium text-zinc-100">
                                 {entry.email}
                               </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-zinc-300">
                             {new Date(entry.timestamp).toLocaleDateString('es-ES', {
                               year: 'numeric',
                               month: 'long',
@@ -1340,23 +1261,23 @@ export default function AdminDashboard() {
                               minute: '2-digit'
                             })}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-zinc-500">
                             {formatRelativeDate(new Date(entry.timestamp))}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          <span className={badge("blue")}>
                             {entry.source}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          <span className={
                             entry.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-800'
+                              ? badge('amber')
                               : entry.status === 'notified'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-green-100 text-green-800'
-                          }`}>
+                              ? badge('blue')
+                              : badge('emerald')
+                          }>
                             {entry.status}
                           </span>
                         </td>
@@ -1366,9 +1287,49 @@ export default function AdminDashboard() {
                 </tbody>
               </table>
             </div>
+
+            <Pagination
+              currentPage={waitlistPagination.currentPage}
+              totalItems={waitlistEntries.length}
+              itemsPerPage={waitlistPagination.itemsPerPage}
+              onPageChange={(page) =>
+                setWaitlistPagination((prev) => ({ ...prev, currentPage: page }))
+              }
+              onItemsPerPageChange={(itemsPerPage) =>
+                setWaitlistPagination({ currentPage: 1, itemsPerPage })
+              }
+            />
           </div>
         </div>
       )}
+
+        </>
+      )}
+
+      {/* Feedback y confirmaciones */}
+      <Toast success={success} error={error} />
+      <ConfirmDialog
+        open={confirmUser !== null}
+        title="Quitar acceso premium"
+        description={
+          confirmUser && (
+            <>
+              Vas a quitarle el acceso premium a{" "}
+              <span className="font-semibold text-zinc-200">
+                {confirmUser.name || confirmUser.email || "este usuario"}
+              </span>
+              . Perderá el acceso a todo el contenido de pago inmediatamente.
+            </>
+          )
+        }
+        confirmLabel="Sí, quitar premium"
+        tone="danger"
+        onConfirm={() => {
+          if (confirmUser) togglePremiumStatus(confirmUser.aud);
+          setConfirmUser(null);
+        }}
+        onCancel={() => setConfirmUser(null)}
+      />
     </div>
   );
 }

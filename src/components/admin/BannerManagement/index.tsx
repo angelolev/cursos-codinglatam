@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import DOMPurify from 'dompurify';
 import dynamic from "next/dynamic";
+import { ui } from "@/components/admin/ui";
 
 // TipTap is heavy and only needed in this admin editor, so load it on demand
 // (client-only) instead of shipping it in the shared bundle.
 const RichTextEditor = dynamic(() => import("./RichTextEditor"), {
   ssr: false,
   loading: () => (
-    <div className="min-h-[120px] rounded-md bg-gray-100 animate-pulse" />
+    <div className="min-h-[120px] rounded-lg bg-white/5 animate-pulse" />
   ),
 });
 
@@ -73,11 +74,11 @@ export default function BannerManagement({ onSuccess }: BannerManagementProps) {
 
   if (fetchLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className={ui.cardPadded}>
         <div className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-4 py-1">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded"></div>
+            <div className="h-4 bg-white/10 rounded w-3/4"></div>
+            <div className="h-4 bg-white/10 rounded"></div>
           </div>
         </div>
       </div>
@@ -85,30 +86,30 @@ export default function BannerManagement({ onSuccess }: BannerManagementProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+    <div className={ui.cardPadded}>
+      <h2 className="text-2xl font-bold text-white mb-6">
         Gestión del Banner Promocional
       </h2>
 
       {error && (
-        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+        <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Active Toggle */}
-        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.02] p-4">
           <div>
-            <label className="text-sm font-medium text-gray-900 flex items-center gap-2">
+            <label className="text-sm font-medium text-zinc-200 flex items-center gap-2">
               {isActive ? (
-                <Eye className="h-5 w-5 text-green-600" />
+                <Eye className="h-5 w-5 text-emerald-400" />
               ) : (
-                <EyeOff className="h-5 w-5 text-gray-400" />
+                <EyeOff className="h-5 w-5 text-zinc-500" />
               )}
               Estado del Banner
             </label>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-zinc-500 mt-1">
               {isActive
                 ? "El banner está visible para todos los usuarios"
                 : "El banner está oculto"}
@@ -118,7 +119,7 @@ export default function BannerManagement({ onSuccess }: BannerManagementProps) {
             type="button"
             onClick={() => setIsActive(!isActive)}
             className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-              isActive ? "bg-green-600" : "bg-gray-300"
+              isActive ? "bg-emerald-600" : "bg-white/15"
             }`}
           >
             <span
@@ -131,14 +132,14 @@ export default function BannerManagement({ onSuccess }: BannerManagementProps) {
 
         {/* Message Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Mensaje del Banner <span className="text-red-500">*</span>
+          <label className={ui.label}>
+            Mensaje del Banner <span className="text-red-400">*</span>
           </label>
           <RichTextEditor
             value={message}
             onChange={setMessage}
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-zinc-500 mt-1">
             Usa los botones para aplicar <strong>negrita</strong> o <em>cursiva</em>
           </p>
         </div>
@@ -146,9 +147,7 @@ export default function BannerManagement({ onSuccess }: BannerManagementProps) {
         {/* Preview */}
         {message && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Vista Previa
-            </label>
+            <label className={ui.label}>Vista Previa</label>
             <div className="bg-gradient-to-r from-rose-200 to-purple-200 text-gray-800 py-3 rounded-lg">
               <div className="max-w-7xl mx-auto text-center px-4">
                 <div
@@ -166,11 +165,11 @@ export default function BannerManagement({ onSuccess }: BannerManagementProps) {
         )}
 
         {/* Submit Buttons */}
-        <div className="flex gap-4 pt-4 border-t border-gray-200">
+        <div className="flex gap-4 pt-4 border-t border-white/10">
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
+            className={ui.btnPrimary}
           >
             {isLoading ? "Guardando..." : "Guardar Cambios"}
           </button>

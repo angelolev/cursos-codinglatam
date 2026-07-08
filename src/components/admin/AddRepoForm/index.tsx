@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { StarterRepoProps } from "@/types/starter-repo";
+import { ui, badge } from "@/components/admin/ui";
 
 interface AddRepoFormProps {
   onSuccess: () => void;
@@ -145,21 +146,21 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+    <div className={`${ui.cardPadded} mb-8`}>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-white">
           {mode === 'edit' ? 'Editar Repositorio' : 'Nuevo Repositorio'}
         </h2>
         <button
           onClick={onCancel}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-zinc-500 transition-colors hover:text-zinc-300"
         >
           <X className="h-6 w-6" />
         </button>
       </div>
 
       {error && (
-        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+        <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">
           {error}
         </div>
       )}
@@ -168,7 +169,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={ui.label}>
               Título <span className="text-red-500">*</span>
             </label>
             <input
@@ -177,14 +178,14 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
               value={formData.title}
               onChange={handleInputChange}
               required
-              className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={ui.input}
               placeholder="Next.js E-commerce Starter"
             />
           </div>
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={ui.label}>
               Categoría <span className="text-red-500">*</span>
             </label>
             <input
@@ -193,7 +194,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
               value={formData.category}
               onChange={handleInputChange}
               required
-              className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={ui.input}
               placeholder="Full Stack, Frontend, Backend..."
             />
           </div>
@@ -201,7 +202,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
 
         {/* Short Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className={ui.label}>
             Descripción Corta
           </label>
           <input
@@ -209,14 +210,14 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
             name="shortDescription"
             value={formData.shortDescription}
             onChange={handleInputChange}
-            className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+            className={ui.input}
             placeholder="Resumen breve del repositorio"
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className={ui.label}>
             Descripción <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -225,14 +226,14 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
             onChange={handleInputChange}
             required
             rows={3}
-            className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+            className={ui.input}
             placeholder="Descripción detallada del repositorio"
           />
         </div>
 
         {/* Thumbnail URL */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className={ui.label}>
             URL de Imagen (Thumbnail) <span className="text-red-500">*</span>
           </label>
           <input
@@ -241,12 +242,12 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
             value={formData.thumbnail}
             onChange={handleInputChange}
             required
-            className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+            className={ui.input}
             placeholder="https://images.unsplash.com/..."
           />
           {formData.thumbnail && (
             <div className="mt-2">
-              <p className="text-sm text-gray-500 mb-2">Preview:</p>
+              <p className="text-sm text-zinc-500 mb-2">Preview:</p>
               <Image
                 src={formData.thumbnail}
                 alt="Preview"
@@ -261,7 +262,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* GitHub URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={ui.label}>
               GitHub URL <span className="text-red-500">*</span>
             </label>
             <input
@@ -270,14 +271,14 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
               value={formData.githubUrl}
               onChange={handleInputChange}
               required
-              className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={ui.input}
               placeholder="https://github.com/username/repo"
             />
           </div>
 
           {/* Demo URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={ui.label}>
               Demo URL
             </label>
             <input
@@ -285,7 +286,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
               name="demoUrl"
               value={formData.demoUrl}
               onChange={handleInputChange}
-              className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={ui.input}
               placeholder="https://demo.example.com"
             />
           </div>
@@ -293,7 +294,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
 
         {/* Stack */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className={ui.label}>
             Stack de Tecnologías
           </label>
           <div className="flex gap-2 mb-2">
@@ -302,28 +303,25 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
               value={stackInput}
               onChange={(e) => setStackInput(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addStackItem())}
-              className="flex-1 rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={`${ui.input} flex-1`}
               placeholder="Next.js, TypeScript, etc."
             />
             <button
               type="button"
               onClick={addStackItem}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+              className={ui.btnPrimary}
             >
               Agregar
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
             {stack.map((item) => (
-              <span
-                key={item}
-                className="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm"
-              >
+              <span key={item} className={badge("indigo")}>
                 {item}
                 <button
                   type="button"
                   onClick={() => removeStackItem(item)}
-                  className="hover:text-indigo-600"
+                  className="transition-colors hover:text-indigo-200"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -335,14 +333,14 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Difficulty */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={ui.label}>
               Dificultad
             </label>
             <select
               name="difficulty"
               value={formData.difficulty}
               onChange={handleInputChange}
-              className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={ui.select}
             >
               <option value="Principiante">Principiante</option>
               <option value="Intermedio">Intermedio</option>
@@ -352,7 +350,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
 
           {/* Setup Time */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={ui.label}>
               Tiempo de Setup
             </label>
             <input
@@ -360,7 +358,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
               name="setupTime"
               value={formData.setupTime}
               onChange={handleInputChange}
-              className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={ui.input}
               placeholder="10 min, 30 min..."
             />
           </div>
@@ -373,9 +371,9 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
                 name="isPremium"
                 checked={formData.isPremium}
                 onChange={handleInputChange}
-                className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-5 w-5"
+                className="h-5 w-5 rounded border-white/20 bg-white/[0.04] text-indigo-600 focus:ring-indigo-500"
               />
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-zinc-300">
                 Repositorio Premium
               </span>
             </label>
@@ -384,7 +382,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
 
         {/* Features */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className={ui.label}>
             Características
           </label>
           <div className="flex gap-2 mb-2">
@@ -393,20 +391,20 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
               value={featureInput}
               onChange={(e) => setFeatureInput(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addFeature())}
-              className="flex-1 rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400"
+              className={`${ui.input} flex-1`}
               placeholder="Stripe integration, Admin dashboard..."
             />
             <button
               type="button"
               onClick={addFeature}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+              className={ui.btnPrimary}
             >
               Agregar
             </button>
           </div>
           <ul className="space-y-1">
             {features.map((item, index) => (
-              <li key={index} className="flex items-center gap-2 text-sm text-gray-700">
+              <li key={index} className="flex items-center gap-2 text-sm text-zinc-300">
                 <span>• {item}</span>
                 <button
                   type="button"
@@ -422,7 +420,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
 
         {/* README */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className={ui.label}>
             README / Instrucciones
           </label>
           <textarea
@@ -430,7 +428,7 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
             value={formData.readme}
             onChange={handleInputChange}
             rows={6}
-            className="w-full rounded-md border-gray-300 shadow-sm p-3 focus:outline-gray-400 font-mono text-sm"
+            className={`${ui.input} font-mono`}
             placeholder="# Installation&#10;&#10;npm install&#10;npm run dev"
           />
         </div>
@@ -440,14 +438,14 @@ export default function AddRepoForm({ onSuccess, onCancel, initialData = null, m
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
+            className={ui.btnPrimary}
           >
             {isLoading ? "Guardando..." : mode === 'edit' ? "Actualizar Repositorio" : "Guardar Repositorio"}
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-colors font-medium"
+            className={ui.btnGhost}
           >
             Cancelar
           </button>

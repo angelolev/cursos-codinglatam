@@ -19,6 +19,28 @@
   --color-terminal-green: #87a96b;
 }
 
+/* Entrada de toasts y diálogos del panel de administración */
+@keyframes admin-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Entrada del drawer lateral del panel de administración */
+@keyframes admin-drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 body {
   background-color: #161616;
   background-image:

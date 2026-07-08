@@ -20,7 +20,7 @@ export default function Pagination({
   const getVisiblePages = () => {
     const pages = [];
     const maxVisible = 5;
-    
+
     if (totalPages <= maxVisible) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -53,44 +53,57 @@ export default function Pagination({
 
   if (totalPages <= 1) return null;
 
+  const navBtn =
+    'relative inline-flex items-center px-2 py-2 text-zinc-500 ring-1 ring-inset ring-white/10 transition-colors hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed';
+
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+    <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 sm:px-6">
       <div className="flex items-center justify-between flex-1 sm:hidden">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative inline-flex items-center rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Previous
+          Anterior
         </button>
-        <span className="text-sm text-gray-700">
-          Page {currentPage} of {totalPages}
+        <span className="text-sm tabular-nums text-zinc-400">
+          Página {currentPage} de {totalPages}
         </span>
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="relative ml-3 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative ml-3 inline-flex items-center rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Next
+          Siguiente
         </button>
       </div>
 
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div className="flex items-center space-x-2">
-          <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">{startItem}</span> to{' '}
-            <span className="font-medium">{endItem}</span> of{' '}
-            <span className="font-medium">{totalItems}</span> results
+          <p className="text-sm text-zinc-500">
+            Mostrando{' '}
+            <span className="font-medium tabular-nums text-zinc-200">
+              {startItem}
+            </span>{' '}
+            a{' '}
+            <span className="font-medium tabular-nums text-zinc-200">
+              {endItem}
+            </span>{' '}
+            de{' '}
+            <span className="font-medium tabular-nums text-zinc-200">
+              {totalItems}
+            </span>{' '}
+            resultados
           </p>
           <select
             value={itemsPerPage}
             onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-            className="ml-4 text-sm border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="ml-4 rounded-lg border border-white/10 bg-light-black px-3 py-1 text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/70"
           >
-            <option value={10}>10 per page</option>
-            <option value={25}>25 per page</option>
-            <option value={50}>50 per page</option>
-            <option value={100}>100 per page</option>
+            <option value={10}>10 por página</option>
+            <option value={25}>25 por página</option>
+            <option value={50}>50 por página</option>
+            <option value={100}>100 por página</option>
           </select>
         </div>
 
@@ -98,7 +111,7 @@ export default function Pagination({
           <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed rounded-l-md"
+            className={`${navBtn} rounded-l-lg`}
           >
             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path
@@ -115,13 +128,13 @@ export default function Pagination({
               onClick={() => typeof page === 'number' && onPageChange(page)}
               disabled={page === '...'}
               className={`
-                relative inline-flex items-center px-4 py-2 text-sm font-semibold
+                relative inline-flex items-center px-4 py-2 text-sm font-semibold tabular-nums
                 ${
                   page === currentPage
-                    ? 'z-10 bg-blue-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
+                    ? 'z-10 bg-indigo-600 text-white'
                     : page === '...'
-                    ? 'text-gray-900 ring-1 ring-inset ring-gray-300 cursor-default'
-                    : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer'
+                    ? 'text-zinc-500 ring-1 ring-inset ring-white/10 cursor-default'
+                    : 'text-zinc-300 ring-1 ring-inset ring-white/10 transition-colors hover:bg-white/5 cursor-pointer'
                 }
               `}
             >
@@ -132,7 +145,7 @@ export default function Pagination({
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed rounded-r-md"
+            className={`${navBtn} rounded-r-lg`}
           >
             <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path

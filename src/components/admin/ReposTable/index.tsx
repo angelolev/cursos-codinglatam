@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Trash2, ExternalLink, Crown, Pencil } from "lucide-react";
 import Swal from "sweetalert2";
 import { StarterRepoProps } from "@/types/starter-repo";
+import { ui, badge } from "@/components/admin/ui";
 
 interface ReposTableProps {
   repos: (StarterRepoProps & { id: string })[];
@@ -21,10 +22,12 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
       text: `¿Quieres eliminar "${title}"? Esta acción no se puede deshacer.`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#3f3f46",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
+      background: "#1e1e1e",
+      color: "#e4e4e7",
     });
 
     if (result.isConfirmed) {
@@ -47,6 +50,8 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
           icon: "success",
           timer: 2000,
           showConfirmButton: false,
+          background: "#1e1e1e",
+          color: "#e4e4e7",
         });
 
         onDelete();
@@ -55,6 +60,8 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
           title: "Error",
           text: error instanceof Error ? error.message : "Error al eliminar",
           icon: "error",
+          background: "#1e1e1e",
+          color: "#e4e4e7",
         });
       } finally {
         setDeletingId(null);
@@ -63,18 +70,18 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
   };
 
   const difficultyColors = {
-    Principiante: "bg-green-100 text-green-800",
-    Intermedio: "bg-yellow-100 text-yellow-800",
-    Avanzado: "bg-red-100 text-red-800",
+    Principiante: badge("emerald"),
+    Intermedio: badge("amber"),
+    Avanzado: badge("red"),
   };
 
   if (repos.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-8 text-center">
-        <p className="text-gray-500 text-lg">
+      <div className={`${ui.cardPadded} p-8 text-center`}>
+        <p className="text-zinc-400 text-lg">
           No hay repositorios creados todavía.
         </p>
-        <p className="text-gray-400 mt-2">
+        <p className="text-zinc-500 mt-2">
           Haz clic en &quot;Nuevo Repositorio&quot; para crear uno.
         </p>
       </div>
@@ -82,34 +89,22 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
   }
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className={ui.card}>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className={ui.table}>
+          <thead className={ui.thead}>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Imagen
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Título / Categoría
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Stack
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Dificultad
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Estado
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Acciones
-              </th>
+              <th className={ui.th}>Imagen</th>
+              <th className={ui.th}>Título / Categoría</th>
+              <th className={ui.th}>Stack</th>
+              <th className={ui.th}>Dificultad</th>
+              <th className={ui.th}>Estado</th>
+              <th className={ui.th}>Acciones</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className={ui.tbody}>
             {repos.map((repo) => (
-              <tr key={repo.id} className="hover:bg-gray-50">
+              <tr key={repo.id} className={ui.tr}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Image
                     src={repo.thumbnail}
@@ -120,23 +115,20 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
                   />
                 </td>
                 <td className="px-6 py-4">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-zinc-100">
                     {repo.title}
                   </div>
-                  <div className="text-sm text-gray-500">{repo.category}</div>
+                  <div className="text-sm text-zinc-500">{repo.category}</div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-wrap gap-1">
                     {repo.stack.slice(0, 3).map((tech, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs"
-                      >
+                      <span key={index} className={badge("indigo")}>
                         {tech}
                       </span>
                     ))}
                     {repo.stack.length > 3 && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">
+                      <span className={badge("zinc")}>
                         +{repo.stack.length - 3}
                       </span>
                     )}
@@ -144,25 +136,23 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    className={
                       difficultyColors[
                         repo.difficulty as keyof typeof difficultyColors
                       ]
-                    }`}
+                    }
                   >
                     {repo.difficulty}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {repo.isPremium ? (
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-full text-xs font-semibold">
+                    <span className={badge("indigo")}>
                       <Crown className="h-3 w-3" />
                       Premium
                     </span>
                   ) : (
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                      Gratis
-                    </span>
+                    <span className={badge("emerald")}>Gratis</span>
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -171,14 +161,14 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
                       href={`/repositorios/${repo.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-indigo-600 hover:text-indigo-900 inline-flex items-center gap-1"
+                      className="text-indigo-400 hover:text-indigo-300 inline-flex items-center gap-1 transition-colors"
                     >
                       <ExternalLink className="h-4 w-4" />
                       Ver
                     </a>
                     <button
                       onClick={() => onEdit(repo)}
-                      className="text-blue-600 hover:text-blue-900 inline-flex items-center gap-1"
+                      className="text-zinc-300 hover:text-white inline-flex items-center gap-1 transition-colors"
                     >
                       <Pencil className="h-4 w-4" />
                       Editar
@@ -186,10 +176,10 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
                     <button
                       onClick={() => handleDelete(repo.id, repo.title)}
                       disabled={deletingId === repo.id}
-                      className={`inline-flex items-center gap-1 ${
+                      className={`inline-flex items-center gap-1 transition-colors ${
                         deletingId === repo.id
-                          ? "text-gray-400 cursor-not-allowed"
-                          : "text-red-600 hover:text-red-900"
+                          ? "text-zinc-600 cursor-not-allowed"
+                          : "text-red-400 hover:text-red-300"
                       }`}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -202,9 +192,11 @@ export default function ReposTable({ repos, onDelete, onEdit }: ReposTableProps)
           </tbody>
         </table>
       </div>
-      <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-        <p className="text-sm text-gray-600">
-          Total: {repos.length} repositorio{repos.length !== 1 ? "s" : ""}
+      <div className="px-6 py-4 bg-white/[0.02] border-t border-white/10">
+        <p className="text-sm text-zinc-500">
+          Total:{" "}
+          <span className="tabular-nums text-zinc-300">{repos.length}</span>{" "}
+          repositorio{repos.length !== 1 ? "s" : ""}
         </p>
       </div>
     </div>

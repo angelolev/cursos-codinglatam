@@ -1,4 +1,5 @@
 import { AdminUser, AdminMetrics, FilterState, SortField, SortDirection } from '@/types/admin';
+import { badge } from '@/components/admin/ui';
 
 export function formatRelativeDate(date: Date | null): string {
   if (!date) return 'fecha desconocida';
@@ -18,20 +19,45 @@ export function formatRelativeDate(date: Date | null): string {
   return `${Math.floor(diffInDays / 365)}y ago`;
 }
 
+export function downloadCSV(
+  headers: string[],
+  rows: string[][],
+  filenamePrefix: string
+): void {
+  const csvContent = [
+    headers.join(','),
+    ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
+  ].join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+
+  link.setAttribute('href', url);
+  link.setAttribute(
+    'download',
+    `${filenamePrefix}_${new Date().toISOString().split('T')[0]}.csv`
+  );
+  link.style.visibility = 'hidden';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
 export function getSubscriptionStatusColor(status?: string): string {
   switch (status) {
     case 'active':
-      return 'bg-green-100 text-green-800';
+      return badge('emerald');
     case 'cancelled':
-      return 'bg-yellow-100 text-yellow-800';
+      return badge('amber');
     case 'expired':
-      return 'bg-red-100 text-red-800';
     case 'unpaid':
-      return 'bg-red-100 text-red-800';
+      return badge('red');
     case 'paused':
-      return 'bg-gray-100 text-gray-800';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return badge('zinc');
   }
 }
 

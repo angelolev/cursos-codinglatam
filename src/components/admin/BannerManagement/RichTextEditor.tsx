@@ -33,7 +33,8 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm max-w-none focus:outline-none min-h-[80px] p-3',
+        class:
+          'prose prose-sm prose-invert max-w-none focus:outline-none min-h-[80px] p-3 text-zinc-100',
       },
     },
   });
@@ -41,14 +42,14 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
   if (!editor) return null;
 
   return (
-    <div className="border border-gray-300 rounded-md overflow-hidden">
+    <div className="rounded-lg border border-white/10 bg-white/[0.04] overflow-hidden">
       {/* Toolbar */}
-      <div className="flex gap-1 p-2 border-b border-gray-200 bg-gray-50">
+      <div className="flex gap-1 p-2 border-b border-white/10 bg-white/[0.02]">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-            editor.isActive('bold') ? 'bg-gray-300' : ''
+          className={`p-2 rounded text-zinc-300 hover:bg-white/10 transition-colors ${
+            editor.isActive('bold') ? 'bg-white/15 text-white' : ''
           }`}
           title="Bold (⌘B)"
         >
@@ -57,8 +58,8 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-            editor.isActive('italic') ? 'bg-gray-300' : ''
+          className={`p-2 rounded text-zinc-300 hover:bg-white/10 transition-colors ${
+            editor.isActive('italic') ? 'bg-white/15 text-white' : ''
           }`}
           title="Italic (⌘I)"
         >
