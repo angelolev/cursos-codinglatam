@@ -166,6 +166,7 @@ export default function WaitlistPage() {
   }>({ type: null, message: "" });
   const [avatars, setAvatars] = useState<WaitlistAvatar[]>([]);
   const [avatarsLoading, setAvatarsLoading] = useState(true);
+  const [certCount, setCertCount] = useState<number | null>(null);
 
   // Precios fijos en soles peruanos (PEN)
   const REGULAR_PRICE_PEN = "S/ 129";
@@ -253,6 +254,24 @@ export default function WaitlistPage() {
     }
 
     fetchAvatars();
+  }, []);
+
+  useEffect(() => {
+    async function fetchCertCount() {
+      try {
+        const response = await fetch("/api/certificates/count");
+        const data = await response.json();
+
+        if (typeof data.count === "number") {
+          setCertCount(data.count);
+        }
+      } catch (error) {
+        console.error("Failed to load certificate count:", error);
+        // Mantener certCount en null -> fallback al valor estático
+      }
+    }
+
+    fetchCertCount();
   }, []);
 
   // Programa completo: 8 clases en vivo los sábados 5 y 12 de setiembre (9:00 AM - 12:00 PM)
@@ -562,14 +581,16 @@ export default function WaitlistPage() {
             </>
           )}
 
-          {/* Badge +176 */}
+          {/* Badge +certificados emitidos */}
           <div className="w-12 h-12 rounded-full bg-claude border-2 border-[#161616] flex items-center justify-center">
-            <span className="text-xs font-bold text-white">+176</span>
+            <span className="text-xs font-bold text-white">
+              +{certCount ?? 176}
+            </span>
           </div>
         </div>
         <p className="text-white/50 text-sm">
-          Más de 176 desarrolladores ya llevaron el curso de Claude Code. Sé
-          parte de la Cohorte 4.
+          Más de {certCount ?? 176} desarrolladores ya llevaron el curso de
+          Claude Code. Sé parte de la Cohorte 4.
         </p>
       </div>
 
