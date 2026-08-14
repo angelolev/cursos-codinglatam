@@ -28,7 +28,7 @@ import cardImage from "@/assets/card.svg";
 import americanExpressImage from "@/assets/amex.svg";
 import yapeImage from "@/assets/yape.svg";
 import plinImage from "@/assets/plin.svg";
-import yapeQR from "@/assets/yape-qr.png";
+import yapeQR from "@/assets/yape-qr.jpeg";
 
 // Grupo oficial de WhatsApp de la Cohorte 4 — canal de información (temario, horarios, avisos)
 const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/Js2oMPiEjEsHWbP8u6ugwK";
@@ -704,7 +704,7 @@ export default function WaitlistPage() {
           <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
         </Link>
         <p className="text-white/40 text-sm mt-4">
-          Pago seguro procesado por Lemon Squeezy
+          Pago seguro procesado por Mercado Pago
         </p>
       </div>
 
@@ -1344,7 +1344,7 @@ export default function WaitlistPage() {
             </div>
 
             <Link
-              href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/5e5924f2-44e3-43f5-b244-d68446726556"
+              href="https://mpago.la/1AtG6Sd"
               className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-claude-deep to-claude px-10 py-5 text-xl font-bold text-white shadow-lg shadow-claude-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-claude/40 cursor-pointer"
             >
               <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
@@ -1353,7 +1353,7 @@ export default function WaitlistPage() {
               <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <p className="text-white/40 text-sm mt-4">
-              Pago seguro procesado por Lemon Squeezy
+              Pago seguro procesado por Mercado Pago
             </p>
           </div>
         </div>
