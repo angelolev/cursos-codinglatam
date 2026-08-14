@@ -158,7 +158,8 @@ export function generateCertificateMetadata(certificate: CertificateProps): Meta
 export function generatePageMetadata(
   title: string,
   description: string,
-  path?: string
+  path?: string,
+  image: string = DEFAULT_IMAGE
 ): Metadata {
   const url = path ? `${SITE_URL}${path}` : SITE_URL;
 
@@ -172,7 +173,7 @@ export function generatePageMetadata(
       siteName: SITE_NAME,
       images: [
         {
-          url: DEFAULT_IMAGE,
+          url: image,
           width: 1200,
           height: 630,
           alt: `${title} - ${SITE_NAME}`,
@@ -184,7 +185,7 @@ export function generatePageMetadata(
       card: "summary_large_image",
       title,
       description,
-      images: [DEFAULT_IMAGE],
+      images: [image],
     },
   };
 }
