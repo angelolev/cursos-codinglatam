@@ -274,10 +274,10 @@ export default function WaitlistPage() {
     fetchCertCount();
   }, []);
 
-  // Programa completo: 8 clases en vivo los sábados 18 y 25 de julio (9:00 AM - 12:00 PM)
+  // Programa completo: 8 clases en vivo los sábados 5 y 12 de setiembre (9:00 AM - 12:00 PM)
   const program = [
     {
-      block: "Sábado 18 de julio",
+      block: "Sábado 5 de setiembre",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -329,7 +329,7 @@ export default function WaitlistPage() {
       ],
     },
     {
-      block: "Sábado 25 de julio",
+      block: "Sábado 12 de setiembre",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -478,7 +478,7 @@ export default function WaitlistPage() {
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-claude" />
           </span>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-claude-deep">
-            Inscripciones abiertas — Julio 2026
+            Inscripciones abiertas — Setiembre 2026
           </span>
         </div>
 
@@ -695,7 +695,7 @@ export default function WaitlistPage() {
         </p>
 
         <Link
-          href="https://cursoscodinglatam.lemonsqueezy.com/checkout/buy/5e5924f2-44e3-43f5-b244-d68446726556"
+          href="https://mpago.la/1AtG6Sd"
           className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-claude-deep to-claude px-10 py-5 text-xl font-bold text-white shadow-lg shadow-claude-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-claude/40 cursor-pointer"
         >
           <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
@@ -910,7 +910,7 @@ export default function WaitlistPage() {
             ¿Qué vas a dominar?
           </h3>
           <p className="text-white/50 max-w-2xl mx-auto">
-            Un programa intensivo los sábados 18 y 25 de julio (9:00 AM – 12:00
+            Un programa intensivo los sábados 5 y 12 de setiembre (9:00 AM – 12:00
             PM) donde pasarás de cero con Claude Code a construir proyectos
             completos con agentes autónomos de IA.
           </p>
@@ -1331,7 +1331,7 @@ export default function WaitlistPage() {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Calendar className="h-4 w-4 text-claude" />
-                Sábados 18 y 25 de julio
+                Sábados 5 y 12 de setiembre
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Clock className="h-4 w-4 text-claude" />
