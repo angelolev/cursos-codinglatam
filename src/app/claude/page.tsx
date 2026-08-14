@@ -274,10 +274,10 @@ export default function WaitlistPage() {
     fetchCertCount();
   }, []);
 
-  // Programa completo: 8 clases en vivo los sábados 5 y 12 de setiembre (9:00 AM - 12:00 PM)
+  // Programa completo: 8 clases en vivo los sábados 12 y 13 de setiembre (9:00 AM - 12:00 PM)
   const program = [
     {
-      block: "Sábado 5 de setiembre",
+      block: "Sábado 12 de setiembre",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -329,7 +329,7 @@ export default function WaitlistPage() {
       ],
     },
     {
-      block: "Sábado 12 de setiembre",
+      block: "Sábado 13 de setiembre",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -910,7 +910,7 @@ export default function WaitlistPage() {
             ¿Qué vas a dominar?
           </h3>
           <p className="text-white/50 max-w-2xl mx-auto">
-            Un programa intensivo los sábados 5 y 12 de setiembre (9:00 AM – 12:00
+            Un programa intensivo los sábados 12 y 13 de setiembre (9:00 AM – 12:00
             PM) donde pasarás de cero con Claude Code a construir proyectos
             completos con agentes autónomos de IA.
           </p>
@@ -1331,7 +1331,7 @@ export default function WaitlistPage() {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Calendar className="h-4 w-4 text-claude" />
-                Sábados 5 y 12 de setiembre
+                Sábados 12 y 13 de setiembre
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Clock className="h-4 w-4 text-claude" />
