@@ -28,7 +28,7 @@ import cardImage from "@/assets/card.svg";
 import americanExpressImage from "@/assets/amex.svg";
 import yapeImage from "@/assets/yape.svg";
 import plinImage from "@/assets/plin.svg";
-import yapeQR from "@/assets/yape-qr.png";
+import yapeQR from "@/assets/yape-qr.jpeg";
 
 // Grupo oficial de WhatsApp de la Cohorte 4 — canal de información (temario, horarios, avisos)
 const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/Js2oMPiEjEsHWbP8u6ugwK";
