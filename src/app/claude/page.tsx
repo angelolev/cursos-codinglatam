@@ -30,7 +30,7 @@ import yapeImage from "@/assets/yape.svg";
 import plinImage from "@/assets/plin.svg";
 import yapeQR from "@/assets/yape-qr.png";
 
-// Grupo oficial de WhatsApp de la Cohorte 3 — canal de información (temario, horarios, avisos)
+// Grupo oficial de WhatsApp de la Cohorte 4 — canal de información (temario, horarios, avisos)
 const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/Js2oMPiEjEsHWbP8u6ugwK";
 
 // WhatsApp brand glyph
@@ -590,7 +590,7 @@ export default function WaitlistPage() {
         </div>
         <p className="text-white/50 text-sm">
           Más de {certCount ?? 176} desarrolladores ya llevaron el curso de
-          Claude Code. Sé parte de la Cohorte 3.
+          Claude Code. Sé parte de la Cohorte 4.
         </p>
       </div>
 
@@ -603,7 +603,7 @@ export default function WaitlistPage() {
             <WhatsAppIcon className="h-6 w-6 text-[#25D366]" />
           </div>
           <h3 className="mb-2 text-xl font-bold text-white/90">
-            Grupo oficial de la Cohorte 3
+            Grupo oficial de la Cohorte 4
           </h3>
           <p className="mx-auto mb-6 max-w-md text-sm text-white/60">
             Toda la información del programa —
@@ -691,7 +691,7 @@ export default function WaitlistPage() {
           Asegura tu lugar con descuento
         </h2>
         <p className="text-white/50 mb-6 text-lg">
-          Únete a la tercera cohorte que dominará Claude Code profesionalmente
+          Únete a la cuarta cohorte que dominará Claude Code profesionalmente
         </p>
 
         <Link
@@ -1319,7 +1319,7 @@ export default function WaitlistPage() {
 
             <h3 className="text-2xl md:text-4xl font-bold text-white/90 mb-4 leading-tight">
               Asegura tu lugar en la{" "}
-              <span className="text-claude">Cohorte 3</span>
+              <span className="text-claude">Cohorte 4</span>
             </h3>
             <p className="text-white/55 max-w-xl mx-auto mb-8">
               2 sábados intensivos para dominar Claude Code y salir construyendo
