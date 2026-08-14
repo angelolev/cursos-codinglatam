@@ -30,7 +30,7 @@ import yapeImage from "@/assets/yape.svg";
 import plinImage from "@/assets/plin.svg";
 import yapeQR from "@/assets/yape-qr.png";
 
-// Grupo oficial de WhatsApp de la Cohorte 3 — canal de información (temario, horarios, avisos)
+// Grupo oficial de WhatsApp de la Cohorte 4 — canal de información (temario, horarios, avisos)
 const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/Js2oMPiEjEsHWbP8u6ugwK";
 
 // WhatsApp brand glyph
@@ -255,10 +255,10 @@ export default function WaitlistPage() {
     fetchAvatars();
   }, []);
 
-  // Programa completo: 8 clases en vivo los sábados 18 y 25 de julio (9:00 AM - 12:00 PM)
+  // Programa completo: 8 clases en vivo los sábados 5 y 12 de setiembre (9:00 AM - 12:00 PM)
   const program = [
     {
-      block: "Sábado 18 de julio",
+      block: "Sábado 5 de setiembre",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -310,7 +310,7 @@ export default function WaitlistPage() {
       ],
     },
     {
-      block: "Sábado 25 de julio",
+      block: "Sábado 12 de setiembre",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -459,7 +459,7 @@ export default function WaitlistPage() {
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-claude" />
           </span>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-claude-deep">
-            Inscripciones abiertas — Julio 2026
+            Inscripciones abiertas — Setiembre 2026
           </span>
         </div>
 
@@ -569,7 +569,7 @@ export default function WaitlistPage() {
         </div>
         <p className="text-white/50 text-sm">
           Más de 176 desarrolladores ya llevaron el curso de Claude Code. Sé
-          parte de la Cohorte 3.
+          parte de la Cohorte 4.
         </p>
       </div>
 
@@ -582,7 +582,7 @@ export default function WaitlistPage() {
             <WhatsAppIcon className="h-6 w-6 text-[#25D366]" />
           </div>
           <h3 className="mb-2 text-xl font-bold text-white/90">
-            Grupo oficial de la Cohorte 3
+            Grupo oficial de la Cohorte 4
           </h3>
           <p className="mx-auto mb-6 max-w-md text-sm text-white/60">
             Toda la información del programa —
@@ -670,7 +670,7 @@ export default function WaitlistPage() {
           Asegura tu lugar con descuento
         </h2>
         <p className="text-white/50 mb-6 text-lg">
-          Únete a la tercera cohorte que dominará Claude Code profesionalmente
+          Únete a la cuarta cohorte que dominará Claude Code profesionalmente
         </p>
 
         <Link
@@ -889,7 +889,7 @@ export default function WaitlistPage() {
             ¿Qué vas a dominar?
           </h3>
           <p className="text-white/50 max-w-2xl mx-auto">
-            Un programa intensivo los sábados 18 y 25 de julio (9:00 AM – 12:00
+            Un programa intensivo los sábados 5 y 12 de setiembre (9:00 AM – 12:00
             PM) donde pasarás de cero con Claude Code a construir proyectos
             completos con agentes autónomos de IA.
           </p>
@@ -1298,7 +1298,7 @@ export default function WaitlistPage() {
 
             <h3 className="text-2xl md:text-4xl font-bold text-white/90 mb-4 leading-tight">
               Asegura tu lugar en la{" "}
-              <span className="text-claude">Cohorte 3</span>
+              <span className="text-claude">Cohorte 4</span>
             </h3>
             <p className="text-white/55 max-w-xl mx-auto mb-8">
               2 sábados intensivos para dominar Claude Code y salir construyendo
@@ -1310,7 +1310,7 @@ export default function WaitlistPage() {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Calendar className="h-4 w-4 text-claude" />
-                Sábados 18 y 25 de julio
+                Sábados 5 y 12 de setiembre
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Clock className="h-4 w-4 text-claude" />
