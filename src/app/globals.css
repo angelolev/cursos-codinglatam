@@ -17,6 +17,9 @@
   --color-claude: #d97757;
   --color-claude-deep: #c15f3c;
   --color-terminal-green: #87a96b;
+  /* Antigravity brochure palette */
+  --color-antigravity: #669df6;
+  --color-antigravity-deep: #4285f4;
 }
 
 /* Entrada de toasts y diálogos del panel de administración */
