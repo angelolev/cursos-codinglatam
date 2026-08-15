@@ -169,9 +169,9 @@ export default function WaitlistPage() {
   const [certCount, setCertCount] = useState<number | null>(null);
 
   // Precios fijos en soles peruanos (PEN)
-  const REGULAR_PRICE_PEN = "S/ 129";
-  const EARLY_BIRD_PRICE_PEN = "S/ 99";
-  const SAVINGS_PEN = "S/ 30";
+  const REGULAR_PRICE_PEN = "S/ 199";
+  const EARLY_BIRD_PRICE_PEN = "S/ 129";
+  const SAVINGS_PEN = "S/ 70";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -274,7 +274,7 @@ export default function WaitlistPage() {
     fetchCertCount();
   }, []);
 
-  // Programa completo: 8 clases en vivo los sábados 12 y 13 de setiembre (9:00 AM - 12:00 PM)
+  // Programa completo: 8 clases en vivo el sábado 12 y domingo 13 de setiembre (9:00 AM - 12:00 PM)
   const program = [
     {
       block: "Sábado 12 de setiembre",
@@ -329,7 +329,7 @@ export default function WaitlistPage() {
       ],
     },
     {
-      block: "Sábado 13 de setiembre",
+      block: "Domingo 13 de setiembre",
       schedule: "9:00 AM – 12:00 PM",
       classes: [
         {
@@ -391,7 +391,7 @@ export default function WaitlistPage() {
     {
       n: "02",
       title: "Progresivo y guiado",
-      text: "Desde los fundamentos hasta producción. Cada sábado construye sobre el anterior con complejidad creciente.",
+      text: "Desde los fundamentos hasta producción. Cada día construye sobre el anterior con complejidad creciente.",
     },
     {
       n: "03",
@@ -491,7 +491,7 @@ export default function WaitlistPage() {
         </h1>
 
         <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-12">
-          <strong className="text-claude">Solo 2 sábados</strong> para pasar de
+          <strong className="text-claude">Solo 2 días</strong> para pasar de
           cero a dominar Claude Code, el AI coding assistant más potente del
           mercado. 6 horas 100% prácticas, sin relleno, donde sales construyendo
           proyectos completos con agentes autónomos de IA.
@@ -501,7 +501,7 @@ export default function WaitlistPage() {
         <div className="flex justify-center mb-12">
           {[
             { value: "6", label: "Horas en vivo" },
-            { value: "2", label: "Sábados" },
+            { value: "2", label: "Días" },
             { value: "100%", label: "Práctico" },
           ].map((stat, i) => (
             <div
@@ -905,12 +905,12 @@ export default function WaitlistPage() {
       {/* Programa Section */}
       <div className="mt-20 max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <Eyebrow>Programa · 8 clases en 2 sábados</Eyebrow>
+          <Eyebrow>Programa · 8 clases en 2 días</Eyebrow>
           <h3 className="text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
             ¿Qué vas a dominar?
           </h3>
           <p className="text-white/50 max-w-2xl mx-auto">
-            Un programa intensivo los sábados 12 y 13 de setiembre (9:00 AM – 12:00
+            Un programa intensivo el sábado 12 y domingo 13 de setiembre (9:00 AM – 12:00
             PM) donde pasarás de cero con Claude Code a construir proyectos
             completos con agentes autónomos de IA.
           </p>
@@ -1322,7 +1322,7 @@ export default function WaitlistPage() {
               <span className="text-claude">Cohorte 4</span>
             </h3>
             <p className="text-white/55 max-w-xl mx-auto mb-8">
-              2 sábados intensivos para dominar Claude Code y salir construyendo
+              2 días intensivos para dominar Claude Code y salir construyendo
               proyectos reales. El precio Early Bird es solo para los primeros
               10.
             </p>
@@ -1331,7 +1331,7 @@ export default function WaitlistPage() {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Calendar className="h-4 w-4 text-claude" />
-                Sábados 12 y 13 de setiembre
+                Sábado 12 y domingo 13 de setiembre
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Clock className="h-4 w-4 text-claude" />

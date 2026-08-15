@@ -4,7 +4,7 @@ import { generatePageMetadata } from "@/utils/metadata";
 export const metadata: Metadata = {
   ...generatePageMetadata(
     "Certificación Claude Code Dev — Cohorte 4",
-    "Domina Claude Code en 2 sábados intensivos: 6 horas en vivo, 100% prácticas. De cero a construir proyectos completos con agentes autónomos de IA. Certificación · Cohorte 4 · Julio 2026. Early Bird para los primeros 10.",
+    "Domina Claude Code en 2 días intensivos: 6 horas en vivo, 100% prácticas. De cero a construir proyectos completos con agentes autónomos de IA. Certificación · Cohorte 4 · Setiembre 2026. Early Bird para los primeros 10.",
     "/claude",
     "https://codinglatam.dev/claude-og.png"
   ),
