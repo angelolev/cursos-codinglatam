@@ -43,8 +43,8 @@ export const PEFlag = () => (
 
 // Uppercase letter-spaced eyebrow label with a code-comment motif (// PROGRAMA)
 export const Eyebrow = ({ children }: { children: React.ReactNode }) => (
-  <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-claude-deep">
-    <span className="text-claude/40">{"// "}</span>
+  <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-accent-deep">
+    <span className="text-accent/40">{"// "}</span>
     {children}
   </span>
 );
@@ -54,7 +54,7 @@ export const cardClass =
   "relative rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.055] to-white/[0.015] backdrop-blur-sm overflow-hidden shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),0_24px_48px_-28px_rgba(0,0,0,0.7)]";
 
 export const TopAccent = () => (
-  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-claude/80 via-claude/20 to-transparent" />
+  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-accent/80 via-accent/20 to-transparent" />
 );
 
 // Terminal window — chrome bar + prompt, echoing the testimonial editor tabs
@@ -72,7 +72,7 @@ export const TerminalSnippet = ({
   <div className="mx-auto max-w-md overflow-hidden rounded-xl border border-white/10 bg-black/50 text-left shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)]">
     <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-2.5">
       <span className="flex items-center gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-claude/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-accent/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
       </span>
@@ -80,11 +80,11 @@ export const TerminalSnippet = ({
     </div>
     <div className="px-5 py-4 text-sm leading-relaxed">
       <div className="text-terminal-green">
-        <span className="text-claude">$</span> {command}
+        <span className="text-accent">$</span> {command}
       </div>
       <div className="mt-1 text-white/55">
         &quot;{prompt}&quot;
-        <span className="animate-caret ml-1 inline-block h-4 w-2 translate-y-0.5 bg-claude" />
+        <span className="animate-caret ml-1 inline-block h-4 w-2 translate-y-0.5 bg-accent" />
       </div>
       <div className="mt-2 text-white/30">
         <span className="text-terminal-green">✓</span> {result}

@@ -72,7 +72,9 @@ export default async function Home() {
     );
 
     return (
-      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
+      // El acento de las primitivas del brochure toma el dorado de la marca
+      // (mismo color del logo) en lugar del terracota de las landings de Claude.
+      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow [--accent:#ecb033] [--accent-deep:#e4911c]">
         {isActiveStudent ? (
           <ContinueLearningServerSide recentCourses={recentCourseActivity} />
         ) : (

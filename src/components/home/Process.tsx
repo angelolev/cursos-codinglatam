@@ -52,7 +52,7 @@ export default function Process() {
           <div key={s.n} className={`${cardClass} p-6`}>
             <TopAccent />
             <div className="flex items-baseline justify-between mb-3">
-              <span className="text-4xl font-bold text-claude/30">{s.n}</span>
+              <span className="text-4xl font-bold text-accent/30">{s.n}</span>
               <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/35">
                 {s.dur}
               </span>

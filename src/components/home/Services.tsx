@@ -75,8 +75,8 @@ export default function Services() {
           <div key={s.title} className={`${cardClass} p-7`}>
             <TopAccent />
             <div className="flex items-start gap-4 mb-4">
-              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-claude-deep/30 bg-claude-deep/10">
-                <s.icon className="h-5 w-5 text-claude" />
+              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-accent-deep/30 bg-accent-deep/10">
+                <s.icon className="h-5 w-5 text-accent" />
               </span>
               <div>
                 <h3 className="text-lg font-bold text-white/90">{s.title}</h3>
@@ -89,7 +89,7 @@ export default function Services() {
                   key={b}
                   className="flex items-start gap-2.5 text-sm text-white/65"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-claude shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
                   <span>{b}</span>
                 </li>
               ))}

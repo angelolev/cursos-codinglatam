@@ -53,20 +53,20 @@ export default function Programs() {
           <Link
             key={p.href}
             href={p.href}
-            className={`${cardClass} group p-7 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-claude/40 hover:shadow-[0_16px_50px_-12px_rgba(217,119,87,0.4)]`}
+            className={`${cardClass} group p-7 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_16px_50px_-12px_rgba(236,176,51,0.4)]`}
           >
             <TopAccent />
             <div className="flex items-center justify-between mb-5">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-claude-deep/30 bg-claude-deep/10">
-                <p.icon className="h-5 w-5 text-claude" />
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-accent-deep/30 bg-accent-deep/10">
+                <p.icon className="h-5 w-5 text-accent" />
               </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-claude-deep">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent-deep">
                 {p.tag}
               </span>
             </div>
             <h3 className="text-lg font-bold text-white/90 mb-2">{p.title}</h3>
             <p className="text-sm text-white/60 flex-grow">{p.text}</p>
-            <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-claude">
+            <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent">
               {p.cta}
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </span>
