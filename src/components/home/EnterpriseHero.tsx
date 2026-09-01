@@ -64,17 +64,17 @@ export default function EnterpriseHero() {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-white/90 mb-6 leading-[1.08]">
-            Tu socio tecnológico para{" "}
+            La IA ya está en tu empresa.{" "}
             <span className="text-accent underline decoration-accent-deep/50 decoration-2 underline-offset-[10px] drop-shadow-[0_0_30px_rgba(236,176,51,0.35)]">
-              potenciar tus proyectos con IA
+              Falta que trabaje para ella.
             </span>
           </h1>
 
           <p className="text-lg md:text-xl text-white/60 max-w-xl mb-10">
-            Capacitamos a tu equipo, implementamos agentes y automatizaciones
-            sobre tus procesos reales y te acompañamos hasta que la IA sea parte
-            de cómo trabaja tu empresa. Sin teoría de relleno, sin demos que no
-            llegan a producción.
+            Tu equipo ya usa chats de IA por su cuenta. Nosotros tomamos los
+            procesos que hoy le cuestan horas, los resolvemos con agentes y
+            automatizaciones, y formamos al equipo para que los opere. Con
+            resultados medidos antes de escalar.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10">
