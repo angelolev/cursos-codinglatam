@@ -47,28 +47,26 @@ export default function Services() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {services.map((s) => (
-          <div key={s.title} className={`${cardClass} p-7`}>
+          <div key={s.title} className={`${cardClass} p-6 flex flex-col`}>
             <TopAccent />
-            <div className="flex items-start gap-4">
-              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-accent-deep/30 bg-accent-deep/10">
-                <s.icon className="h-5 w-5 text-accent" />
-              </span>
-              <div className="min-w-0">
-                <h3 className="text-lg font-bold text-white/90">{s.title}</h3>
-                <p className="text-sm text-white/60 mt-1.5">{s.text}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {s.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/55"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-accent-deep/30 bg-accent-deep/10 mb-5">
+              <s.icon className="h-5 w-5 text-accent" />
+            </span>
+            <h3 className="text-lg font-bold text-white/90 leading-snug">
+              {s.title}
+            </h3>
+            <p className="text-sm text-white/60 mt-2 flex-grow">{s.text}</p>
+            <div className="mt-5 flex flex-wrap gap-1.5">
+              {s.tags.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-white/10 px-2.5 py-0.5 text-[11px] text-white/55"
+                >
+                  {t}
+                </span>
+              ))}
             </div>
           </div>
         ))}
