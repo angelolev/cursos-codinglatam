@@ -53,6 +53,17 @@
   }
 }
 
+/* Desplazamiento suave al navegar entre secciones por ancla (#servicios, #contacto…) */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background-color: #161616;
   background-image:
