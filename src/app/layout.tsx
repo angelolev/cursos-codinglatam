@@ -22,7 +22,8 @@ const organizationSchema = {
   name: "Coding Latam",
   url: "https://codinglatam.dev",
   logo: "https://codinglatam.dev/og.png",
-  description: "Aprende a programar HACIENDO proyectos reales.",
+  description:
+    "Socio tecnológico de empresas y equipos: capacitación en IA, agentes a medida y automatización de procesos.",
 };
 
 export default async function RootLayout({

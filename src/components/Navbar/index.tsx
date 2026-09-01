@@ -9,7 +9,8 @@ import {
   ChevronDown,
   Rocket,
   Play,
-} from "lucide-react";
+  Building2,
+} from"lucide-react";
 import Logo from "../Logo";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -75,6 +76,13 @@ export function Navbar() {
 
           {/* Desktop Menu */}
           <div className="menu gap-12  flex items-center">
+            <Link
+              href="/#servicios"
+              className="hidden text-white/90 md:flex gap-2 items-center"
+            >
+              <Building2 size={18} />
+              Empresas
+            </Link>
             <Link
               href="/proyectos"
               className="hidden text-white/90 md:flex gap-2 items-center"
@@ -187,6 +195,13 @@ export function Navbar() {
               </Link>
             )}
 
+            <Link
+              href="/#servicios"
+              className="text-gray-700 border-b flex py-2 px-3 gap-2 items-center"
+            >
+              <Building2 size={18} />
+              Empresas
+            </Link>
             <Link
               href="/proyectos"
               className="text-gray-700 border-b flex py-2 px-3 gap-2 items-center"
