@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import {
@@ -32,7 +33,7 @@ import SortableHeader from "@/components/admin/SortableHeader";
 import { ui, badge } from "@/components/admin/ui";
 import { StarterRepoProps } from "@/types/starter-repo";
 import { WorkshopProps } from "@/types/workshop";
-import { Plus, Download, Copy, Check, ExternalLink, Pencil, Save, X } from "lucide-react";
+import { Plus, Download, ExternalLink, Pencil, Save, X } from "lucide-react";
 
 type TabType = "usuarios" | "repositorios" | "banner" | "waitlist" | "certificados" | "workshops";
 
@@ -92,14 +93,15 @@ function AdminDashboard() {
   const [repos, setRepos] = useState<(StarterRepoProps & { id: string })[]>([]);
   const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
   const [certificates, setCertificates] = useState<CertificateEntry[]>([]);
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [certSearch, setCertSearch] = useState("");
+  const [certCourseFilter, setCertCourseFilter] = useState("all");
+  const [certDateFrom, setCertDateFrom] = useState("");
+  const [certDateTo, setCertDateTo] = useState("");
   const [showCertForm, setShowCertForm] = useState(false);
   const [certForm, setCertForm] = useState({
     studentName: "",
     courseName: "",
     completionDate: "",
-    certificateUrl: "",
   });
   const [savingCert, setSavingCert] = useState(false);
   const [workshops, setWorkshops] = useState<(WorkshopProps & { id: string })[]>([]);
@@ -255,15 +257,14 @@ function AdminDashboard() {
     }
   };
 
-  const copyLink = (code: string) => {
-    navigator.clipboard.writeText(`https://codinglatam.dev/certificados/${code}`);
-    setCopiedCode(code);
-    setTimeout(() => setCopiedCode(null), 2000);
-  };
+  const certificatePath = (code: string) => `/certificados/${code}`;
 
   const handleCreateCertificate = async (e: React.FormEvent) => {
     e.preventDefault();
     setSavingCert(true);
+    // El tab se abre antes del await: si se abriera después, el navegador lo
+    // trataría como popup y lo bloquearía.
+    const certTab = window.open("", "_blank");
     try {
       const res = await fetch("/api/admin/certificates", {
         method: "POST",
@@ -272,16 +273,18 @@ function AdminDashboard() {
           studentName: certForm.studentName,
           courseName: certForm.courseName,
           completionDate: certForm.completionDate,
-          certificateUrl: certForm.certificateUrl || null,
         }),
       });
       if (!res.ok) throw new Error("Failed to create certificate");
-      setCertForm({ studentName: "", courseName: "", completionDate: "", certificateUrl: "" });
+      const { code } = await res.json();
+      if (certTab) certTab.location.href = certificatePath(code);
+      setCertForm({ studentName: "", courseName: "", completionDate: "" });
       setShowCertForm(false);
       setSuccess("Certificado creado exitosamente");
       setTimeout(() => setSuccess(null), 3000);
       fetchCertificates();
     } catch (err) {
+      certTab?.close();
       console.error("Failed to create certificate:", err);
       setError("Error al crear el certificado");
       setTimeout(() => setError(null), 3000);
@@ -290,8 +293,27 @@ function AdminDashboard() {
     }
   };
 
+  const certCourses = useMemo(
+    () =>
+      Array.from(new Set(certificates.map((c) => c.courseName))).sort((a, b) =>
+        a.localeCompare(b, "es")
+      ),
+    [certificates]
+  );
+
   const filteredCertificates = useMemo(() => {
     let result = [...certificates];
+    if (certCourseFilter !== "all") {
+      result = result.filter((c) => c.courseName === certCourseFilter);
+    }
+    // completionDate se guarda como "YYYY-MM-DD", así que comparar strings
+    // equivale a comparar fechas y evita problemas de timezone.
+    if (certDateFrom) {
+      result = result.filter((c) => c.completionDate >= certDateFrom);
+    }
+    if (certDateTo) {
+      result = result.filter((c) => c.completionDate <= certDateTo);
+    }
     if (certSearch) {
       const search = certSearch.toLowerCase();
       result = result.filter(
@@ -304,7 +326,7 @@ function AdminDashboard() {
     return result.sort((a, b) =>
       a.studentName.localeCompare(b.studentName, "es")
     );
-  }, [certificates, certSearch]);
+  }, [certificates, certSearch, certCourseFilter, certDateFrom, certDateTo]);
 
   const paginatedCertificates = useMemo(() => {
     const start = (certPagination.currentPage - 1) * certPagination.itemsPerPage;
@@ -875,24 +897,12 @@ function AdminDashboard() {
                     className={`${ui.input} [color-scheme:dark]`}
                   />
                 </div>
-                <div>
-                  <label className={ui.label}>
-                    URL del PDF (opcional)
-                  </label>
-                  <input
-                    type="url"
-                    value={certForm.certificateUrl}
-                    onChange={(e) => setCertForm({ ...certForm, certificateUrl: e.target.value })}
-                    placeholder="https://..."
-                    className={ui.input}
-                  />
-                </div>
                 <div className="md:col-span-2 flex gap-3 justify-end">
                   <button
                     type="button"
                     onClick={() => {
                       setShowCertForm(false);
-                      setCertForm({ studentName: "", courseName: "", completionDate: "", certificateUrl: "" });
+                      setCertForm({ studentName: "", courseName: "", completionDate: "" });
                     }}
                     className={ui.btnGhost}
                   >
@@ -910,18 +920,82 @@ function AdminDashboard() {
             </div>
           )}
 
-          <div className="mb-4">
-            <input
-              type="text"
-              value={certSearch}
-              onChange={(e) => {
-                setCertSearch(e.target.value);
-                setCertPagination((prev) => ({ ...prev, currentPage: 1 }));
-              }}
-              placeholder="Buscar por nombre, curso o código..."
-              aria-label="Buscar certificados por nombre, curso o código"
-              className={`${ui.input} max-w-md`}
-            />
+          <div className="mb-4 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end">
+            <div className="flex-1 min-w-[16rem]">
+              <label className={ui.label}>Buscar</label>
+              <input
+                type="text"
+                value={certSearch}
+                onChange={(e) => {
+                  setCertSearch(e.target.value);
+                  setCertPagination((prev) => ({ ...prev, currentPage: 1 }));
+                }}
+                placeholder="Buscar por nombre, curso o código..."
+                aria-label="Buscar certificados por nombre, curso o código"
+                className={ui.input}
+              />
+            </div>
+            <div className="min-w-[14rem]">
+              <label className={ui.label}>Curso</label>
+              <select
+                value={certCourseFilter}
+                onChange={(e) => {
+                  setCertCourseFilter(e.target.value);
+                  setCertPagination((prev) => ({ ...prev, currentPage: 1 }));
+                }}
+                aria-label="Filtrar certificados por curso"
+                className={ui.input}
+              >
+                <option value="all">Todos los cursos</option>
+                {certCourses.map((course) => (
+                  <option key={course} value={course}>
+                    {course}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={ui.label}>Desde</label>
+              <input
+                type="date"
+                value={certDateFrom}
+                onChange={(e) => {
+                  setCertDateFrom(e.target.value);
+                  setCertPagination((prev) => ({ ...prev, currentPage: 1 }));
+                }}
+                aria-label="Fecha desde"
+                className={`${ui.input} [color-scheme:dark]`}
+              />
+            </div>
+            <div>
+              <label className={ui.label}>Hasta</label>
+              <input
+                type="date"
+                value={certDateTo}
+                onChange={(e) => {
+                  setCertDateTo(e.target.value);
+                  setCertPagination((prev) => ({ ...prev, currentPage: 1 }));
+                }}
+                aria-label="Fecha hasta"
+                className={`${ui.input} [color-scheme:dark]`}
+              />
+            </div>
+            {(certSearch || certCourseFilter !== "all" || certDateFrom || certDateTo) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCertSearch("");
+                  setCertCourseFilter("all");
+                  setCertDateFrom("");
+                  setCertDateTo("");
+                  setCertPagination((prev) => ({ ...prev, currentPage: 1 }));
+                }}
+                className={ui.btnGhost}
+              >
+                <X className="h-4 w-4" />
+                Limpiar filtros
+              </button>
+            )}
           </div>
 
           <div className={ui.card}>
@@ -939,18 +1013,17 @@ function AdminDashboard() {
                       Fecha
                     </th>
                     <th className={ui.th}>
-                      Link
-                    </th>
-                    <th className={ui.th}>
-                      PDF
+                      Certificado
                     </th>
                   </tr>
                 </thead>
                 <tbody className={ui.tbody}>
                   {filteredCertificates.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className={ui.tdEmpty}>
-                        {certSearch ? "No se encontraron certificados" : "No hay certificados aún"}
+                      <td colSpan={4} className={ui.tdEmpty}>
+                        {certSearch || certCourseFilter !== "all" || certDateFrom || certDateTo
+                          ? "No se encontraron certificados"
+                          : "No hay certificados aún"}
                       </td>
                     </tr>
                   ) : (
@@ -974,37 +1047,15 @@ function AdminDashboard() {
                           })}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <button
-                            onClick={() => copyLink(cert.code)}
+                          <Link
+                            href={certificatePath(cert.code)}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5"
                           >
-                            {copiedCode === cert.code ? (
-                              <>
-                                <Check className="h-4 w-4 text-emerald-400" />
-                                <span className="text-emerald-400">Copiado</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="h-4 w-4" />
-                                Copiar link
-                              </>
-                            )}
-                          </button>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {cert.certificateUrl ? (
-                            <a
-                              href={cert.certificateUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-sm text-indigo-400 transition-colors hover:text-indigo-300"
-                            >
-                              <ExternalLink className="h-4 w-4" />
-                              Ver PDF
-                            </a>
-                          ) : (
-                            <span className="text-sm text-zinc-600">—</span>
-                          )}
+                            <ExternalLink className="h-4 w-4" />
+                            Ver certificado
+                          </Link>
                         </td>
                       </tr>
                     ))
