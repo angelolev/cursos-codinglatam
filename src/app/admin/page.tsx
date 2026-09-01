@@ -259,6 +259,18 @@ function AdminDashboard() {
 
   const certificatePath = (code: string) => `/certificados/${code}`;
 
+  // completionDate viene como "YYYY-MM-DD". new Date(string) lo interpreta como
+  // medianoche UTC y en zonas negativas muestra el día anterior, así que se
+  // construye la fecha en horario local (igual que /certificados/[code]).
+  const formatCompletionDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   const handleCreateCertificate = async (e: React.FormEvent) => {
     e.preventDefault();
     setSavingCert(true);
@@ -1040,11 +1052,7 @@ function AdminDashboard() {
                           </span>
                         </td>
                         <td className={ui.td}>
-                          {new Date(cert.completionDate).toLocaleDateString("es-ES", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
+                          {formatCompletionDate(cert.completionDate)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Link
