@@ -30,6 +30,7 @@ const columns = [
   {
     title: "Formación",
     links: [
+      { label: "Para profesionales", href: "/aprende" },
       { label: "Certificación Claude Code", href: "/claude" },
       { label: "Claude para no programadores", href: "/claude-no-programadores" },
       { label: "Cursos", href: "/cursos" },

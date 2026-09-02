@@ -29,7 +29,7 @@ const programs = [
     tag: "A tu ritmo",
     title: "Catálogo de cursos",
     text: "Cursos grabados y proyectos reales para que cada persona del equipo avance a su ritmo, con certificado al terminar.",
-    href: "/cursos",
+    href: "/aprende",
     cta: "Explorar cursos",
   },
 ];
