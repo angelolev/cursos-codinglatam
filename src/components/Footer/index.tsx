@@ -31,6 +31,7 @@ const columns = [
       { label: "Workshops", href: "/workshops" },
       { label: "Proyectos", href: "/proyectos" },
       { label: "Guías", href: "/guias" },
+      { label: "Ingresar a mi cuenta", href: "/login" },
     ],
   },
   {

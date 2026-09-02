@@ -4,7 +4,6 @@ import {
   Menu,
   X,
   LogOut,
-  LogIn,
   Settings,
   ChevronDown,
   Play,
@@ -177,16 +176,11 @@ export function Navbar() {
                 </div>
               </div>
             ) : (
-              <div className="hidden md:flex items-center gap-4">
-                {showCurrency && <CurrencySelector />}
-                <Link
-                  href="/login"
-                  className="inline-flex items-center text-sm font-medium text-white/70 transition-colors hover:text-white"
-                >
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Ingresar
-                </Link>
-              </div>
+              showCurrency && (
+                <div className="hidden md:flex items-center gap-4">
+                  <CurrencySelector />
+                </div>
+              )
             )}
 
             {/* Mobile Menu Button */}
@@ -208,16 +202,6 @@ export function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 space-y-1 bg-white border-t pb-3">
-            {!session?.user && (
-              <Link
-                href="/login"
-                className="flex items-center border-gray-200 border-b px-4 py-2 font-medium text-indigo-500"
-              >
-                <LogIn className="h-4 w-4 mr-2" />
-                Ingresar
-              </Link>
-            )}
-
             {navLinks.map((link) => (
               <Link
                 key={link.href}
