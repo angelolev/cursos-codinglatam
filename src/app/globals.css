@@ -158,3 +158,64 @@ body::before {
 .animate-caret {
   animation: caret-blink 1.1s steps(1) infinite;
 }
+
+/* Marquee de logos de empresas — dos pistas en sentidos opuestos. Cada pista
+   contiene sus items duplicados 2x, así translateX(50%) recorre exactamente una
+   copia. Los bordes se desvanecen con máscara (no con un overlay de color)
+   porque el suelo lleva gradientes y grano. */
+.company-logos-track {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+.company-logos-marquee {
+  animation: company-marquee 40s linear infinite;
+  will-change: transform;
+}
+
+.company-logos-marquee-reverse {
+  animation: company-marquee-reverse 35s linear infinite;
+  will-change: transform;
+}
+
+.company-logos-track:hover .company-logos-marquee,
+.company-logos-track:hover .company-logos-marquee-reverse {
+  animation-play-state: paused;
+}
+
+@keyframes company-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes company-marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .company-logos-marquee,
+  .company-logos-marquee-reverse {
+    animation: none;
+  }
+}
