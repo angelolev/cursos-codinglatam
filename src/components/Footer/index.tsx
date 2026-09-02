@@ -6,11 +6,16 @@ import {
   Twitch,
   Mail,
   MessageCircle,
+  CalendarDays,
 } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import { WhatsAppIcon } from "@/components/claude-brochure/primitives";
-import { CONTACT_EMAIL, CONTACT_WHATSAPP_URL } from "@/components/home/constants";
+import {
+  CALENDAR_URL,
+  CONTACT_EMAIL,
+  CONTACT_WHATSAPP_URL,
+} from "@/components/home/constants";
 
 const columns = [
   {
@@ -78,6 +83,15 @@ export default function Footer() {
             </p>
 
             <div className="mt-6 space-y-2.5">
+              <a
+                href={CALENDAR_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 text-sm text-white/60 transition-colors hover:text-white"
+              >
+                <CalendarDays className="h-4 w-4 text-primary-400" />
+                Agendar una llamada
+              </a>
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
                 className="flex items-center gap-2.5 text-sm text-white/60 transition-colors hover:text-white"

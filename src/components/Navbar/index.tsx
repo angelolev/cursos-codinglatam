@@ -7,6 +7,7 @@ import {
   Settings,
   ChevronDown,
   Play,
+  CalendarDays,
 } from "lucide-react";
 import Logo from "../Logo";
 import Link from "next/link";
@@ -19,7 +20,10 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import CurrencySelector from "../CurrencySelector";
 import { WhatsAppIcon } from "@/components/claude-brochure/primitives";
-import { CONTACT_WHATSAPP_URL } from "@/components/home/constants";
+import {
+  CALENDAR_URL,
+  CONTACT_WHATSAPP_URL,
+} from "@/components/home/constants";
 
 // Navegación enfocada en el comprador corporativo. El catálogo de aprendizaje
 // (cursos, proyectos, guías) sigue accesible desde el footer y desde el perfil.
@@ -103,12 +107,12 @@ export function Navbar() {
             </div>
 
             <Link
-              href={CONTACT_WHATSAPP_URL}
+              href={CALENDAR_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:inline-flex items-center gap-2 rounded-md bg-primary-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition-colors hover:bg-primary-300"
             >
-              <WhatsAppIcon className="h-4 w-4" />
+              <CalendarDays className="h-4 w-4" />
               Agendar llamada
             </Link>
 
@@ -213,14 +217,23 @@ export function Navbar() {
             ))}
 
             <Link
-              href={CONTACT_WHATSAPP_URL}
+              href={CALENDAR_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="mx-3 mt-3 flex items-center justify-center gap-2 rounded-md bg-primary-400 px-4 py-2.5 text-sm font-semibold text-zinc-950"
             >
-              <WhatsAppIcon className="h-4 w-4" />
+              <CalendarDays className="h-4 w-4" />
               Agendar llamada
             </Link>
+            <a
+              href={CONTACT_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-3 mt-2 flex items-center justify-center gap-2 rounded-md border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              Escríbenos por WhatsApp
+            </a>
 
             {session?.user && (
               <>

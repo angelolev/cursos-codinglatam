@@ -5,12 +5,13 @@ import {
   Bot,
   GraduationCap,
   Handshake,
+  CalendarDays,
 } from "lucide-react";
 import {
   TerminalSnippet,
   WhatsAppIcon,
 } from "@/components/claude-brochure/primitives";
-import { CONTACT_WHATSAPP_URL } from "./constants";
+import { CALENDAR_URL, CONTACT_WHATSAPP_URL } from "./constants";
 
 const pillars = [
   {
@@ -77,16 +78,16 @@ export default function EnterpriseHero() {
             resultados medidos antes de escalar.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-5">
             <Link
-              href={CONTACT_WHATSAPP_URL}
+              href={CALENDAR_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-accent-deep to-accent px-7 py-4 text-base font-bold text-zinc-950 shadow-lg shadow-accent-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-accent/40"
             >
               <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
-              <WhatsAppIcon className="h-5 w-5" />
-              Hablemos de tu proyecto
+              <CalendarDays className="h-5 w-5" />
+              Agendar una llamada
               <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <Link
@@ -96,6 +97,19 @@ export default function EnterpriseHero() {
               Ver cómo trabajamos
             </Link>
           </div>
+
+          <p className="mb-10 text-sm text-white/40">
+            30 minutos, sin compromiso. ¿Prefieres escribir?{" "}
+            <a
+              href={CONTACT_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-semibold text-white/70 underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent"
+            >
+              <WhatsAppIcon className="h-3.5 w-3.5" />
+              Escríbenos por WhatsApp
+            </a>
+          </p>
 
           {/* Stats */}
           <div className="flex">
