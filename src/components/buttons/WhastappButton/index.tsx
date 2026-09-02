@@ -1,8 +1,19 @@
 import Link from "next/link";
 
+// Botón flotante presente en todo el sitio: el mensaje es neutro porque lo
+// usan tanto empresas como alumnos de los cursos.
+const WHATSAPP_URL =
+  "https://wa.me/51964225808?text=" +
+  encodeURIComponent("Hola, tengo una consulta sobre Coding Latam.");
+
 export default function WhastappButton() {
   return (
-    <Link target="_blank" href="https://wa.link/0u6vty">
+    <Link
+      target="_blank"
+      rel="noopener noreferrer"
+      href={WHATSAPP_URL}
+      aria-label="Escríbenos por WhatsApp"
+    >
       <svg
         id="Layer_1"
         style={{ enableBackground: "new 0 0 1000 1000" } as React.CSSProperties}
