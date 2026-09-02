@@ -7,10 +7,8 @@ import {
   LogIn,
   Settings,
   ChevronDown,
-  Rocket,
   Play,
-  Building2,
-} from"lucide-react";
+} from "lucide-react";
 import Logo from "../Logo";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,12 +19,29 @@ import Swal from "sweetalert2";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import CurrencySelector from "../CurrencySelector";
+import { WhatsAppIcon } from "@/components/claude-brochure/primitives";
+import { CONTACT_WHATSAPP_URL } from "@/components/home/constants";
+
+// Navegación enfocada en el comprador corporativo. El catálogo de aprendizaje
+// (cursos, proyectos, guías) sigue accesible desde el footer y desde el perfil.
+const navLinks = [
+  { label: "Servicios", href: "/#servicios" },
+  { label: "Cómo trabajamos", href: "/#proceso" },
+  { label: "Programas", href: "/#programas" },
+];
+
+// El selector de moneda solo aporta donde hay precios en pantalla.
+const PRICING_ROUTES = ["/cursos", "/pro", "/workshops", "/guias", "/en-vivo"];
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profileData, setProfileData] = useState<DocumentData | null>(null);
   const pathname = usePathname();
   const { data: session } = useSession();
+
+  const showCurrency = PRICING_ROUTES.some((route) =>
+    pathname?.startsWith(route),
+  );
 
   const handleLogout = () => {
     Swal.fire({
@@ -75,31 +90,32 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="menu gap-12  flex items-center">
+          <div className="menu flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-white/80 transition-colors hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
             <Link
-              href="/#servicios"
-              className="hidden text-white/90 md:flex gap-2 items-center"
+              href={CONTACT_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center gap-2 rounded-md bg-primary-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition-colors hover:bg-primary-300"
             >
-              <Building2 size={18} />
-              Empresas
+              <WhatsAppIcon className="h-4 w-4" />
+              Agendar llamada
             </Link>
-            <Link
-              href="/proyectos"
-              className="hidden text-white/90 md:flex gap-2 items-center"
-            >
-              <Rocket size={18} />
-              Proyectos
-            </Link>
-            <Link
-              href="/cursos"
-              className="hidden text-white/90 md:flex items-center gap-2"
-            >
-              <Play size={18} />
-              Cursos
-            </Link>
+
             {session?.user ? (
               <div className="hidden md:flex items-center gap-4 ">
-                {!session.user.isPremium && <CurrencySelector />}
+                {!session.user.isPremium && showCurrency && <CurrencySelector />}
                 <div className="relative">
                   <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -135,6 +151,13 @@ export function Navbar() {
                   {isMenuOpen && (
                     <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-50">
                       <Link
+                        href="/cursos"
+                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
+                      >
+                        <Play className="h-4 w-4 inline" />
+                        Mis cursos
+                      </Link>
+                      <Link
                         href="/profile"
                         className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                       >
@@ -155,10 +178,10 @@ export function Navbar() {
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-4">
-                <CurrencySelector />
+                {showCurrency && <CurrencySelector />}
                 <Link
                   href="/login"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-400 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 transition-colors"
+                  className="inline-flex items-center text-sm font-medium text-white/70 transition-colors hover:text-white"
                 >
                   <LogIn className="h-4 w-4 mr-2" />
                   Ingresar
@@ -184,38 +207,37 @@ export function Navbar() {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 space-y-1 bg-white border-t">
+          <div className="px-2 space-y-1 bg-white border-t pb-3">
             {!session?.user && (
               <Link
                 href="/login"
-                className="flex items-center border-gray-700 border-b px-4 py-2 font-medium  text-indigo-500  "
+                className="flex items-center border-gray-200 border-b px-4 py-2 font-medium text-indigo-500"
               >
                 <LogIn className="h-4 w-4 mr-2" />
                 Ingresar
               </Link>
             )}
 
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-gray-700 border-b border-gray-200 flex py-2 px-3 gap-2 items-center"
+              >
+                {link.label}
+              </Link>
+            ))}
+
             <Link
-              href="/#servicios"
-              className="text-gray-700 border-b flex py-2 px-3 gap-2 items-center"
+              href={CONTACT_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-3 mt-3 flex items-center justify-center gap-2 rounded-md bg-primary-400 px-4 py-2.5 text-sm font-semibold text-zinc-950"
             >
-              <Building2 size={18} />
-              Empresas
+              <WhatsAppIcon className="h-4 w-4" />
+              Agendar llamada
             </Link>
-            <Link
-              href="/proyectos"
-              className="text-gray-700 border-b flex py-2 px-3 gap-2 items-center"
-            >
-              <Rocket size={18} />
-              Proyectos
-            </Link>
-            <Link
-              href="/cursos"
-              className="text-gray-700 flex py-2 px-3 items-center gap-2"
-            >
-              <Play size={18} />
-              Cursos
-            </Link>
+
             {session?.user && (
               <>
                 <div className="px-3 py-2 text-gray-700 border-b border-t flex items-center gap-2">
@@ -236,6 +258,13 @@ export function Navbar() {
                 </div>
 
                 <Link
+                  href="/cursos"
+                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 transition-colors"
+                >
+                  <Play className="h-4 w-4 inline" />
+                  Mis cursos
+                </Link>
+                <Link
                   href="/profile"
                   className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 transition-colors"
                 >
@@ -243,7 +272,7 @@ export function Navbar() {
                   Mi perfil
                 </Link>
                 <button
-                  className="w-full mt-2 flex items-center border-t pb-3 border-gray-700 px-3 py-2 text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50"
+                  className="w-full mt-2 flex items-center border-t pb-3 border-gray-200 px-3 py-2 text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50"
                   onClick={handleLogout}
                 >
                   <LogOut className="h-4 w-4 mr-2" />
