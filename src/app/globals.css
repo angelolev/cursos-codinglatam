@@ -19,6 +19,18 @@
   --color-terminal-green: #87a96b;
 }
 
+/* Acento de las landings tipo brochure: terracota (Claude) por defecto, sobreescribible
+   por página con --accent / --accent-deep (el home usa el dorado de la marca). */
+@theme inline {
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+}
+
+:root {
+  --accent: #d97757;
+  --accent-deep: #c15f3c;
+}
+
 /* Entrada de toasts y diálogos del panel de administración */
 @keyframes admin-toast-in {
   from {
@@ -38,6 +50,17 @@
   }
   to {
     transform: translateX(0);
+  }
+}
+
+/* Desplazamiento suave al navegar entre secciones por ancla (#servicios, #contacto…) */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 

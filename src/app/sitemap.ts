@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // because they redirect unauthenticated crawlers to /pro).
   const staticRoutes: MetadataRoute.Sitemap = [
     "",
+    "/aprende",
     "/pro",
     "/cursos",
     "/workshops",

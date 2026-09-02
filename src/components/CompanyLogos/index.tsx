@@ -80,13 +80,10 @@ function LogoItem({ logo }: { logo: Logo }) {
 
 export default function CompanyLogos() {
   return (
-    <section className="my-12 sm:my-24 py-8 sm:py-16">
-      <div className="text-center mb-24">
-        <h2 className="text-4xl font-bold text-white/90 mb-4">
-          Nuestros graduados trabajan en
-        </h2>
-        <p className="text-xl text-white/60 max-w-2xl mx-auto">
-          Empresas que confían en el talento formado en nuestra plataforma
+    <section className="mb-24">
+      <div className="text-center mb-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/40">
+          Equipos de estas empresas ya se han formado con nosotros
         </p>
       </div>
 

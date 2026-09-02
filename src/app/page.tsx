@@ -1,185 +1,54 @@
-import { CourseCard } from "@/components/CourseCard";
-import Workshop from "@/components/WorkshopCard";
-import Hero from "@/components/Hero";
-import {
-  getCourses,
-  getProducts,
-  getWorkshops,
-  getStarterRepos,
-} from "@/utils/common";
-import { hasStartedAnyCourse, getRecentCourseActivity } from "@/utils/progress";
+import { getRecentCourseActivity } from "@/utils/progress";
 import { auth } from "./auth";
 import { generatePageMetadata } from "@/utils/metadata";
 
-import { ProductsInfiniteScroll } from "@/components/ProductsInfiniteScroll";
 import ContinueLearningServerSide from "@/components/ContinueLearningServerSide";
-import PricingServerSide from "@/components/PricingServerSide";
-import { CourseGridSkeleton } from "@/components/SkeletonLoader";
 import Link from "next/link";
-import StarterRepoCard from "@/components/StarterRepoCard";
-import AICertificationBanner from "@/components/AICertificationBanner";
 import CompanyLogos from "@/components/CompanyLogos";
+import EnterpriseHero from "@/components/home/EnterpriseHero";
+import Services from "@/components/home/Services";
+import Process from "@/components/home/Process";
+import Programs from "@/components/home/Programs";
+import ContactCTA from "@/components/home/ContactCTA";
 
 // Enable revalidation for better performance (ISR)
 export const revalidate = 300; // Revalidate every 5 minutes
 
 export function generateMetadata() {
   return generatePageMetadata(
-    "Domina la IA para destacar como desarrollador",
-    "Aprende a usar herramientas de IA para potenciar tus habilidades y diferenciarte. Cursos, proyectos reales y guías prácticas para la nueva era del desarrollo.",
+    "Capacitación e implementación de IA para empresas",
+    "Somos el socio tecnológico de empresas y equipos que quieren potenciar sus proyectos con IA: capacitación in-company, agentes a medida y automatización de procesos.",
     "/",
   );
 }
 
 export default async function Home() {
   try {
-    // Fetch all data in parallel with limits for better performance
-    const [courses, products, workshops, starterRepos, session] =
-      await Promise.all([
-        getCourses(12).catch((err) => {
-          console.error("Failed to fetch courses:", err);
-          return null;
-        }),
-        getProducts(8).catch((err) => {
-          console.error("Failed to fetch products:", err);
-          return null;
-        }),
-        getWorkshops(8).catch((err) => {
-          console.error("Failed to fetch workshops:", err);
-          return null;
-        }),
-        getStarterRepos(4).catch((err) => {
-          console.error("Failed to fetch starter repos:", err);
-          return null;
-        }),
-        auth().catch((err) => {
-          console.error("Failed to get auth:", err);
-          return null;
-        }),
-      ]);
+    const session = await auth().catch((err) => {
+      console.error("Failed to get auth:", err);
+      return null;
+    });
 
-    // Check if user has started any course and get recent activity
-    const [userHasStartedAnyCourse, recentCourseActivity] = session?.user?.email
-      ? await Promise.all([
-          hasStartedAnyCourse(session.user.email).catch((err) => {
-            console.error("Failed to check user progress:", err);
-            return false;
-          }),
-          getRecentCourseActivity(session.user.email).catch((err) => {
-            console.error("Failed to fetch recent course activity:", err);
-            return [];
-          }),
-        ])
-      : [false, []];
+    // Un estudiante con actividad reciente ve un acceso rápido a sus cursos
+    // encima de la landing; el catálogo completo vive en /cursos.
+    const recentCourseActivity = session?.user?.email
+      ? await getRecentCourseActivity(session.user.email).catch((err) => {
+          console.error("Failed to fetch recent course activity:", err);
+          return [];
+        })
+      : [];
 
     return (
-      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
-        {session?.user?.isPremium || userHasStartedAnyCourse ? null : <Hero />}
-
-        {/* AI Certification Banner */}
-        {/* <AICertificationBanner /> */}
-
-        {/* Show continue learning for logged-in users */}
+      // El acento de las primitivas del brochure toma el dorado de la marca
+      // (mismo color del logo) en lugar del terracota de las landings de Claude.
+      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow [--accent:#ecb033] [--accent-deep:#e4911c]">
         <ContinueLearningServerSide recentCourses={recentCourseActivity} />
-
-        <div className="text-center mb-24">
-          <h1 className="text-4xl font-bold text-white/90 mb-4">
-            Aprende haciendo proyectos reales
-          </h1>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto">
-            Te enseño a integrar IA en tu día a día como dev, con proyectos
-            reales y todo lo que he aprendido construyendo en producción.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {courses && courses.length > 0 ? (
-            courses.map((course, index) => (
-              <CourseCard key={course.id || index} {...course} />
-            ))
-          ) : (
-            <CourseGridSkeleton count={8} />
-          )}
-          {workshops &&
-            workshops.length > 0 &&
-            workshops.map((workshop, index) => (
-              <Workshop key={workshop.id || index} {...workshop} />
-            ))}
-        </div>
-
+        <EnterpriseHero />
         <CompanyLogos />
-
-        {/* <MonthlyEvents /> */}
-
-        {/* <div className="text-center my-24">
-            <h1 className="text-4xl font-bold text-white/90 mb-4">
-              Workshops y training
-            </h1>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Talleres pensados no solo en habilidades técnicas sino también en
-              habilidades blandas
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {workshops?.map((workshop, index) => (
-              <Workshop key={workshop.slug} {...workshop} />
-            ))}
-          </div> */}
-
-        <div>
-          <div className="text-center my-24">
-            <h2 className="text-4xl font-bold text-white/90 mb-4">
-              Guías prácticas para devs
-            </h2>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Recursos prácticos sobre desarrollo, herramientas modernas e IA.
-              Pensados para que apliques lo aprendido el mismo día.
-            </p>
-          </div>
-          <ProductsInfiniteScroll initialProducts={products || []} />
-          <Link
-            href="/guias"
-            className="text-white/60 text-center block mx-auto cursor-pointer"
-          >
-            Ver todas las guías
-          </Link>
-        </div>
-
-        {/* <div>
-          <div className="text-center my-24">
-            <h1 className="text-4xl font-bold text-white/90 mb-4">
-              Repositorios con IA integrada
-            </h1>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Arranca tus proyectos con repositorios optimizados que integran
-              herramientas de IA y mejores prácticas modernas
-            </p>
-          </div>
-          {starterRepos && starterRepos.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-6">
-                {starterRepos.map((repo) => (
-                  <StarterRepoCard key={repo.id} {...repo} />
-                ))}
-              </div>
-              <Link
-                href="/repositorios"
-                className="text-white/60 text-center block mx-auto cursor-pointer hover:text-white/80 transition-colors"
-              >
-                Ver todos los repositorios →
-              </Link>
-            </>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-white/60">
-                Próximamente: Repositorios de apoyo optimizados
-              </p>
-            </div>
-          )}
-        </div> */}
-
-        {session?.user?.isPremium ? null : (
-          <PricingServerSide userSession={session} />
-        )}
+        <Services />
+        <Process />
+        <Programs />
+        <ContactCTA />
       </main>
     );
   } catch (error) {

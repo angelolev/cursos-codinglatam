@@ -7,18 +7,20 @@ import { CertificateProps } from "@/types/certificate";
 const SITE_NAME = "Coding Latam";
 const SITE_URL = "https://codinglatam.dev";
 const DEFAULT_IMAGE = "https://codinglatam.dev/og.png";
+const SITE_DESCRIPTION =
+  "Socio tecnológico de empresas y equipos: capacitación en IA, agentes a medida y automatización de procesos.";
 
 export function generateSiteMetadata(): Metadata {
   return {
     metadataBase: new URL(SITE_URL),
     title: {
       template: `%s | ${SITE_NAME}`,
-      default: `Aprende a programar HACIENDO proyectos | ${SITE_NAME}`,
+      default: `Capacitación e implementación de IA para empresas | ${SITE_NAME}`,
     },
-    description: "Aprende HACIENDO proyectos REALES",
+    description: SITE_DESCRIPTION,
     openGraph: {
       title: SITE_NAME,
-      description: "Aprende HACIENDO proyectos REALES",
+      description: SITE_DESCRIPTION,
       url: SITE_URL,
       siteName: SITE_NAME,
       images: [
@@ -34,7 +36,7 @@ export function generateSiteMetadata(): Metadata {
     twitter: {
       card: "summary_large_image",
       title: SITE_NAME,
-      description: "Aprende HACIENDO proyectos REALES",
+      description: SITE_DESCRIPTION,
       images: [DEFAULT_IMAGE],
     },
   };
