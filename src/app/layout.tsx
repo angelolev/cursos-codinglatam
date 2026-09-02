@@ -12,6 +12,7 @@ import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { generateSiteMetadata } from "@/utils/metadata";
 import JsonLd from "@/components/JsonLd";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
@@ -80,6 +81,7 @@ export default async function RootLayout({
           <WhastappButton />
         </div>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
