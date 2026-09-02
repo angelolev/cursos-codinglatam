@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { generateSiteMetadata } from "@/utils/metadata";
 import JsonLd from "@/components/JsonLd";
+import { Analytics } from "@vercel/analytics/next";
 
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
@@ -78,6 +79,7 @@ export default async function RootLayout({
         <div className="bg-white rounded-full w-16 fixed bottom-5 right-4">
           <WhastappButton />
         </div>
+        <Analytics />
       </body>
     </html>
   );
