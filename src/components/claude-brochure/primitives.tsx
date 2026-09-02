@@ -63,13 +63,19 @@ export const TerminalSnippet = ({
   command = "claude",
   prompt = "Crea una app fullstack",
   result = "Planificando arquitectura…",
+  className = "",
 }: {
   title?: string;
   command?: string;
   prompt?: string;
   result?: string;
+  // Permite que una superficie ensanche la ventana (p. ej. cuando ocupa toda
+  // una columna del hero en lugar de ir centrada en el ancho por defecto).
+  className?: string;
 }) => (
-  <div className="mx-auto max-w-md overflow-hidden rounded-xl border border-white/10 bg-black/50 text-left shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)]">
+  <div
+    className={`mx-auto max-w-md overflow-hidden rounded-xl border border-white/10 bg-black/50 text-left shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] ${className}`}
+  >
     <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-2.5">
       <span className="flex items-center gap-1.5">
         <span className="h-2.5 w-2.5 rounded-full bg-accent/80" />

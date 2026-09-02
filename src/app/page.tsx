@@ -6,10 +6,12 @@ import ContinueLearningServerSide from "@/components/ContinueLearningServerSide"
 import Link from "next/link";
 import CompanyLogos from "@/components/CompanyLogos";
 import EnterpriseHero from "@/components/home/EnterpriseHero";
+import Credentials from "@/components/home/Credentials";
 import Services from "@/components/home/Services";
 import Process from "@/components/home/Process";
 import Programs from "@/components/home/Programs";
 import ContactCTA from "@/components/home/ContactCTA";
+import { ctaPrimary } from "@/components/ui/actions";
 
 // Enable revalidation for better performance (ISR)
 export const revalidate = 300; // Revalidate every 5 minutes
@@ -21,6 +23,11 @@ export function generateMetadata() {
     "/",
   );
 }
+
+// El acento de las primitivas del brochure toma el dorado de la marca
+// (mismo color del logo) en lugar del terracota de las landings de Claude.
+const mainClass =
+  "pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow [--accent:#ecb033] [--accent-deep:#e4911c]";
 
 export default async function Home() {
   try {
@@ -39,11 +46,11 @@ export default async function Home() {
       : [];
 
     return (
-      // El acento de las primitivas del brochure toma el dorado de la marca
-      // (mismo color del logo) en lugar del terracota de las landings de Claude.
-      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow [--accent:#ecb033] [--accent-deep:#e4911c]">
+      <main className={mainClass}>
         <ContinueLearningServerSide recentCourses={recentCourseActivity} />
         <EnterpriseHero />
+        {/* Prueba social: las cifras y los logos se leen como un solo bloque. */}
+        <Credentials />
         <CompanyLogos />
         <Services />
         <Process />
@@ -54,19 +61,16 @@ export default async function Home() {
   } catch (error) {
     console.error("Home page error:", error);
     return (
-      <main className="pt-24 mx-auto max-w-7xl w-full sm:px-6 md:px-8 px-4 lg:px-0 flex-grow">
-        <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-red-300 mb-4">
-            Error cargando la página
+      <main className={mainClass}>
+        <div className="mx-auto my-20 max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center">
+          <h2 className="text-xl font-bold text-white/90">
+            No pudimos cargar la página
           </h2>
-          <p className="text-red-200 mb-6">
-            Ocurrió un error inesperado. Por favor, recarga la página.
+          <p className="mt-2 text-sm text-white/60">
+            Algo falló de nuestro lado. Vuelve a intentarlo en unos segundos.
           </p>
-          <Link
-            href="/"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg inline-block"
-          >
-            Recargar página
+          <Link href="/" className={`${ctaPrimary} mt-6`}>
+            Reintentar
           </Link>
         </div>
       </main>

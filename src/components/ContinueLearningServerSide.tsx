@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, BookOpen, Play, ChevronRight } from "lucide-react";
+import { Clock, BookOpen, ChevronRight } from "lucide-react";
 import ProgressBar from "./ProgressBar";
 import { CourseProps } from "@/types/course";
 
@@ -48,17 +48,14 @@ export default function ContinueLearningServerSide({
 
   return (
     <div className="mb-16">
-      <div className="bg-gray-900/60 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 shadow-xl">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">
-              Continúa aprendiendo
-            </h2>
-            <p className="text-gray-300">
-              Retoma donde lo dejaste y sigue progresando
-            </p>
-          </div>
-          <Play className="w-8 h-8 text-blue-400" />
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm">
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-white/90">
+            Continúa aprendiendo
+          </h2>
+          <p className="mt-1 text-sm text-white/60">
+            Retoma donde lo dejaste y sigue progresando
+          </p>
         </div>
 
         <div className="grid gap-3">
@@ -75,9 +72,9 @@ export default function ContinueLearningServerSide({
                 }`}
                 className="group block"
               >
-                <div className="bg-gray-800/80 rounded-lg p-4 border border-gray-600/30 hover:border-blue-500/50 transition-all hover:bg-gray-700/80 hover:shadow-lg">
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-colors hover:border-primary-400/40 hover:bg-white/[0.06]">
                   <div className="flex gap-4">
-                    <div className="relative w-20 h-14 rounded-lg overflow-hidden flex-shrink-0 ring-1 ring-gray-600/50">
+                    <div className="relative w-20 h-14 rounded-lg overflow-hidden flex-shrink-0 ring-1 ring-white/10">
                       <Image
                         src={course.image}
                         alt={course.title}
@@ -90,10 +87,10 @@ export default function ContinueLearningServerSide({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="text-white font-semibold text-lg mb-1 group-hover:text-blue-300 transition-colors">
+                          <h3 className="mb-1 text-lg font-semibold text-white/90 transition-colors group-hover:text-primary-300">
                             {course.title}
                           </h3>
-                          <div className="flex items-center gap-4 text-sm text-gray-400 mb-3">
+                          <div className="mb-3 flex items-center gap-4 text-sm text-white/55">
                             <div className="flex items-center gap-1">
                               <BookOpen className="w-4 h-4" />
                               <span>
@@ -116,7 +113,7 @@ export default function ContinueLearningServerSide({
                             showPercentage
                           />
                         </div>
-                        <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-blue-400 transition-colors ml-2" />
+                        <ChevronRight className="ml-2 h-5 w-5 text-white/40 transition-colors group-hover:text-primary-300" />
                       </div>
                     </div>
                   </div>
@@ -129,7 +126,7 @@ export default function ContinueLearningServerSide({
         <div className="mt-6 text-center">
           <Link
             href="/cursos"
-            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors inline-flex items-center gap-1 "
+            className="inline-flex items-center gap-1.5 rounded-sm text-sm font-semibold text-primary-300 transition-colors hover:text-primary-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#161616]"
           >
             Ver todos los cursos
             <span className="transition-all">→</span>

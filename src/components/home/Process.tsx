@@ -1,8 +1,4 @@
-import {
-  Eyebrow,
-  cardClass,
-  TopAccent,
-} from "@/components/claude-brochure/primitives";
+import SectionHeader from "./SectionHeader";
 import Reveal from "./Reveal";
 
 const steps = [
@@ -35,33 +31,41 @@ const steps = [
 export default function Process() {
   return (
     <Reveal id="proceso" className="mb-24">
-      <div className="mb-12">
-        <Eyebrow>Cómo trabajamos</Eyebrow>
-        <h2 className="text-3xl md:text-4xl font-bold text-white/90 mt-3 mb-4">
-          Un caso real primero, la teoría después
-        </h2>
-        <p className="text-white/50 max-w-2xl text-lg">
-          No empezamos por una charla sobre el futuro de la IA. Empezamos por un
-          proceso tuyo que hoy duele, lo resolvemos y sobre eso formamos al
-          equipo.
-        </p>
-      </div>
+      <SectionHeader
+        eyebrow="Cómo trabajamos"
+        title="Un caso real primero, la teoría después"
+      >
+        No empezamos por una charla sobre el futuro de la IA. Empezamos por un
+        proceso tuyo que hoy duele, lo resolvemos y sobre eso formamos al equipo.
+      </SectionHeader>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <ol className="relative grid gap-y-10 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-0">
+        {/* Riel que une los cuatro pasos: vertical en móvil, horizontal desde
+            lg. Se apaga hacia el final porque la etapa de escala es continua. */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute bottom-2 left-[7px] top-2 w-px bg-gradient-to-b from-accent/50 via-white/15 to-transparent lg:bottom-auto lg:left-0 lg:right-0 lg:top-[7px] lg:h-px lg:w-auto lg:bg-gradient-to-r"
+        />
+
         {steps.map((s) => (
-          <div key={s.n} className={`${cardClass} p-6`}>
-            <TopAccent />
-            <div className="flex items-baseline justify-between mb-3">
-              <span className="text-4xl font-bold text-accent/30">{s.n}</span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/35">
-                {s.dur}
-              </span>
-            </div>
-            <h3 className="font-bold text-white/90 mb-2">{s.title}</h3>
-            <p className="text-sm text-white/60">{s.text}</p>
-          </div>
+          <li key={s.n} className="relative pl-8 lg:pl-0 lg:pr-8">
+            <span
+              aria-hidden
+              className="absolute left-0 top-px flex h-3.5 w-3.5 items-center justify-center rounded-full border border-accent/60 bg-[#161616] lg:static lg:mb-6"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            </span>
+
+            <p className="flex items-baseline gap-2 text-xs font-semibold uppercase tracking-[0.18em]">
+              <span className="text-accent-deep tabular-nums">{s.n}</span>
+              <span className="text-white/25">·</span>
+              <span className="text-white/50">{s.dur}</span>
+            </p>
+            <h3 className="mt-3 text-lg font-bold text-white/90">{s.title}</h3>
+            <p className="mt-2 text-sm text-white/60">{s.text}</p>
+          </li>
         ))}
-      </div>
+      </ol>
     </Reveal>
   );
 }

@@ -69,7 +69,6 @@ function LogoItem({ logo }: { logo: Logo }) {
       <Image
         src={logo.src}
         alt={logo.alt}
-        title={logo.alt}
         width={160}
         height={64}
         className={`object-contain max-h-[64px] w-auto opacity-60 transition-opacity duration-300 hover:opacity-100 ${logo.white ? "brightness-0 invert" : ""}`}
@@ -82,17 +81,16 @@ export default function CompanyLogos() {
   return (
     <section className="mb-24">
       <div className="text-center mb-12">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/40">
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/55">
           Equipos de estas empresas ya se han formado con nosotros
         </p>
       </div>
 
-      <div className="relative overflow-hidden group">
-        {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-24  pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none" />
-
-        {/* Row 1 - scrolls left */}
+      {/* El desvanecido de los bordes se hace con máscara y no con un degradado
+          encima: el suelo lleva gradientes y grano, así que un overlay de color
+          plano dejaría un corte visible. */}
+      <div className="company-logos-track group relative overflow-hidden">
+        {/* Fila 1 — avanza hacia la izquierda */}
         <div className="flex mb-8 company-logos-marquee">
           {row1.map((logo, i) => (
             <LogoItem key={`r1a-${i}`} logo={logo} />
@@ -102,7 +100,7 @@ export default function CompanyLogos() {
           ))}
         </div>
 
-        {/* Row 2 - scrolls right */}
+        {/* Fila 2 — avanza hacia la derecha */}
         <div className="flex company-logos-marquee-reverse">
           {row2.map((logo, i) => (
             <LogoItem key={`r2a-${i}`} logo={logo} />
@@ -112,33 +110,6 @@ export default function CompanyLogos() {
           ))}
         </div>
       </div>
-
-      <style>{`
-        .company-logos-marquee {
-          animation: company-marquee 40s linear infinite;
-        }
-        .company-logos-marquee-reverse {
-          animation: company-marquee-reverse 35s linear infinite;
-        }
-        .group:hover .company-logos-marquee,
-        .group:hover .company-logos-marquee-reverse {
-          animation-play-state: paused;
-        }
-        @keyframes company-marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes company-marquee-reverse {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .company-logos-marquee,
-          .company-logos-marquee-reverse {
-            animation: none;
-          }
-        }
-      `}</style>
     </section>
   );
 }
