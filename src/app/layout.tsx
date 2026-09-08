@@ -64,7 +64,7 @@ export default async function RootLayout({
         </Script>
       </head>
       <body
-        className={`bg-light-black ${firaCode.className} relative min-h-screen flex flex-col overflow-x-hidden`}
+        className={`bg-light-black ${firaCode.className} relative min-h-screen flex flex-col`}
       >
         <SessionProvider session={session}>
           <CurrencyProvider>

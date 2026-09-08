@@ -28,16 +28,97 @@ export const LinkedInIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
+interface FlagProps {
+  // Se puede pasar un tamaño explícito (ej. para filas compactas de
+  // horarios); por defecto queda igual que el uso histórico de PEFlag.
+  className?: string;
+}
+
 // Peru Flag Component
-export const PEFlag = () => (
+export const PEFlag = ({ className = "w-5 h-5 inline-block" }: FlagProps) => (
   <svg
-    className="w-5 h-5 inline-block"
+    className={className}
     viewBox="0 0 512 512"
+    preserveAspectRatio="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <rect y="0" width="512" height="512" fill="#fff" />
     <rect y="0" width="170.67" height="512" fill="#D80027" />
     <rect x="341.33" width="170.67" height="512" fill="#D80027" />
+  </svg>
+);
+
+// Banderas simplificadas por franjas de color, mismo estilo que PEFlag.
+// Se usan como SVG (no emoji): Windows no siempre trae la fuente de emoji
+// de banderas y cae al código de país en texto plano ("PE", "CO"...).
+export const COFlag = ({ className = "w-5 h-5 inline-block" }: FlagProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 512 512"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="512" height="512" fill="#FCD116" />
+    <rect y="256" width="512" height="128" fill="#003893" />
+    <rect y="384" width="512" height="128" fill="#CE1126" />
+  </svg>
+);
+
+export const ECFlag = ({ className = "w-5 h-5 inline-block" }: FlagProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 512 512"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="512" height="512" fill="#FFDD00" />
+    <rect y="256" width="512" height="128" fill="#034EA2" />
+    <rect y="384" width="512" height="128" fill="#ED1C24" />
+  </svg>
+);
+
+export const MXFlag = ({ className = "w-5 h-5 inline-block" }: FlagProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 512 512"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="512" height="512" fill="#fff" />
+    <rect width="170.67" height="512" fill="#006341" />
+    <rect x="341.33" width="170.67" height="512" fill="#CE1126" />
+  </svg>
+);
+
+export const ARFlag = ({ className = "w-5 h-5 inline-block" }: FlagProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 512 512"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="512" height="512" fill="#fff" />
+    <rect width="512" height="170.67" fill="#75AADB" />
+    <rect y="341.33" width="512" height="170.67" fill="#75AADB" />
+  </svg>
+);
+
+export const CLFlag = ({ className = "w-5 h-5 inline-block" }: FlagProps) => (
+  <svg
+    className={className}
+    viewBox="0 0 512 512"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect width="512" height="512" fill="#fff" />
+    <rect y="256" width="512" height="256" fill="#D52B1E" />
+    <rect width="256" height="256" fill="#0039A6" />
+    <g transform="translate(88,88) scale(3.3)">
+      <path
+        fill="#fff"
+        d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.771l-7.416 3.642 1.48-8.279L0 9.306l8.332-1.151z"
+      />
+    </g>
   </svg>
 );
 
