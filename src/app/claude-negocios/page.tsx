@@ -80,7 +80,7 @@ const HORARIOS_PAIS = [
 
 // Checkout del producto en Hotmart. Si en el panel creas una oferta
 // específica, añade "?off=CODIGO_OFERTA" al link.
-const CHECKOUT_URL = "https://pay.hotmart.com/T107518538H?sck=web-landing";
+const CHECKOUT_URL = "https://pay.hotmart.com/T107518538H?checkoutMode=10";
 
 // El precio real que cobra Hotmart está fijado en soles (S/ 299). Este
 // valor en USD es la base de conversión para mostrar un estimado en la
