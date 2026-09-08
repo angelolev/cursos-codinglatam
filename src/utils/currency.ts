@@ -20,6 +20,18 @@ interface CachedRates {
 export async function detectUserCurrency(
   initialCountryCode?: string
 ): Promise<string> {
+  // Override manual para pruebas: ?currency=MXN en la URL. Tiene
+  // prioridad sobre todo lo demás y no se guarda en localStorage, así
+  // que no queda "pegado" en visitas futuras sin el parámetro.
+  if (typeof window !== 'undefined') {
+    const forcedCurrency = new URLSearchParams(window.location.search)
+      .get('currency')
+      ?.toUpperCase();
+    if (forcedCurrency && SUPPORTED_CURRENCIES[forcedCurrency]) {
+      return forcedCurrency;
+    }
+  }
+
   // Check user preference first
   const savedPreference = localStorage.getItem(CURRENCY_PREFERENCE_KEY);
   if (savedPreference && SUPPORTED_CURRENCIES[savedPreference]) {
