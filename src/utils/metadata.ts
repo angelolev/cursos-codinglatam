@@ -39,6 +39,11 @@ export function generateSiteMetadata(): Metadata {
       description: SITE_DESCRIPTION,
       images: [DEFAULT_IMAGE],
     },
+    verification: {
+      other: {
+        "facebook-domain-verification": "jl7lx42h0rry0wbp0dqcxma9jki6z4",
+      },
+    },
   };
 }
 
