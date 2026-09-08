@@ -662,7 +662,7 @@ export default function ClaudeNegociosPage() {
           <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
         </Link>
         <p className="text-white/40 text-sm mt-4">
-          Pago seguro procesado por Hotmart · Tarjeta, cuotas y PagoEfectivo
+          Pago seguro procesado por Hotmart · Tarjeta, cuotas y métodos locales
         </p>
         <p className="text-white/40 text-sm mt-1">
           Consultas al{" "}
@@ -677,7 +677,11 @@ export default function ClaudeNegociosPage() {
         </p>
       </div>
 
-      {/* Medios de pago alternativos */}
+      {/* Medios de pago alternativos — solo para Perú (Yape/Plin/transferencia
+          en soles no aplican fuera del país). Mientras se detecta la moneda
+          se asume Perú para no hacerlo aparecer de golpe para la mayoría del
+          público, que sí es de Perú. */}
+      {(currencyLoading || currentCurrency.code === "PEN") && (
       <div className={`${cardClass} p-8 md:p-12 max-w-4xl mx-auto mt-8`}>
         <TopAccent />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -761,6 +765,7 @@ export default function ClaudeNegociosPage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Temario */}
       <div className="mt-20 max-w-4xl mx-auto">
@@ -1266,7 +1271,7 @@ export default function ClaudeNegociosPage() {
             <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
           <p className="text-center text-white/40 text-[11px] mt-3">
-            Pago seguro por Hotmart · Tarjeta, cuotas y PagoEfectivo
+            Pago seguro por Hotmart · Tarjeta, cuotas y métodos locales
           </p>
           <p className="text-center text-white/40 text-[11px] mt-1">
             Consultas al{" "}
