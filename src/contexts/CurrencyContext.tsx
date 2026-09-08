@@ -29,9 +29,16 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined
 
 interface CurrencyProviderProps {
   children: ReactNode;
+  // País detectado del lado del servidor (header x-vercel-ip-country de
+  // Vercel), pasado desde el layout raíz. Si está presente, evita la
+  // llamada a ipapi.co para detectar la moneda.
+  initialCountryCode?: string;
 }
 
-export function CurrencyProvider({ children }: CurrencyProviderProps) {
+export function CurrencyProvider({
+  children,
+  initialCountryCode,
+}: CurrencyProviderProps) {
   const [currentCurrency, setCurrentCurrency] = useState<Currency>(SUPPORTED_CURRENCIES.USD);
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +48,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
   useEffect(() => {
     initializeCurrency();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initializeCurrency = async () => {
@@ -50,7 +58,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
       // Detect user currency and fetch exchange rates in parallel
       const [currencyCode, rates] = await Promise.all([
-        detectUserCurrency(),
+        detectUserCurrency(initialCountryCode),
         getExchangeRates()
       ]);
 

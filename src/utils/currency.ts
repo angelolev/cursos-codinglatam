@@ -17,20 +17,33 @@ interface CachedRates {
   timestamp: number;
 }
 
-export async function detectUserCurrency(): Promise<string> {
+export async function detectUserCurrency(
+  initialCountryCode?: string
+): Promise<string> {
   // Check user preference first
   const savedPreference = localStorage.getItem(CURRENCY_PREFERENCE_KEY);
   if (savedPreference && SUPPORTED_CURRENCIES[savedPreference]) {
     return savedPreference;
   }
 
+  // País ya detectado en el servidor (header x-vercel-ip-country de
+  // Vercel: gratis, sin límite de solicitudes, sin dependencia externa).
+  // Evita llamar a ipapi.co en producción.
+  if (initialCountryCode) {
+    const currency = COUNTRY_TO_CURRENCY[initialCountryCode] || 'USD';
+    if (SUPPORTED_CURRENCIES[currency]) {
+      return currency;
+    }
+  }
+
   try {
-    // Use ipapi.co for free IP geolocation
+    // Respaldo: ipapi.co, usado solo cuando no hay país detectado por el
+    // servidor (ej. en desarrollo local, donde Vercel no envía ese header).
     const response = await fetch('https://ipapi.co/json/');
     const data: CurrencyDetectionResult = await response.json();
-    
+
     const currency = COUNTRY_TO_CURRENCY[data.country] || 'USD';
-    
+
     // Only return if we support this currency
     if (SUPPORTED_CURRENCIES[currency]) {
       return currency;
@@ -38,7 +51,7 @@ export async function detectUserCurrency(): Promise<string> {
   } catch (error) {
     console.warn('Failed to detect user currency:', error);
   }
-  
+
   // Fallback to USD
   return 'USD';
 }

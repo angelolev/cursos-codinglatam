@@ -1152,8 +1152,7 @@ export default function ClaudeNegociosPage() {
           <p className="text-white/40 text-xs mt-2">
             {!currencyLoading && currentCurrency.code !== "PEN" ? (
               <>
-                {currentCurrency.flag} Estimado en {currentCurrency.name} ·
-                Cobro en soles peruanos (PEN) por Hotmart
+                {currentCurrency.flag} Estimado en {currentCurrency.name}
               </>
             ) : (
               "Precio en soles peruanos (PEN), por persona."

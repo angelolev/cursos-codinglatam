@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Fira_Code } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import PromoBanner from "@/components/PromoBanner";
@@ -35,6 +36,12 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
+  // País del visitante, resuelto por Vercel en el edge (gratis, sin
+  // límite de solicitudes). En desarrollo local este header no existe;
+  // CurrencyProvider cae a ipapi.co como respaldo en ese caso.
+  const headersList = await headers();
+  const countryCode = headersList.get("x-vercel-ip-country") ?? undefined;
+
   return (
     <html lang="es" className="overflow-x-hidden">
       <head>
@@ -67,7 +74,7 @@ export default async function RootLayout({
         className={`bg-light-black ${firaCode.className} relative min-h-screen flex flex-col`}
       >
         <SessionProvider session={session}>
-          <CurrencyProvider>
+          <CurrencyProvider initialCountryCode={countryCode}>
             <Navbar />
             <PromoBanner />
 
