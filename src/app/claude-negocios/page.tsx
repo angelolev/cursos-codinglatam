@@ -43,22 +43,23 @@ import yapeImage from "@/assets/yape.svg";
 import plinImage from "@/assets/plin.svg";
 import yapeQR from "@/assets/yape-qr.jpeg";
 
-const FECHA_INICIO = "13 de octubre";
+const FECHA_INICIO = "6 de octubre";
 const FECHA_FIN = "5 de noviembre de 2026";
 const HORARIO_CURSO = "8:00 – 10:00 PM (hora Perú)";
 const FRECUENCIA = "Martes y jueves · 4 semanas";
 const FECHAS_SESIONES =
-  "Octubre 13, 15, 20, 22, 27 y 29 · Noviembre 3 y 5";
+  "Octubre 6, 8, 20, 22, 27 y 29 · Noviembre 3 y 5";
 const CONTACTO_WHATSAPP = "+51 964225808";
 const CONTACTO_WHATSAPP_URL =
   "https://wa.me/51964225808?text=" +
   encodeURIComponent(
-    "Hola, quiero inscribirme al curso Claude para Negocios (13 oct - 5 nov 2026)."
+    "Hola, quiero inscribirme al curso Claude para Negocios (6 oct - 5 nov 2026)."
   );
 const CONTACTO_EMAIL = "angelo@codinglatam.dev";
 
 // Mismo horario real convertido a la hora local de cada país (verificado
-// para las fechas del curso, 13 oct - 5 nov 2026). Perú, Colombia y
+// para las fechas del curso, 6 oct - 5 nov 2026, con receso la semana del
+// 13-15 de octubre). Perú, Colombia y
 // Ecuador no tienen horario de verano (UTC-5 todo el año). México (zona
 // Centro) tampoco desde 2022 (UTC-6 fijo). Argentina es UTC-3 fijo, y
 // Chile entra en horario de verano (UTC-3) el 6 de setiembre de 2026, así
@@ -632,6 +633,10 @@ export default function ClaudeNegociosPage() {
             </div>
           ))}
         </dl>
+        <p className="text-xs text-white/40 mt-3">
+          Sin clase la semana del 13 y 15 de octubre. Las sesiones se retoman
+          el 20 de octubre sin afectar el temario ni el total de 8 sesiones.
+        </p>
         <div className="rounded-xl border border-claude-deep/40 bg-claude-deep/5 p-4 mt-5">
           <p className="text-sm text-white/70">
             <strong className="text-white/90">Puedes pagar en 2 partes.</strong>{" "}

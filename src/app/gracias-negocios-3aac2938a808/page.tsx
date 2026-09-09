@@ -61,7 +61,7 @@ export default function GraciasClaudeNegociosPage() {
       <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-white/60">
         <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
           <Calendar className="h-4 w-4 text-claude" />
-          Clases en vivo desde el 13 de octubre de 2026 (fecha estimada)
+          Clases en vivo desde el 6 de octubre de 2026 (fecha estimada)
         </span>
         <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
           <Video className="h-4 w-4 text-claude" />
