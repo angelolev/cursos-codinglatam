@@ -57,6 +57,14 @@ const CONTACTO_WHATSAPP_URL =
   );
 const CONTACTO_EMAIL = "angelo@codinglatam.dev";
 
+// Beneficios mostrados en la barra de precio fija de mobile.
+const MOBILE_BAR_BENEFITS: { icon: typeof CheckCircle2; label: string }[] = [
+  { icon: CheckCircle2, label: "Sin experiencia previa" },
+  { icon: Video, label: "Grabaciones incluidas" },
+  { icon: BadgeCheck, label: "Certificado" },
+  { icon: CalendarDays, label: "Paga en 2 partes" },
+];
+
 // Mismo horario real convertido a la hora local de cada país (verificado
 // para las fechas del curso, 6 oct - 5 nov 2026, con receso la semana del
 // 13-15 de octubre). Perú, Colombia y
@@ -407,21 +415,35 @@ export default function ClaudeNegociosPage() {
   // presentan de forma explícita como testimonios de esa otra cohorte,
   // no como si fueran de este curso. Mismos urns que usa /claude — al
   // agregar egresados propios de este curso, reemplazar por esos.
-  const testimonials: string[] = [
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7465867780463001600?collapsed=1",
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7447303531075764224?collapsed=1",
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7445646280707604480?collapsed=1",
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7446270449925124096?collapsed=1",
+  // Capturas estáticas en vez de <iframe> embed: LinkedIn muestra un
+  // modal de "abrir la app" que tapa el post cuando el visitante no
+  // tiene sesión iniciada (frecuente en mobile).
+  const testimonials: { image: string; href: string; height: number }[] = [
+    {
+      image: "/testimonios/testimonio-01.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7465867780463001600/",
+      height: 535,
+    },
+    {
+      image: "/testimonios/testimonio-02.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7447303531075764224/",
+      height: 535,
+    },
+    {
+      image: "/testimonios/testimonio-03.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7445646280707604480/",
+      height: 598,
+    },
+    {
+      image: "/testimonios/testimonio-04.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7446270449925124096/",
+      height: 535,
+    },
   ];
-
-  const toEmbedSrc = (ref: string) =>
-    ref.startsWith("http")
-      ? ref
-      : `https://www.linkedin.com/embed/feed/update/${ref}`;
 
   return (
     <main
-      className="pt-24 pb-16 mx-auto w-full max-w-7xl sm:px-6 px-4 lg:px-0 xl:grid xl:grid-cols-[1fr_360px] xl:gap-8 xl:items-start flex-grow min-w-0"
+      className="pt-24 pb-44 sm:pb-28 xl:pb-16 mx-auto w-full max-w-7xl sm:px-6 px-4 lg:px-0 xl:grid xl:grid-cols-[1fr_360px] xl:gap-8 xl:items-start flex-grow min-w-0"
     >
       <div ref={contentRef} className="xl:min-w-0">
       {/* Hero */}
@@ -992,7 +1014,7 @@ export default function ClaudeNegociosPage() {
             }}
           >
             <div className="flex w-max gap-6 py-3 animate-testimonial-marquee group-hover:[animation-play-state:paused]">
-              {[...testimonials, ...testimonials].map((ref, i) => {
+              {[...testimonials, ...testimonials].map((t, i) => {
                 const isClone = i >= testimonials.length;
                 const n = (i % testimonials.length) + 1;
                 return (
@@ -1015,15 +1037,22 @@ export default function ClaudeNegociosPage() {
                       <LinkedInIcon className="ml-auto h-3.5 w-3.5 text-[#0a66c2]/70 transition-colors duration-300 group-hover/card:text-[#0a66c2]" />
                     </figcaption>
 
-                    <iframe
-                      src={toEmbedSrc(ref)}
-                      title={`Testimonio de alumno en LinkedIn ${n}`}
-                      className="block h-[520px] w-full bg-[#f3f2ef]"
-                      frameBorder="0"
-                      allowFullScreen
-                      loading="lazy"
+                    <a
+                      href={t.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       tabIndex={isClone ? -1 : undefined}
-                    />
+                      aria-label={`Ver testimonio de alumno en LinkedIn ${n}`}
+                    >
+                      <Image
+                        src={t.image}
+                        alt={`Testimonio de alumno en LinkedIn ${n}`}
+                        width={460}
+                        height={t.height}
+                        className="block h-auto w-full bg-[#f3f2ef]"
+                        loading="lazy"
+                      />
+                    </a>
                   </figure>
                 );
               })}
@@ -1291,6 +1320,47 @@ export default function ClaudeNegociosPage() {
           </p>
         </div>
       </aside>
+
+      {/* Barra de precio + CTA fija en mobile: el sidebar con el precio
+          está oculto (xl:hidden en el aside de arriba), así que sin esto
+          había que scrollear todo el temario para ver cuánto cuesta.
+          Fondo sólido (sin backdrop-blur): combinado con el navbar fijo,
+          el blur en un segundo elemento "fixed" hacía que Safari en iOS
+          renderizara mal el navbar al hacer scroll. */}
+      <div
+        id="mobile-price-bar"
+        className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#161616] px-4 pb-3 pt-2.5"
+      >
+        <ul className="mb-2.5 flex flex-col gap-1 text-[10px] font-medium text-white/55 sm:flex-row sm:items-center sm:gap-3.5 sm:overflow-x-auto sm:whitespace-nowrap sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden">
+          {MOBILE_BAR_BENEFITS.map(({ icon: Icon, label }) => (
+            <li key={label} className="flex items-center gap-1 sm:shrink-0">
+              <Icon className="h-3 w-3 text-claude" />
+              {label}
+            </li>
+          ))}
+        </ul>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="truncate text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
+              Claude para Negocios
+            </p>
+            <p className="text-xl font-bold text-white">
+              {currencyLoading ? (
+                <span className="animate-pulse">···</span>
+              ) : (
+                formatLocalPrice(PRECIO_USD)
+              )}
+            </p>
+          </div>
+          <Link
+            href={CHECKOUT_URL}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg bg-gradient-to-r from-claude-deep to-claude px-4 py-3 text-sm font-bold text-white shadow-lg shadow-claude-deep/25"
+          >
+            Inscribirme
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
     </main>
   );
 }

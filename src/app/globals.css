@@ -219,3 +219,11 @@ body::before {
     animation: none;
   }
 }
+
+/* Cuando una página muestra su barra de precio fija en mobile
+   (#mobile-price-bar), el burbuja de WhatsApp sube para no taparla. */
+@media (max-width: 1279.98px) {
+  body:has(#mobile-price-bar) #whatsapp-float {
+    bottom: 5.5rem;
+  }
+}

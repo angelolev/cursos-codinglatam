@@ -84,7 +84,10 @@ export default async function RootLayout({
             <Footer />
           </CurrencyProvider>
         </SessionProvider>
-        <div className="bg-white rounded-full w-16 fixed bottom-5 right-4">
+        <div
+          id="whatsapp-float"
+          className="bg-white rounded-full w-16 fixed bottom-5 right-4"
+        >
           <WhastappButton />
         </div>
         <Analytics />

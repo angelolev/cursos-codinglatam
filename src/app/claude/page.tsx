@@ -323,21 +323,33 @@ export default function WaitlistPage() {
     },
   ];
 
-  // Testimonios de alumnos como posts incrustados de LinkedIn.
-  // En cada publicación pública: menú ⋯ → "Insertar esta publicación" (Embed this post).
-  // Pega aquí el urn (urn:li:share:... o urn:li:ugcPost:...) o el src completo del iframe.
-  const testimonials: string[] = [
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7465867780463001600?collapsed=1",
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7447303531075764224?collapsed=1",
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7445646280707604480?collapsed=1",
-    "https://www.linkedin.com/embed/feed/update/urn:li:share:7446270449925124096?collapsed=1",
+  // Testimonios de alumnos: capturas estáticas de posts de LinkedIn en
+  // vez de <iframe> embed, porque LinkedIn muestra un modal de "abrir la
+  // app" que tapa el post cuando el visitante no tiene sesión iniciada
+  // (frecuente en mobile). Para actualizar: capturar el post público a
+  // 460px de ancho y guardarlo en /public/testimonios.
+  const testimonials: { image: string; href: string; height: number }[] = [
+    {
+      image: "/testimonios/testimonio-01.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7465867780463001600/",
+      height: 535,
+    },
+    {
+      image: "/testimonios/testimonio-02.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7447303531075764224/",
+      height: 535,
+    },
+    {
+      image: "/testimonios/testimonio-03.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7445646280707604480/",
+      height: 598,
+    },
+    {
+      image: "/testimonios/testimonio-04.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7446270449925124096/",
+      height: 535,
+    },
   ];
-
-  // Normaliza un urn o URL al src del embed de LinkedIn.
-  const toEmbedSrc = (ref: string) =>
-    ref.startsWith("http")
-      ? ref
-      : `https://www.linkedin.com/embed/feed/update/${ref}`;
 
   return (
     <main
@@ -1076,7 +1088,7 @@ export default function WaitlistPage() {
             }}
           >
             <div className="flex w-max gap-6 py-3 animate-testimonial-marquee group-hover:[animation-play-state:paused]">
-              {[...testimonials, ...testimonials].map((ref, i) => {
+              {[...testimonials, ...testimonials].map((t, i) => {
                 const isClone = i >= testimonials.length;
                 const n = (i % testimonials.length) + 1;
                 return (
@@ -1101,16 +1113,23 @@ export default function WaitlistPage() {
                       <LinkedInIcon className="ml-auto h-3.5 w-3.5 text-[#0a66c2]/70 transition-colors duration-300 group-hover/card:text-[#0a66c2]" />
                     </figcaption>
 
-                    {/* LinkedIn embed */}
-                    <iframe
-                      src={toEmbedSrc(ref)}
-                      title={`Testimonio de alumno en LinkedIn ${n}`}
-                      className="block h-[520px] w-full bg-[#f3f2ef]"
-                      frameBorder="0"
-                      allowFullScreen
-                      loading="lazy"
+                    {/* Captura estática del post de LinkedIn */}
+                    <a
+                      href={t.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       tabIndex={isClone ? -1 : undefined}
-                    />
+                      aria-label={`Ver testimonio de alumno en LinkedIn ${n}`}
+                    >
+                      <Image
+                        src={t.image}
+                        alt={`Testimonio de alumno en LinkedIn ${n}`}
+                        width={460}
+                        height={t.height}
+                        className="block h-auto w-full bg-[#f3f2ef]"
+                        loading="lazy"
+                      />
+                    </a>
                   </figure>
                 );
               })}
