@@ -63,7 +63,6 @@ const MOBILE_BAR_BENEFITS: { icon: typeof CheckCircle2; label: string }[] = [
   { icon: CheckCircle2, label: "Sin experiencia previa" },
   { icon: Video, label: "Grabaciones incluidas" },
   { icon: BadgeCheck, label: "Certificado" },
-  { icon: CalendarDays, label: "Paga en 2 partes" },
 ];
 
 // Mismo horario real convertido a la hora local de cada país (verificado
@@ -1343,7 +1342,7 @@ export default function ClaudeNegociosPage() {
             <p className="truncate text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
               Claude para Negocios
             </p>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-3xl font-bold text-white">
               {currencyLoading ? (
                 <span className="animate-pulse">···</span>
               ) : (
