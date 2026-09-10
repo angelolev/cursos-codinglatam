@@ -59,6 +59,7 @@ const CONTACTO_EMAIL = "angelo@codinglatam.dev";
 
 // Beneficios mostrados en la barra de precio fija de mobile.
 const MOBILE_BAR_BENEFITS: { icon: typeof CheckCircle2; label: string }[] = [
+  { icon: Video, label: "Clases en vivo" },
   { icon: CheckCircle2, label: "Sin experiencia previa" },
   { icon: Video, label: "Grabaciones incluidas" },
   { icon: BadgeCheck, label: "Certificado" },
@@ -442,7 +443,7 @@ export default function ClaudeNegociosPage() {
 
   return (
     <main
-      className="pt-24 pb-44 sm:pb-28 xl:pb-16 mx-auto w-full max-w-7xl sm:px-6 px-4 lg:px-0 xl:grid xl:grid-cols-[1fr_360px] xl:gap-8 xl:items-start flex-grow min-w-0"
+      className="pt-24 pb-52 sm:pb-28 xl:pb-16 mx-auto w-full max-w-7xl sm:px-6 px-4 lg:px-0 xl:grid xl:grid-cols-[1fr_360px] xl:gap-8 xl:items-start flex-grow min-w-0"
     >
       <div ref={contentRef} className="xl:min-w-0">
         {/* Hero */}
@@ -1329,10 +1330,10 @@ export default function ClaudeNegociosPage() {
         id="mobile-price-bar"
         className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#161616] px-4 pb-3 pt-2.5"
       >
-        <ul className="mb-2.5 flex flex-col gap-1 text-[10px] font-medium text-white/55 sm:flex-row sm:items-center sm:gap-3.5 sm:overflow-x-auto sm:whitespace-nowrap sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden">
+        <ul className="mb-2.5 flex flex-col gap-1.5 text-xs font-medium text-white/55 sm:flex-row sm:items-center sm:gap-3.5 sm:overflow-x-auto sm:whitespace-nowrap sm:text-[10px] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden">
           {MOBILE_BAR_BENEFITS.map(({ icon: Icon, label }) => (
-            <li key={label} className="flex items-center gap-1 sm:shrink-0">
-              <Icon className="h-3 w-3 text-claude" />
+            <li key={label} className="flex items-center gap-1.5 sm:shrink-0">
+              <Icon className="h-3.5 w-3.5 shrink-0 text-claude sm:h-3 sm:w-3" />
               {label}
             </li>
           ))}
@@ -1342,7 +1343,7 @@ export default function ClaudeNegociosPage() {
             <p className="truncate text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
               Claude para Negocios
             </p>
-            <p className="text-xl font-bold text-white">
+            <p className="text-2xl font-bold text-white">
               {currencyLoading ? (
                 <span className="animate-pulse">···</span>
               ) : (
