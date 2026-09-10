@@ -393,7 +393,7 @@ export default function ClaudeNegociosPage() {
 
   // Qué te llevas al terminar
   const teLlevas = [
-    "Delega tu trabajoa la IA",
+    "Delega tu trabajo a la IA",
     "Tareas repetitivas convertidas en Skills",
     "Flujos y tareas automatizadas",
     "Criterio para saber cuándo la IA se está equivocando",
