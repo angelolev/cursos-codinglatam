@@ -4,13 +4,14 @@ import { generatePageMetadata } from "@/utils/metadata";
 
 export const metadata: Metadata = {
   ...generatePageMetadata(
-    "Claude para Negocios — Curso en vivo",
+    "Claude desde cero — Curso en vivo",
     "Aprende a delegarle tu trabajo diario a la IA y a construir tus propios agentes conectados a tus herramientas. 8 sesiones en vivo, 16 horas, sin código y sin conocimientos técnicos previos. Del 6 de octubre al 5 de noviembre de 2026.",
     "/claude-negocios",
     "https://codinglatam.dev/claude-negocios-og.png"
   ),
   keywords: [
-    "Claude para Negocios",
+    "Claude desde cero",
+    "curso de Claude desde cero",
     "Claude IA para empresas",
     "curso de IA sin código",
     "productividad con IA",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://codinglatam.dev/claude-negocios" },
 };
 
-export default function ClaudeNegociosLayout({
+export default function ClaudeDesdeCeroLayout({
   children,
 }: {
   children: React.ReactNode;

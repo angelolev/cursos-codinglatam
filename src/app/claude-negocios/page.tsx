@@ -53,7 +53,7 @@ const CONTACTO_WHATSAPP = "+51 964225808";
 const CONTACTO_WHATSAPP_URL =
   "https://wa.me/51964225808?text=" +
   encodeURIComponent(
-    "Hola, quiero inscribirme al curso Claude para Negocios (6 oct - 5 nov 2026)."
+    "Hola, quiero inscribirme al curso Claude desde cero (6 oct - 5 nov 2026)."
   );
 const CONTACTO_EMAIL = "angelo@codinglatam.dev";
 
@@ -113,7 +113,7 @@ const CURRENCY_LOCALE: Record<string, string> = {
   PYG: "es-PY",
 };
 
-export default function ClaudeNegociosPage() {
+export default function ClaudeDesdeCeroPage() {
   const contentRef = useRef<HTMLDivElement>(null);
   useScrollReveal(contentRef);
   const {
@@ -409,7 +409,7 @@ export default function ClaudeNegociosPage() {
   ];
 
   // Testimonios reales de la cohorte de Claude Code (mismo instructor,
-  // misma metodología en vivo). "Claude para Negocios" es su primera
+  // misma metodología en vivo). "Claude desde cero" es su primera
   // cohorte y todavía no tiene egresados propios, así que estos se
   // presentan de forma explícita como testimonios de esa otra cohorte,
   // no como si fueran de este curso. Mismos urns que usa /claude — al
@@ -475,7 +475,7 @@ export default function ClaudeNegociosPage() {
             Claude
             <br />
             <span className="text-claude underline decoration-claude-deep/50 decoration-2 underline-offset-[10px] drop-shadow-[0_0_30px_rgba(217,119,87,0.35)]">
-              para Negocios
+              desde cero
             </span>
           </h1>
 
@@ -991,7 +991,7 @@ export default function ClaudeNegociosPage() {
                 <strong className="text-white/80">Claude Code</strong>, el
                 curso de programación de Angelo — mismo instructor, misma
                 metodología en vivo y el mismo nivel de acompañamiento que
-                vas a tener en Claude para Negocios.
+                vas a tener en Claude desde cero.
               </p>
               <span className="inline-flex items-center gap-2 rounded-full border border-[#0a66c2]/30 bg-[#0a66c2]/10 px-3.5 py-1.5">
                 <LinkedInIcon className="h-3.5 w-3.5 text-[#0a66c2]" />
@@ -1171,7 +1171,7 @@ export default function ClaudeNegociosPage() {
           </div>
 
           <p className="text-sm font-bold text-white/85">
-            Claude para Negocios
+            Claude desde cero
           </p>
 
           <div className="mt-4 border-t border-dashed border-white/15 pt-4">
@@ -1340,7 +1340,7 @@ export default function ClaudeNegociosPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           <div className="min-w-0">
             <p className="truncate text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
-              Claude para Negocios
+              Claude desde cero
             </p>
             <p className="text-3xl font-bold text-white">
               {currencyLoading ? (

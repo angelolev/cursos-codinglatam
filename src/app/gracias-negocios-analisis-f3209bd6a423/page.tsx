@@ -44,7 +44,7 @@ export default function GraciasClaudeNegociosAnalisisPage() {
         </h2>
         <p className="text-sm text-white/60">
           En cuanto tu banco apruebe el pago, te llega un correo con la
-          confirmación de tu inscripción a Claude para Negocios.
+          confirmación de tu inscripción a Claude desde cero.
         </p>
       </div>
 

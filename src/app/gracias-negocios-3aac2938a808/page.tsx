@@ -25,7 +25,7 @@ export default function GraciasClaudeNegociosPage() {
       </div>
 
       <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-4">
-        ¡Gracias por inscribirte a Claude para Negocios!
+        ¡Gracias por inscribirte a Claude desde cero!
       </h1>
       <p className="text-white/60 mb-10">
         Tu pago fue procesado por Hotmart. En unos minutos te llega el correo

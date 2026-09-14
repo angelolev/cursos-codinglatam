@@ -31,7 +31,7 @@ export default function GraciasClaudeNegociosEsperaPage() {
       <p className="text-white/60 mb-10">
         Elegiste un método de pago que Hotmart necesita confirmar (por
         ejemplo PagoEfectivo o transferencia). Apenas se acredite, tu
-        inscripción a Claude para Negocios queda lista automáticamente.
+        inscripción a Claude desde cero queda lista automáticamente.
       </p>
 
       <div className={`${cardClass} p-6 sm:p-8 mb-10`}>
