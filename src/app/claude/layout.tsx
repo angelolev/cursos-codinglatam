@@ -3,8 +3,8 @@ import { generatePageMetadata } from "@/utils/metadata";
 
 export const metadata: Metadata = {
   ...generatePageMetadata(
-    "Certificación Claude Code Dev — Cohorte 4",
-    "Domina Claude Code en 2 días intensivos: 6 horas en vivo, 100% prácticas. De cero a construir proyectos completos con agentes autónomos de IA. Certificación · Cohorte 4 · Setiembre 2026. Early Bird para los primeros 10.",
+    "Claude Code para programadores — Inicia el 20 de octubre",
+    "Domina Claude Code, el agente de programación de Anthropic, y aprende a construir, revisar y desplegar software con agentes de IA. 8 clases en vivo, 4 semanas, 16 horas 100% prácticas. Del 20 de octubre al 12 de noviembre de 2026, martes y jueves de 8:00 a 10:00 PM hora Perú. Dictado por un miembro del Claude Partner Network.",
     "/claude",
     "https://codinglatam.dev/claude-og.png"
   ),
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "prompt engineering",
     "Coding Latam",
     "curso programación con IA",
+    "Claude Partner Network",
   ],
   alternates: { canonical: "https://codinglatam.dev/claude" },
 };
