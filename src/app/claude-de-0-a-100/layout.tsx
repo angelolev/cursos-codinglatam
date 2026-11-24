@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     "Claude de 0 a 100 — Inicia el 12 de enero",
     "De nunca haber usado IA a tener tu propio sistema de trabajo con Claude: correos, documentos, datos, atención por WhatsApp, diseño, tareas automáticas, tu propia web y edición de video, sin saber programar. 8 clases en vivo, 16 horas de práctica guiada y 5 entregables propios. Del 12 de enero al 4 de febrero de 2027, martes y jueves de 8:00 a 10:00 PM hora Perú. Dictado por un miembro del Claude Partner Network.",
     "/claude-de-0-a-100",
-    "https://codinglatam.dev/claude-og.png"
+    "https://codinglatam.dev/claude-de-0-a-100-og.jpg"
   ),
   keywords: [
     "Claude de 0 a 100",

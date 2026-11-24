@@ -387,7 +387,7 @@ export default function ClaudeCodePage() {
           {/* Ambient terracota glow + faint grid backdrop */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-[-6rem] -z-10 h-[28rem] w-[42rem] max-w-[110vw] -translate-x-1/2 rounded-full bg-primary-400/10 blur-[120px]"
+            className="pointer-events-none absolute left-1/2 top-[-6rem] -z-10 h-[28rem] w-[42rem] max-w-[100vw] -translate-x-1/2 rounded-full bg-primary-400/10 blur-[120px]"
           />
           <div
             aria-hidden
@@ -404,8 +404,8 @@ export default function ClaudeCodePage() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-60" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary-400" />
             </span>
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-500">
-              {PROMO_LABEL} · Inicia el {FECHA_INICIO}
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-primary-500">
+              {PROMO_LABEL} · <span className="hidden sm:inline">Inicia el </span>{FECHA_INICIO}
             </span>
           </div>
 
@@ -474,7 +474,7 @@ export default function ClaudeCodePage() {
                 <div className="text-3xl sm:text-4xl font-bold text-primary-400 drop-shadow-[0_0_20px_rgba(236,176,51,0.25)]">
                   {stat.value}
                 </div>
-                <div className="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+                <div className="mt-1 text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-white/60">
                   {stat.label}
                 </div>
               </div>
@@ -497,7 +497,7 @@ export default function ClaudeCodePage() {
           >
             ✳
           </span>
-          <p className="relative text-xs font-bold uppercase tracking-[0.2em] text-black/60">
+          <p className="relative text-xs font-bold uppercase tracking-[0.08em] md:tracking-[0.2em] text-black/60">
             Parte del ecosistema Claude
           </p>
           <h2 className="relative mt-3 text-3xl md:text-4xl font-bold leading-tight text-[#171717]">
@@ -513,13 +513,13 @@ export default function ClaudeCodePage() {
             <span className="text-xl text-primary-400">✳</span>
             <div>
               <p className="font-bold text-white/90">Claude Partner Network</p>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-white/50">
+              <p className="text-xs xl:text-[10px] uppercase tracking-[0.06em] md:tracking-[0.15em] text-[#b5b5b5]">
                 Miembro · Innodesign E.I.R.L.
               </p>
             </div>
           </div>
         </div>
-        <p className="max-w-4xl mx-auto mb-20 text-center text-[11px] text-white/30">
+        <p className="max-w-4xl mx-auto mb-20 text-center text-xs xl:text-[11px] text-white/60">
           Claude y Claude Partner Network son marcas de Anthropic. Coding Latam
           es un programa independiente.
         </p>
@@ -542,7 +542,7 @@ export default function ClaudeCodePage() {
                 &ldquo;
               </span>
               <Eyebrow>Testimonios</Eyebrow>
-              <h3 className="relative text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
+              <h3 className="relative text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3 mb-4">
                 Lo que dicen nuestros alumnos
               </h3>
               <span className="inline-flex items-center gap-2 rounded-full border border-[#0a66c2]/30 bg-[#0a66c2]/10 px-3.5 py-1.5">
@@ -566,7 +566,7 @@ export default function ClaudeCodePage() {
                     <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                     <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                   </span>
-                  <span className="ml-1 truncate text-xs text-white/40">
+                  <span className="ml-1 truncate text-xs text-white/60">
                     opiniones-alumnos.mp4
                   </span>
                   <Video className="ml-auto h-3.5 w-3.5 text-primary-400/70 transition-colors duration-300 group-hover/video:text-primary-400" />
@@ -617,7 +617,7 @@ export default function ClaudeCodePage() {
                           <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                           <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
                         </span>
-                        <span className="ml-1 truncate text-xs text-white/40">
+                        <span className="ml-1 truncate text-xs text-white/60">
                           testimonio-0{n}.md
                         </span>
                         <LinkedInIcon className="ml-auto h-3.5 w-3.5 text-[#0a66c2]/70 transition-colors duration-300 group-hover/card:text-[#0a66c2]" />
@@ -652,7 +652,7 @@ export default function ClaudeCodePage() {
         <div className="max-w-4xl mx-auto mb-20">
           <div className="text-center mb-10">
             <Eyebrow>Para quién es</Eyebrow>
-            <h2 className="text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
+            <h2 className="text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3 mb-4">
               Para quien quiere que la IA trabaje para él, no al revés
             </h2>
           </div>
@@ -663,11 +663,11 @@ export default function ClaudeCodePage() {
                 className={`${brandCard} group p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary-400/40`}
               >
                 <TopAccent />
-                <div className="text-2xl font-bold text-primary-400/40 mb-3 transition-colors duration-300 group-hover:text-primary-400/70">
+                <div className="text-2xl font-bold text-primary-400/70 mb-3 transition-colors duration-300 group-hover:text-primary-400">
                   {d.n}
                 </div>
-                <h3 className="font-bold text-white/90 mb-1.5">{d.title}</h3>
-                <p className="text-sm text-[#b5b5b5]">{d.text}</p>
+                <h3 className="text-lg md:text-base font-bold text-white/90 mb-1.5">{d.title}</h3>
+                <p className="text-base md:text-sm text-[#b5b5b5]">{d.text}</p>
               </div>
             ))}
           </div>
@@ -677,7 +677,7 @@ export default function ClaudeCodePage() {
         <div className="max-w-4xl mx-auto mb-20">
           <div className="text-center mb-10">
             <Eyebrow>Lo que te llevas</Eyebrow>
-            <h2 className="text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
+            <h2 className="text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3 mb-4">
               Terminas con 5 cosas funcionando
             </h2>
           </div>
@@ -688,16 +688,16 @@ export default function ClaudeCodePage() {
                 className={`${brandCard} group p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary-400/40`}
               >
                 <TopAccent />
-                <div className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary-500">
+                <div className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-primary-500">
                   {e.n} · {e.tag}
                 </div>
-                <h3 className="font-bold text-white/90 mb-1.5">{e.title}</h3>
-                <p className="text-sm text-[#b5b5b5]">{e.text}</p>
+                <h3 className="text-lg md:text-base font-bold text-white/90 mb-1.5">{e.title}</h3>
+                <p className="text-base md:text-sm text-[#b5b5b5]">{e.text}</p>
               </div>
             ))}
             <div className={`${brandCard} p-6 flex items-center`}>
               <TopAccent />
-              <p className="text-sm text-white/70">
+              <p className="text-base md:text-sm text-white/70">
                 Todo hecho por ti, sobre tus propios casos y{" "}
                 <strong className="text-primary-400">sin escribir código</strong>.
               </p>
@@ -705,7 +705,7 @@ export default function ClaudeCodePage() {
           </div>
 
           <div className="mt-10 text-center">
-            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
+            <p className="mb-4 text-xs xl:text-[10px] font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-white/60">
               Herramientas que vas a usar
             </p>
             <div className="flex flex-wrap justify-center gap-2">
@@ -721,7 +721,7 @@ export default function ClaudeCodePage() {
                 </span>
               ))}
             </div>
-            <p className="mt-4 text-sm text-white/50">
+            <p className="mt-4 text-sm text-[#b5b5b5]">
               Todo gira alrededor de Claude, con una sola cuenta. HyperFrames
               se usa desde Claude Code para editar video.
             </p>
@@ -733,10 +733,10 @@ export default function ClaudeCodePage() {
         <div className="max-w-4xl mx-auto mb-20">
           <div className="text-center mb-10">
             <Eyebrow>Temario · 8 sesiones de 2 horas</Eyebrow>
-            <h2 className="text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
+            <h2 className="text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3 mb-4">
               Cada clase suma una pieza a tu sistema
             </h2>
-            <p className="text-white/50 max-w-2xl mx-auto">
+            <p className="text-[#b5b5b5] max-w-2xl mx-auto">
               En vivo y grabadas. En 4 semanas pasas de tu primer chat con
               Claude a tener tu asistente, tus diseños, tareas automáticas, tu
               web y tus videos funcionando.
@@ -749,26 +749,26 @@ export default function ClaudeCodePage() {
                 <div key={cls.n} className={`${brandCard} p-5`}>
                   <TopAccent />
                   <div className="mb-1.5 flex items-center justify-between gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-500">
+                    <span className="text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-primary-500">
                       Sesión {String(cls.n).padStart(2, "0")}
                     </span>
-                    <span className="text-xs font-medium uppercase tracking-[0.15em] text-white/40">
+                    <span className="text-xs font-medium uppercase tracking-[0.06em] md:tracking-[0.15em] text-white/60">
                       {cls.day}
                     </span>
                   </div>
-                  <h3 className="font-bold text-white/90">{cls.title}</h3>
-                  <p className="mt-2 text-xs text-white/45">
+                  <h3 className="text-lg md:text-base font-bold text-white/90">{cls.title}</h3>
+                  <p className="mt-2 text-[15px] md:text-xs text-white/60">
                     Sales con ›{" "}
                     <span className="font-semibold text-primary-400">
                       {cls.outcome}
                     </span>
                   </p>
                   <details className="group mt-3 border-t border-white/10 pt-2.5">
-                    <summary className="flex cursor-pointer list-none items-center gap-1.5 text-xs font-semibold text-white/50 transition-colors hover:text-primary-400 [&::-webkit-details-marker]:hidden">
+                    <summary className="flex cursor-pointer list-none items-center gap-1.5 text-[15px] md:text-xs font-semibold text-[#b5b5b5] transition-colors hover:text-primary-400 [&::-webkit-details-marker]:hidden">
                       <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180" />
                       Ver temas de la clase
                     </summary>
-                    <ul className="mt-3 space-y-2 text-sm text-[#b5b5b5]">
+                    <ul className="mt-3 space-y-2 text-base md:text-sm text-[#b5b5b5]">
                       {cls.items.map((item) => (
                         <li key={item} className="flex items-start gap-2">
                           <span className="text-primary-400 mt-0.5">·</span>
@@ -789,13 +789,13 @@ export default function ClaudeCodePage() {
               <Rocket className="h-5 w-5 text-primary-400" />
             </span>
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-500">
+              <span className="text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-primary-500">
                 Antes de empezar
               </span>
               <h3 className="font-bold text-white/90 mt-1.5 mb-2">
                 Clase 0 en diciembre
               </h3>
-              <p className="text-sm text-[#b5b5b5]">
+              <p className="text-base md:text-sm text-[#b5b5b5]">
                 Configuramos Claude, instalamos todo lo que vas a usar y
                 resolvemos tus dudas en una sesión de preguntas y respuestas.
                 Todas las clases son de 8 a 10 p.m. (Perú) y quedan grabadas
@@ -809,7 +809,7 @@ export default function ClaudeCodePage() {
         <div className="max-w-4xl mx-auto mb-20">
           <div className="text-center mb-10">
             <Eyebrow>Inscripción</Eyebrow>
-            <h2 className="text-2xl md:text-3xl font-bold text-white/90 mt-3">
+            <h2 className="text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3">
               ¿Qué incluye tu inscripción?
             </h2>
           </div>
@@ -820,8 +820,8 @@ export default function ClaudeCodePage() {
                 <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-primary-500/30 bg-primary-500/10">
                   <inc.icon className="h-4 w-4 text-primary-400" />
                 </span>
-                <h3 className="font-bold text-white/90 mb-1 text-sm">{inc.title}</h3>
-                <p className="text-xs text-[#b5b5b5]">{inc.text}</p>
+                <h3 className="font-bold text-white/90 mb-1 text-base md:text-sm">{inc.title}</h3>
+                <p className="text-[15px] md:text-xs text-[#b5b5b5]">{inc.text}</p>
               </div>
             ))}
           </div>
@@ -832,10 +832,10 @@ export default function ClaudeCodePage() {
         <div id="inversion" className="max-w-4xl mx-auto scroll-mt-24">
           <div className="text-center mb-10">
             <Eyebrow>Inversión</Eyebrow>
-            <h2 className="text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
+            <h2 className="text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3 mb-4">
               Asegura tu cupo
             </h2>
-            <p className="text-white/50 max-w-2xl mx-auto">
+            <p className="text-[#b5b5b5] max-w-2xl mx-auto">
               Separa tu cupo hoy y empieza en enero.
             </p>
           </div>
@@ -843,21 +843,21 @@ export default function ClaudeCodePage() {
             <TopAccent />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:items-center">
               <div>
-                <span className="inline-flex rounded-full border border-primary-300/40 bg-primary-300/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-primary-300">
+                <span className="inline-flex rounded-full border border-primary-300/40 bg-primary-300/10 px-3.5 py-1 text-xs xl:text-[10px] font-bold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-300">
                   {PROMO_LABEL} — {DESCUENTO}
                 </span>
                 <div className="mt-5 flex items-baseline gap-3">
                   <span className="text-5xl sm:text-6xl font-bold text-white drop-shadow-[0_0_24px_rgba(236,176,51,0.3)]">
                     {EARLY_BIRD_PRICE_PEN}
                   </span>
-                  <span className="text-xl text-white/40 line-through">
+                  <span className="text-xl text-white/60 line-through">
                     {REGULAR_PRICE_PEN}
                   </span>
                 </div>
-                <p className="mt-2 text-xs text-white/40">
+                <p className="mt-2 text-xs text-white/60">
                   PEN · Precio {PROMO_LABEL}
                 </p>
-                <p className="mt-4 inline-flex rounded-lg border border-dashed border-primary-400/40 px-3 py-2 text-xs text-white/70">
+                <p className="mt-4 inline-flex rounded-lg border border-dashed border-primary-400/40 px-3 py-2 text-[15px] md:text-xs text-white/70">
                   {PROMO_VIGENCIA}
                 </p>
               </div>
@@ -873,7 +873,7 @@ export default function ClaudeCodePage() {
                     key={k}
                     className="flex items-baseline justify-between gap-4 border-b border-white/10 py-2.5"
                   >
-                    <dt className="text-[10px] uppercase tracking-[0.15em] text-white/40 shrink-0">
+                    <dt className="text-xs xl:text-[10px] uppercase tracking-[0.06em] md:tracking-[0.15em] text-white/60 shrink-0">
                       {k}
                     </dt>
                     <dd className="text-right text-xs sm:text-sm font-semibold text-white/80">
@@ -886,7 +886,7 @@ export default function ClaudeCodePage() {
 
             <div className="mt-6 flex items-start gap-3 rounded-xl border border-primary-500/40 bg-primary-500/5 p-4">
               <CalendarDays className="h-5 w-5 text-primary-400 shrink-0 mt-0.5" />
-              <p className="text-sm text-white/70">
+              <p className="text-base md:text-sm text-white/70">
                 <strong className="text-white/90">Fechas de las clases:</strong>{" "}
                 {FECHAS_SESIONES}. La Clase 0 es en diciembre.
               </p>
@@ -909,13 +909,13 @@ export default function ClaudeCodePage() {
                   key={o.label}
                   className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
                 >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary-500">
+                  <p className="text-xs xl:text-[10px] font-semibold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-500">
                     {o.label}
                   </p>
                   <p className="mt-1 text-2xl font-bold text-white/90">
                     {o.value}
                   </p>
-                  <p className="mt-1 text-xs text-[#b5b5b5]">{o.text}</p>
+                  <p className="mt-1 text-[15px] md:text-xs text-[#b5b5b5]">{o.text}</p>
                 </div>
               ))}
             </div>
@@ -933,7 +933,7 @@ export default function ClaudeCodePage() {
                 Separar mi cupo por WhatsApp
                 <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
-              <p className="text-white/40 text-sm">
+              <p className="text-white/60 text-sm">
                 Mercado Pago · Yape · Plin · Transferencia · PayPal
               </p>
               <a
@@ -949,7 +949,7 @@ export default function ClaudeCodePage() {
             {/* Requisitos */}
             <div className="mt-8 border-t border-white/10 pt-5 flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-primary-400 shrink-0 mt-0.5" />
-              <p className="text-sm text-[#b5b5b5]">
+              <p className="text-base md:text-sm text-[#b5b5b5]">
                 <strong className="text-white/90">Qué necesitas:</strong> una
                 computadora con macOS o Windows, buena conexión y una{" "}
                 <strong className="text-white/90">
@@ -989,7 +989,7 @@ export default function ClaudeCodePage() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-sm text-[#b5b5b5] mb-5">
+                  <p className="text-base md:text-sm text-[#b5b5b5] mb-5">
                     Escanea el código QR desde tu app de Yape o Plin. Titular:{" "}
                     <b className="text-white/90">Innodesign</b>. Envía tu
                     voucher al{" "}
@@ -1008,7 +1008,7 @@ export default function ClaudeCodePage() {
                         key={k}
                         className="flex items-baseline justify-between gap-4 border-b border-white/10 py-2.5"
                       >
-                        <dt className="text-[10px] uppercase tracking-[0.15em] text-white/40">
+                        <dt className="text-xs xl:text-[10px] uppercase tracking-[0.06em] md:tracking-[0.15em] text-white/60">
                           {k}
                         </dt>
                         <dd className="text-right text-xs sm:text-sm font-semibold text-white/80">
@@ -1029,7 +1029,7 @@ export default function ClaudeCodePage() {
                         className="w-full h-auto"
                       />
                     </div>
-                    <p className="w-full text-center text-sm font-semibold uppercase tracking-[0.15em] text-primary-500">
+                    <p className="w-full text-center text-sm font-semibold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-500">
                       Paga con QR
                     </p>
                   </div>
@@ -1043,7 +1043,7 @@ export default function ClaudeCodePage() {
         <div className="mt-20 max-w-4xl mx-auto">
           <div className="mb-8">
             <Eyebrow>Instructor</Eyebrow>
-            <h3 className="text-2xl md:text-3xl font-bold text-white/90 mt-3">
+            <h3 className="text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3">
               Quién te guía
             </h3>
           </div>
@@ -1058,7 +1058,7 @@ export default function ClaudeCodePage() {
                 className="w-24 h-24 rounded-full object-cover border border-white/10 shrink-0"
               />
               <div>
-                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-500 mb-1">
+                <div className="text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-primary-500 mb-1">
                   Docente principal
                 </div>
                 <h4 className="text-2xl font-bold text-white/90">Angelo Leva</h4>
@@ -1068,7 +1068,7 @@ export default function ClaudeCodePage() {
                 </p>
               </div>
             </div>
-            <div className="space-y-4 text-sm text-[#b5b5b5]">
+            <div className="space-y-4 text-base md:text-sm text-[#b5b5b5]">
               <p className="text-base text-white/80">
                 Ayuda a equipos y empresas a adoptar la IA de la forma
                 correcta: con capacitación práctica que convierte herramientas
@@ -1110,7 +1110,7 @@ export default function ClaudeCodePage() {
                   <span className="text-2xl font-bold text-primary-400 shrink-0">
                     {s.value}
                   </span>
-                  <span className="text-xs text-[#b5b5b5]">{s.label}</span>
+                  <span className="text-[15px] md:text-xs text-[#b5b5b5]">{s.label}</span>
                 </div>
               ))}
             </div>
@@ -1152,7 +1152,7 @@ export default function ClaudeCodePage() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-60" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary-400" />
                 </span>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-500">
+                <span className="text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-primary-500">
                   {PROMO_LABEL} · Inicia el {FECHA_INICIO}
                 </span>
               </div>
@@ -1167,7 +1167,7 @@ export default function ClaudeCodePage() {
               </p>
 
               {/* Chips de logística */}
-              <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-base md:text-sm text-white/70">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                   <CalendarDays className="h-4 w-4 text-primary-400" />
                   Del {FECHA_INICIO} al {FECHA_FIN.replace(" de 2027", "")} · {FRECUENCIA}
@@ -1193,7 +1193,7 @@ export default function ClaudeCodePage() {
                 Separar mi cupo — {EARLY_BIRD_PRICE_PEN}
                 <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
-              <p className="text-white/40 text-sm mt-4">
+              <p className="text-white/60 text-sm mt-4">
                 {PROMO_VIGENCIA} · Consultas al{" "}
                 <a
                   href={CONTACTO_WHATSAPP_URL}
@@ -1219,7 +1219,7 @@ export default function ClaudeCodePage() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-60" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary-400" />
             </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary-500">
+            <span className="text-xs xl:text-[10px] font-semibold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-500">
               Inicia el {FECHA_INICIO}
             </span>
           </div>
@@ -1228,7 +1228,7 @@ export default function ClaudeCodePage() {
             <p className="text-sm font-bold text-white/85">
               Claude de 0 a 100
             </p>
-            <span className="shrink-0 whitespace-nowrap rounded-md border border-primary-300/40 bg-primary-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em] text-primary-300">
+            <span className="shrink-0 whitespace-nowrap rounded-md border border-primary-300/40 bg-primary-300/10 px-2 py-0.5 text-xs xl:text-[10px] font-bold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-300">
               {PROMO_LABEL}
             </span>
           </div>
@@ -1238,34 +1238,34 @@ export default function ClaudeCodePage() {
               <span className="text-4xl font-bold text-white drop-shadow-[0_0_24px_rgba(236,176,51,0.3)]">
                 {EARLY_BIRD_PRICE_PEN}
               </span>
-              <span className="text-lg text-white/40 line-through">
+              <span className="text-lg text-white/60 line-through">
                 {REGULAR_PRICE_PEN}
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between gap-2">
-              <span className="inline-flex items-center rounded-full border border-primary-400/30 bg-primary-400/10 px-2.5 py-0.5 text-[11px] font-bold text-primary-400">
+              <span className="inline-flex items-center rounded-full border border-primary-400/30 bg-primary-400/10 px-2.5 py-0.5 text-xs xl:text-[11px] font-bold text-primary-400">
                 {DESCUENTO}
               </span>
-              <span className="text-[10px] uppercase tracking-[0.15em] text-white/30">
+              <span className="text-xs xl:text-[10px] uppercase tracking-[0.06em] md:tracking-[0.15em] text-white/60">
                 Precio {PROMO_LABEL}
               </span>
             </div>
           </div>
-          <p className="text-white/40 text-xs mt-2">
+          <p className="text-white/60 text-xs mt-2">
             Precio en soles peruanos (PEN), por persona.
           </p>
           <p className="mt-2 text-xs font-semibold text-primary-400">
             {PROMO_VIGENCIA}
           </p>
-          <p className="mt-1 text-xs text-white/50">
+          <p className="mt-1 text-xs text-[#b5b5b5]">
             {CUOTAS} · Pack dúo: {PACK_DUO}
           </p>
 
           <div className="mt-4 border-t border-white/10 pt-4">
-            <p className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
+            <p className="mb-2.5 text-xs xl:text-[10px] font-semibold uppercase tracking-[0.06em] md:tracking-[0.15em] text-white/60">
               Martes y jueves — tu hora local
             </p>
-            <ul className="space-y-3 text-xs text-white/70">
+            <ul className="space-y-3 text-[15px] md:text-xs text-white/70">
               {HORARIOS_PAIS.map((h) => (
                 <li
                   key={h.time}
@@ -1324,12 +1324,12 @@ export default function ClaudeCodePage() {
                 ))
               )}
               <div className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#1e1e1e] bg-primary-400">
-                <span className="text-[10px] font-bold text-[#171717]">
+                <span className="text-xs xl:text-[10px] font-bold text-[#171717]">
                   +300
                 </span>
               </div>
             </div>
-            <p className="text-xs leading-relaxed text-white/50">
+            <p className="text-[15px] md:text-xs leading-relaxed text-[#b5b5b5]">
               Más de 300 personas ya se formaron en IA con Coding Latam. Sé
               parte de la cohorte que inicia el {FECHA_INICIO}.
             </p>
@@ -1354,10 +1354,10 @@ export default function ClaudeCodePage() {
             <Download className="h-4 w-4" />
             Descargar brochure (PDF)
           </a>
-          <p className="text-center text-white/40 text-[11px] mt-3">
+          <p className="text-center text-white/60 text-xs xl:text-[11px] mt-3">
             Mercado Pago · Yape · Plin · Transferencia · PayPal
           </p>
-          <p className="text-center text-white/40 text-[11px] mt-1">
+          <p className="text-center text-white/60 text-xs xl:text-[11px] mt-1">
             Consultas al{" "}
             <a
               href={CONTACTO_WHATSAPP_URL}
@@ -1369,7 +1369,7 @@ export default function ClaudeCodePage() {
             </a>
           </p>
 
-          <ul className="mt-5 space-y-2.5 border-t border-white/10 pt-4 text-xs text-white/70">
+          <ul className="mt-5 space-y-2.5 border-t border-white/10 pt-4 text-[15px] md:text-xs text-white/70">
             {SIDEBAR_BENEFITS.map((b) => (
               <li key={b} className="flex items-start gap-2">
                 <CheckCircle2 className="h-3.5 w-3.5 text-primary-400 shrink-0 mt-0.5" />
@@ -1387,19 +1387,19 @@ export default function ClaudeCodePage() {
           el navbar al hacer scroll. */}
       <div
         id="mobile-price-bar"
-        className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#3d3d3d] bg-[#171717]/95 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))]"
+        className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#3d3d3d] bg-[#171717] px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))]"
       >
         {/* Una sola fila: precio a la izquierda, CTA a la derecha. */}
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-[10px] font-semibold uppercase tracking-[0.15em] text-primary-400">
+            <p className="truncate text-xs xl:text-[10px] font-semibold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-400">
               {PROMO_LABEL} · {DESCUENTO}
             </p>
             <p className="flex items-baseline gap-1.5 whitespace-nowrap">
               <span className="text-2xl font-bold leading-tight text-white">
                 {EARLY_BIRD_PRICE_PEN}
               </span>
-              <span className="text-xs text-white/40 line-through">
+              <span className="text-xs text-white/60 line-through">
                 {REGULAR_PRICE_PEN}
               </span>
             </p>
