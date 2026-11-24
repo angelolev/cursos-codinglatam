@@ -51,6 +51,64 @@ function srLabel(r: Remaining) {
 }
 
 /**
+ * Franja roja fija bajo el navbar con la cuenta regresiva, visible durante
+ * todo el scroll. Mismo patrón que el PromoBanner global (sticky top-16, en
+ * el flujo), así no hace falta compensar padding y al vencer la promo
+ * desaparece sin dejar hueco. Toda la franja lleva al bloque de precio.
+ */
+export function CountdownBanner({
+  href,
+  price,
+  promoLabel,
+}: {
+  href: string;
+  price: string;
+  promoLabel: string;
+}) {
+  const remaining = useCountdown(PROMO_DEADLINE);
+
+  if (remaining === "expired") return null;
+
+  const time = remaining
+    ? `${remaining.days}d ${pad(remaining.hours)}h ${pad(remaining.minutes)}m ${pad(remaining.seconds)}s`
+    : "0d 00h 00m 00s";
+
+  return (
+    <a
+      href={href}
+      className="group sticky top-16 z-20 block w-full bg-red-600 text-white shadow-[0_8px_24px_-12px_rgba(220,38,38,0.8)] transition-colors hover:bg-red-700"
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-center gap-2.5 px-3 py-2.5 text-[13px] sm:gap-4 sm:px-4 sm:text-sm">
+        <span className="relative flex h-2 w-2 shrink-0">
+          <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-75 motion-safe:animate-ping" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+        </span>
+        <span className="hidden font-bold uppercase tracking-[0.12em] sm:inline">
+          {promoLabel} · {price}
+        </span>
+        <span role="timer" className="whitespace-nowrap">
+          {remaining && (
+            <span className="sr-only">{srLabel(remaining)}</span>
+          )}
+          <span aria-hidden>
+            <span className="sm:hidden">{promoLabel} termina en </span>
+            <span className="hidden sm:inline">Termina en </span>
+            <strong
+              className={`font-bold tabular-nums ${remaining ? "" : "invisible"}`}
+            >
+              {time}
+            </strong>
+          </span>
+        </span>
+        <span className="hidden items-center gap-1 rounded-md bg-white px-3 py-1 text-xs font-bold text-red-700 transition-transform group-hover:translate-x-0.5 sm:inline-flex">
+          Separar cupo →
+        </span>
+      </div>
+    </a>
+  );
+}
+
+/**
  * Cuenta regresiva de la promoción.
  * - `full`: cajas con días, horas, minutos y segundos (hero y bloque de precio).
  * - `compact`: una línea "5d 12h 30m 10s" (sidebar y barra fija de mobile).
