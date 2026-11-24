@@ -51,7 +51,52 @@ const CONTACTO_WHATSAPP_URL =
 // No hay link de Mercado Pago para este precio: la inscripción se cierra
 // por WhatsApp (pago con Mercado Pago, Yape, Plin, transferencia o PayPal).
 const CHECKOUT_URL = CONTACTO_WHATSAPP_URL;
+// Dos versiones del brochure: A4 para computadora y vertical para celular.
+// Hasta tablet (iPad en vertical, < 1024px) se ofrece la de celular.
 const BROCHURE_URL = "/brochures/claude-de-0-a-100.pdf";
+const BROCHURE_MOBILE_URL = "/brochures/claude-de-0-a-100-celular.pdf";
+
+// Clases literales para que Tailwind las detecte: la versión celular se ve
+// por debajo de `lg` y la de computadora desde `lg`.
+const BROCHURE_VISIBILITY = {
+  flex: { mobile: "flex lg:hidden", desktop: "hidden lg:flex" },
+  "inline-flex": {
+    mobile: "inline-flex lg:hidden",
+    desktop: "hidden lg:inline-flex",
+  },
+} as const;
+
+// Botón de descarga del brochure: muestra la versión adecuada según el
+// ancho de pantalla.
+function BrochureDownload({
+  className,
+  display = "inline-flex",
+}: {
+  className: string;
+  display?: keyof typeof BROCHURE_VISIBILITY;
+}) {
+  const v = BROCHURE_VISIBILITY[display];
+  return (
+    <>
+      <a
+        href={BROCHURE_MOBILE_URL}
+        download="Claude de 0 a 100 - Brochure (celular).pdf"
+        className={`${v.mobile} ${className}`}
+      >
+        <Download className="h-4 w-4" />
+        Descargar brochure (PDF)
+      </a>
+      <a
+        href={BROCHURE_URL}
+        download="Claude de 0 a 100 - Brochure.pdf"
+        className={`${v.desktop} ${className}`}
+      >
+        <Download className="h-4 w-4" />
+        Descargar brochure (PDF)
+      </a>
+    </>
+  );
+}
 
 // Precios fijos en soles peruanos (PEN)
 const REGULAR_PRICE_PEN = "S/ 399";
@@ -434,14 +479,7 @@ export default function ClaudeCodePage() {
               Separar mi cupo — {EARLY_BIRD_PRICE_PEN}
               <ArrowRight className="h-4 w-4" />
             </a>
-            <a
-              href={BROCHURE_URL}
-              download
-              className="inline-flex items-center gap-2 rounded-lg border border-[#3d3d3d] bg-[#1e1e1e] px-6 py-3 font-semibold text-white/85 transition-colors hover:border-primary-400/60 hover:text-primary-400"
-            >
-              <Download className="h-4 w-4" />
-              Descargar brochure (PDF)
-            </a>
+            <BrochureDownload className="items-center gap-2 rounded-lg border border-[#3d3d3d] bg-[#1e1e1e] px-6 py-3 font-semibold text-white/85 transition-colors hover:border-primary-400/60 hover:text-primary-400" />
           </div>
 
           {/* Chips de formato */}
@@ -936,14 +974,7 @@ export default function ClaudeCodePage() {
               <p className="text-white/60 text-sm">
                 Mercado Pago · Yape · Plin · Transferencia · PayPal
               </p>
-              <a
-                href={BROCHURE_URL}
-                download
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary-400 underline decoration-primary-500/50 underline-offset-4 hover:text-primary-300"
-              >
-                <Download className="h-4 w-4" />
-                Descargar brochure (PDF)
-              </a>
+              <BrochureDownload className="items-center gap-2 text-sm font-semibold text-primary-400 underline decoration-primary-500/50 underline-offset-4 hover:text-primary-300" />
             </div>
 
             {/* Requisitos */}
@@ -1346,9 +1377,10 @@ export default function ClaudeCodePage() {
             Separar mi cupo
             <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
+          {/* El sidebar solo se ve en desktop (xl): versión A4. */}
           <a
             href={BROCHURE_URL}
-            download
+            download="Claude de 0 a 100 - Brochure.pdf"
             className="mt-2.5 flex items-center justify-center gap-2 rounded-lg border border-[#3d3d3d] px-6 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:border-primary-400/60 hover:text-primary-400"
           >
             <Download className="h-4 w-4" />
