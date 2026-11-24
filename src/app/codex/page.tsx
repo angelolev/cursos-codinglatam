@@ -1,0 +1,1279 @@
+"use client";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  CheckCircle2,
+  AlertCircle,
+  Mail,
+  ArrowRight,
+  Zap,
+  GraduationCap,
+  TrendingUp,
+  Video,
+  BadgeCheck,
+  Users,
+  MessageCircle,
+  Code2,
+  RefreshCw,
+  AlertTriangle,
+  Calendar,
+  Clock,
+} from "lucide-react";
+import { WaitlistAvatar } from "@/types/waitlist";
+import {
+  Eyebrow,
+  cardClass,
+  TopAccent,
+  TerminalSnippet,
+  WhatsAppIcon,
+  LinkedInIcon,
+  PEFlag,
+  useScrollReveal,
+} from "@/components/claude-brochure";
+import angeloImage from "@/assets/angelo.jpeg";
+import paypalImage from "@/assets/paypal.svg";
+import visaImage from "@/assets/visa.svg";
+import cardImage from "@/assets/card.svg";
+import americanExpressImage from "@/assets/amex.svg";
+import yapeImage from "@/assets/yape.svg";
+import plinImage from "@/assets/plin.svg";
+import yapeQR from "@/assets/yape-qr.jpeg";
+
+// TODO: reemplazar por el grupo oficial de WhatsApp de la Cohorte 1 de Codex
+// cuando exista. Mientras tanto apunta al WhatsApp de Coding Latam.
+const WHATSAPP_GROUP_URL =
+  "https://wa.me/51964225808?text=Hola%2C%20quiero%20informaci%C3%B3n%20del%20curso%20de%20Codex";
+
+// TODO: reemplazar por el link de pago de Mercado Pago del curso de Codex.
+// No reutilizar el link de /claude: cobraría el curso equivocado.
+const CHECKOUT_URL =
+  "https://wa.me/51964225808?text=Hola%2C%20quiero%20inscribirme%20al%20curso%20de%20Codex";
+
+export default function CodexPage() {
+  const mainRef = useRef<HTMLElement>(null);
+  useScrollReveal(mainRef);
+
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+  const [avatars, setAvatars] = useState<WaitlistAvatar[]>([]);
+  const [avatarsLoading, setAvatarsLoading] = useState(true);
+  const [certCount, setCertCount] = useState<number | null>(null);
+
+  // Precios fijos en soles peruanos (PEN)
+  const REGULAR_PRICE_PEN = "S/ 199";
+  const EARLY_BIRD_PRICE_PEN = "S/ 129";
+  const SAVINGS_PEN = "S/ 70";
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitStatus({ type: null, message: "" });
+
+    // Client validation
+    if (!email.trim()) {
+      setSubmitStatus({
+        type: "error",
+        message: "Por favor ingresa tu email",
+      });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setSubmitStatus({
+        type: "error",
+        message: "Por favor ingresa un email válido",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.toLowerCase().trim() }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Error al registrar email");
+      }
+
+      setSubmitStatus({
+        type: "success",
+        message:
+          "¡Listo! Recibirás información del programa y futuras versiones por email.",
+      });
+      setEmail("");
+
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus({ type: null, message: "" });
+      }, 5000);
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Algo salió mal",
+      });
+
+      // Auto-hide error message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus({ type: null, message: "" });
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchAvatars() {
+      try {
+        const response = await fetch("/api/users/random");
+        const data = await response.json();
+
+        if (data.users && data.users.length >= 3) {
+          setAvatars(data.users.slice(0, 3)); // Tomar primeros 3
+        }
+      } catch (error) {
+        console.error("Failed to load avatars:", error);
+        // Mantener avatars vacío -> fallback a estáticos
+      } finally {
+        setAvatarsLoading(false);
+      }
+    }
+
+    fetchAvatars();
+  }, []);
+
+  useEffect(() => {
+    async function fetchCertCount() {
+      try {
+        const response = await fetch("/api/certificates/count");
+        const data = await response.json();
+
+        if (typeof data.count === "number") {
+          setCertCount(data.count);
+        }
+      } catch (error) {
+        console.error("Failed to load certificate count:", error);
+        // Mantener certCount en null -> fallback al valor estático
+      }
+    }
+
+    fetchCertCount();
+  }, []);
+
+  // Programa completo: 8 clases en vivo el sábado 16 y domingo 17 de enero (9:00 AM - 12:00 PM)
+  const program = [
+    {
+      block: "Sábado 16 de enero",
+      schedule: "9:00 AM – 12:00 PM",
+      classes: [
+        {
+          n: 1,
+          time: "9:00 – 9:45",
+          title: "Introducción y Configuración",
+          items: [
+            "Qué es Codex y en qué se diferencia de ChatGPT y Copilot",
+            "Las superficies de Codex: CLI, extensión para IDE y Codex Cloud",
+            "Planes y costos",
+            "Instalación en vivo",
+            "Login con ChatGPT vs API Key",
+          ],
+        },
+        {
+          n: 2,
+          time: "9:45 – 10:30",
+          title: "Sesiones, Comandos y Navegación",
+          items: [
+            "Anatomía de una sesión en la CLI",
+            "Comandos: /model, /status, /diff, /compact, /review",
+            "Mencionar archivos con @ y adjuntar imágenes",
+            "Contexto y tokens",
+            "Retomar sesiones con resume",
+          ],
+        },
+        {
+          n: 3,
+          time: "10:30 – 11:15",
+          title: "AGENTS.md, config.toml y Sandbox",
+          items: [
+            "AGENTS.md a nivel global, proyecto y subcarpetas",
+            "Qué incluir: stack, convenciones, comandos de test",
+            "config.toml y perfiles",
+            "Modos de aprobación y sandbox: read-only, workspace-write, full access",
+          ],
+        },
+        {
+          n: 4,
+          time: "11:15 – 12:00",
+          title: "MCP Servers",
+          items: [
+            "Qué es MCP (Model Context Protocol)",
+            "Cuándo usar un MCP y cuándo no",
+            "MCP servers populares: GitHub, Playwright, Figma, documentación",
+            "Configuración práctica en config.toml",
+          ],
+        },
+      ],
+    },
+    {
+      block: "Domingo 17 de enero",
+      schedule: "9:00 AM – 12:00 PM",
+      classes: [
+        {
+          n: 5,
+          time: "9:00 – 9:45",
+          title: "Skills, Prompts y Automatización",
+          items: [
+            "Skills: empaquetar flujos de trabajo reutilizables",
+            "Prompts personalizados como slash commands",
+            "codex exec: Codex en modo no interactivo",
+            "Automatizar tareas con scripts",
+          ],
+        },
+        {
+          n: 6,
+          time: "9:45 – 10:30",
+          title: "Modelos, Razonamiento y Prompt Engineering",
+          items: [
+            "Modelos de Codex: cuándo usar cada uno",
+            "Niveles de razonamiento (reasoning effort)",
+            "Planificar antes de ejecutar",
+            "Prompt engineering para código profesional",
+          ],
+        },
+        {
+          n: 7,
+          time: "10:30 – 11:15",
+          title: "Codex Cloud y Tareas en Paralelo",
+          items: [
+            "Delegar tareas a la nube desde la web y el IDE",
+            "Entornos y scripts de setup",
+            "Varias tareas en paralelo y revisión de diffs",
+            "Testing E2E con Playwright como ejemplo",
+          ],
+        },
+        {
+          n: 8,
+          time: "11:15 – 12:00",
+          title: "GitHub Integration y Proyecto Final",
+          items: [
+            "Code review automático con @codex en PRs",
+            "Crear PRs directamente desde Codex",
+            "Flujo completo: issue → PR → review",
+            "Codex en CI con GitHub Actions",
+          ],
+        },
+      ],
+    },
+  ];
+
+  // Metodología de aprendizaje
+  const methodology = [
+    {
+      n: "01",
+      title: "Learning by Doing",
+      text: "Cada clase incluye ejercicios prácticos. Resuelves problemas concretos, no ves slides pasivamente.",
+    },
+    {
+      n: "02",
+      title: "Progresivo y guiado",
+      text: "Desde los fundamentos hasta producción. Cada día construye sobre el anterior con complejidad creciente.",
+    },
+    {
+      n: "03",
+      title: "Proyecto real",
+      text: "Construirás un proyecto completo que demuestra tus habilidades y que impresiona a empleadores.",
+    },
+  ];
+
+  // ¿Qué incluye tu inscripción?
+  const inclusions = [
+    {
+      icon: Video,
+      title: "Grabaciones de por vida",
+      text: "Acceso permanente a las grabaciones de todas las clases para repasar cuando quieras",
+    },
+    {
+      icon: BadgeCheck,
+      title: "Certificación verificable",
+      text: "Badge para LinkedIn que valida tus habilidades con Codex",
+    },
+    {
+      icon: Users,
+      title: "Comunidad privada",
+      text: "Acceso al grupo exclusivo de alumnos y egresados para networking y soporte",
+    },
+    {
+      icon: MessageCircle,
+      title: "Mentoría en vivo",
+      text: "Resuelve dudas en tiempo real durante cada clase con el instructor",
+    },
+    {
+      icon: Code2,
+      title: "Proyectos prácticos",
+      text: "Cada clase incluye ejercicios reales que suman a tu portfolio profesional",
+    },
+    {
+      icon: RefreshCw,
+      title: "Actualizaciones incluidas",
+      text: "Acceso a futuras actualizaciones del contenido sin costo adicional",
+    },
+  ];
+
+  // Testimonios de alumnos: capturas estáticas de posts de LinkedIn en
+  // vez de <iframe> embed, porque LinkedIn muestra un modal de "abrir la
+  // app" que tapa el post cuando el visitante no tiene sesión iniciada
+  // (frecuente en mobile). Para actualizar: capturar el post público a
+  // 460px de ancho y guardarlo en /public/testimonios.
+  const testimonials: { image: string; href: string; height: number }[] = [
+    {
+      image: "/testimonios/testimonio-01.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7465867780463001600/",
+      height: 535,
+    },
+    {
+      image: "/testimonios/testimonio-02.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7447303531075764224/",
+      height: 535,
+    },
+    {
+      image: "/testimonios/testimonio-03.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7445646280707604480/",
+      height: 598,
+    },
+    {
+      image: "/testimonios/testimonio-04.png",
+      href: "https://www.linkedin.com/feed/update/urn:li:share:7446270449925124096/",
+      height: 535,
+    },
+  ];
+
+  return (
+    <main
+      ref={mainRef}
+      className="pt-24 pb-16 mx-auto w-full max-w-4xl sm:px-6 px-4 lg:px-0 flex-grow min-w-0 [--accent:#8b9cff] [--accent-deep:#6474f0]"
+    >
+      {/* Hero Section */}
+      <div className="relative text-center mb-16">
+        {/* Ambient terracota glow + faint grid backdrop */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-[-6rem] -z-10 h-[28rem] w-[42rem] max-w-[110vw] -translate-x-1/2 rounded-full bg-accent/10 blur-[120px]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-[-6rem] -z-10 h-[26rem] opacity-[0.12] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)",
+            backgroundSize: "44px 44px",
+          }}
+        />
+
+        <div className="inline-flex items-center gap-2 rounded-full border border-accent-deep/40 bg-accent-deep/10 px-4 py-1.5 mb-8">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+          </span>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-deep">
+            Inscripciones abiertas — Enero 2027
+          </span>
+        </div>
+
+        <h1 className="text-4xl md:text-6xl font-bold text-white/90 mb-6 leading-[1.1]">
+          Codex
+          <br />
+          <span className="text-accent underline decoration-accent-deep/50 decoration-2 underline-offset-[10px] drop-shadow-[0_0_30px_rgba(139,156,255,0.35)]">
+            desde cero
+          </span>
+        </h1>
+
+        <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-12">
+          <strong className="text-accent">Solo 2 días</strong> para pasar de
+          cero a dominar Codex, el agente de programación de OpenAI. 6 horas
+          100% prácticas, sin relleno, donde sales construyendo proyectos
+          completos desde la terminal, el IDE y la nube.
+        </p>
+
+        {/* Stats row */}
+        <div className="flex justify-center mb-12">
+          {[
+            { value: "6", label: "Horas en vivo" },
+            { value: "2", label: "Días" },
+            { value: "100%", label: "Práctico" },
+          ].map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`px-6 sm:px-10 text-center ${i > 0 ? "border-l border-white/10" : ""
+                }`}
+            >
+              <div className="text-3xl sm:text-4xl font-bold text-accent drop-shadow-[0_0_20px_rgba(139,156,255,0.25)]">
+                {stat.value}
+              </div>
+              <div className="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <TerminalSnippet title="codex — zsh" command="codex" />
+      </div>
+
+      {/* Social Proof Section */}
+      <div className="flex flex-col items-center justify-center mb-12">
+        <div className="flex -space-x-4 mb-4">
+          {avatarsLoading ? (
+            // Loading skeleton
+            <>
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="w-12 h-12 rounded-full bg-white/10 animate-pulse border-2 border-[#161616]"
+                />
+              ))}
+            </>
+          ) : avatars.length >= 3 ? (
+            // Avatares reales con tooltip
+            <>
+              {avatars.map((avatar, index) => (
+                <div key={index} className="relative group">
+                  <Image
+                    src={avatar.image}
+                    alt={avatar.name}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 rounded-full border-2 border-[#161616] object-cover"
+                  />
+                  {/* Tooltip CSS-only */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 border border-white/10">
+                    {avatar.name}
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
+            // Fallback: avatares estáticos
+            <>
+              <Image
+                src="https://ui-avatars.com/api/?name=Maria+Garcia&background=6474f0&color=fff&size=48"
+                alt="Usuario"
+                width={48}
+                height={48}
+                className="w-12 h-12 rounded-full border-2 border-[#161616]"
+              />
+              <Image
+                src="https://ui-avatars.com/api/?name=Carlos+Rodriguez&background=8b9cff&color=fff&size=48"
+                alt="Usuario"
+                width={48}
+                height={48}
+                className="w-12 h-12 rounded-full border-2 border-[#161616]"
+              />
+              <Image
+                src="https://ui-avatars.com/api/?name=Ana+Martinez&background=87a96b&color=fff&size=48"
+                alt="Usuario"
+                width={48}
+                height={48}
+                className="w-12 h-12 rounded-full border-2 border-[#161616]"
+              />
+            </>
+          )}
+
+          {/* Badge +certificados emitidos */}
+          <div className="w-12 h-12 rounded-full bg-accent border-2 border-[#161616] flex items-center justify-center">
+            <span className="text-xs font-bold text-white">
+              +{certCount ?? 176}
+            </span>
+          </div>
+        </div>
+        <p className="text-white/50 text-sm">
+          Más de {certCount ?? 176} desarrolladores ya se certificaron con
+          Coding Latam. Sé parte de la primera cohorte de Codex.
+        </p>
+      </div>
+
+      {/* WhatsApp + Inversión — fila de 2 columnas */}
+      <div className="grid items-stretch gap-6 md:grid-cols-2 max-w-4xl mx-auto mb-12">
+        {/* WhatsApp Group CTA */}
+        <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-2xl border border-[#25D366]/30 bg-[#25D366]/[0.06] p-6 sm:p-8 text-center">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-[#25D366]/80 via-[#25D366]/20 to-transparent" />
+          <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366]/15">
+            <WhatsAppIcon className="h-6 w-6 text-[#25D366]" />
+          </div>
+          <h3 className="mb-2 text-xl font-bold text-white/90">
+            Grupo oficial de la Cohorte 1
+          </h3>
+          <p className="mx-auto mb-6 max-w-md text-sm text-white/60">
+            Toda la información del programa —
+            <strong className="text-white/80">
+              temario, horarios, materiales y avisos
+            </strong>
+            — se comparte por el grupo de WhatsApp. Es tu canal directo con el
+            instructor y tus compañeros.
+          </p>
+          <Link
+            href={WHATSAPP_GROUP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-lg bg-[#25D366] px-8 py-4 font-bold text-white shadow-lg shadow-[#25D366]/25 transition-all duration-200 hover:bg-[#1ebe5d] hover:scale-[1.02]"
+          >
+            <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
+            <WhatsAppIcon className="h-5 w-5" />
+            Unirse al grupo de WhatsApp
+          </Link>
+        </div>
+
+        {/* Pricing Section — recibo de terminal */}
+        <div className={`${cardClass} p-7 h-full`}>
+          <TopAccent />
+          <div className="relative z-10">
+            {/* Header: concepto + sello early bird */}
+            <div className="flex items-start justify-between gap-4 mb-5">
+              <div>
+                <Eyebrow>Inversión</Eyebrow>
+                <p className="mt-2 text-sm font-bold text-white/85">
+                  Certificación Codex Dev
+                </p>
+              </div>
+              <span className="shrink-0 rotate-3 rounded-md border border-terminal-green/40 bg-terminal-green/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-terminal-green">
+                Early Bird
+              </span>
+            </div>
+
+            {/* Renglones del recibo */}
+            <div className="border-t border-dashed border-white/15 pt-4 space-y-3">
+              <div className="flex items-baseline justify-between">
+                <span className="text-xs uppercase tracking-[0.12em] text-white/40">
+                  Precio regular
+                </span>
+                <span className="text-lg text-white/40 line-through">
+                  {REGULAR_PRICE_PEN}
+                </span>
+              </div>
+
+              <div className="flex items-end justify-between">
+                <span className="text-xs font-semibold uppercase tracking-[0.12em] text-accent-deep">
+                  Precio Early Bird
+                </span>
+                <span className="flex items-baseline gap-1.5">
+                  <span className="text-4xl sm:text-5xl font-bold text-white drop-shadow-[0_0_24px_rgba(139,156,255,0.3)]">
+                    {EARLY_BIRD_PRICE_PEN}
+                  </span>
+                  <span className="text-sm text-white/50">soles</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Ahorro + cupos */}
+            <div className="mt-4 flex items-center justify-between border-t border-dashed border-white/15 pt-4">
+              <span className="inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
+                Ahorras {SAVINGS_PEN}
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.15em] text-white/30">
+                Solo primeros 10
+              </span>
+            </div>
+
+            {/* Nota de pago */}
+            <p className="text-center text-white/40 text-xs mt-4">
+              Precio en soles peruanos (PEN).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Direct Checkout CTA */}
+      <div className={`${cardClass} p-8 md:p-12 max-w-2xl mx-auto text-center`}>
+        <TopAccent />
+        <h2 className="text-2xl md:text-3xl font-bold text-white/90 mb-4">
+          Asegura tu lugar con descuento
+        </h2>
+        <p className="text-white/50 mb-6 text-lg">
+          Únete a la primera cohorte que dominará Codex profesionalmente
+        </p>
+
+        <Link
+          href={CHECKOUT_URL}
+          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-accent-deep to-accent px-10 py-5 text-xl font-bold text-white shadow-lg shadow-accent-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-accent/40 cursor-pointer"
+        >
+          <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
+          <CheckCircle2 className="h-6 w-6" />
+          Pagar y Asegurar mi Lugar
+          <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
+        </Link>
+        <p className="text-white/40 text-sm mt-4">
+          Te confirmamos tu inscripción por WhatsApp
+        </p>
+      </div>
+
+      {/* Payment Methods Section */}
+      <div className={`${cardClass} p-8 md:p-12 max-w-2xl mx-auto mt-8`}>
+        <TopAccent />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <Eyebrow>Métodos de pago</Eyebrow>
+            <h3 className="text-xl font-bold text-white/90 mt-2 mb-4">
+              Paga con
+            </h3>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {[
+                { src: visaImage, alt: "Visa" },
+                { src: cardImage, alt: "Mastercard" },
+                { src: paypalImage, alt: "PayPal" },
+                { src: americanExpressImage, alt: "American Express" },
+              ].map((logo) => (
+                <span
+                  key={logo.alt}
+                  className="flex h-11 w-16 items-center justify-center rounded-lg bg-white/95 ring-1 ring-black/5 transition-transform duration-200 hover:-translate-y-0.5"
+                >
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={48}
+                    height={24}
+                    className="h-6 w-auto object-contain"
+                  />
+                </span>
+              ))}
+            </div>
+            <div className="rounded-xl border border-accent-deep/40 bg-accent-deep/5 p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <PEFlag />
+                <h4 className="text-lg font-bold text-white/90">
+                  Opciones para Perú
+                </h4>
+              </div>
+              <div className="flex items-center gap-2 mb-4">
+                {[
+                  { src: yapeImage, alt: "Yape" },
+                  { src: plinImage, alt: "Plin" },
+                ].map((logo) => (
+                  <span
+                    key={logo.alt}
+                    className="flex h-11 w-16 items-center justify-center rounded-lg bg-white/95 ring-1 ring-black/5 transition-transform duration-200 hover:-translate-y-0.5"
+                  >
+                    <Image
+                      src={logo.src}
+                      alt={logo.alt}
+                      width={48}
+                      height={24}
+                      className="h-7 w-auto object-contain"
+                    />
+                  </span>
+                ))}
+              </div>
+              <p className="text-white/60 text-sm">
+                Envía tu voucher al{" "}
+                <b className="text-white/90">+51 964225808</b> para completar tu
+                registro
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+              <div className="bg-white rounded-xl p-4 mb-4">
+                <Image
+                  src={yapeQR}
+                  alt="Yape QR"
+                  width={280}
+                  height={280}
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="w-full text-center text-sm font-semibold uppercase tracking-[0.15em] text-accent-deep">
+                Paga con QR
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Card - Hidden for now */}
+      {/* <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Recibe información del programa
+          </h2>
+          <p className="text-gray-600">
+            Regístrate para recibir información del programa y futuras
+            versiones.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="sr-only">
+              Email
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                className="w-full rounded-lg bg-white border border-gray-300 shadow-sm pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent text-gray-900 placeholder-gray-400"
+                disabled={isSubmitting}
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-gray-100 text-gray-700 border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+          >
+            {isSubmitting ? (
+              <>
+                <div className="animate-spin h-5 w-5 border-2 border-gray-700 border-t-transparent rounded-full" />
+                Enviando...
+              </>
+            ) : (
+              <>
+                Recibir Información
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
+          </button>
+
+          {submitStatus.type === "success" && (
+            <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
+              <p className="text-green-700 text-sm">{submitStatus.message}</p>
+            </div>
+          )}
+
+          {submitStatus.type === "error" && (
+            <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+              <p className="text-red-700 text-sm">{submitStatus.message}</p>
+            </div>
+          )}
+        </form>
+
+        <p className="text-center text-gray-500 text-sm mt-6">
+          🔒 Te enviaremos información del programa por correo. Sin spam.
+        </p>
+      </div> */}
+
+      {/* Benefits Section */}
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-5 max-w-3xl mx-auto">
+        {[
+          {
+            icon: Zap,
+            n: "01",
+            title: "Productividad 3-5x",
+            text: "Tareas que tomaban días ahora toman horas con IA",
+          },
+          {
+            icon: GraduationCap,
+            n: "02",
+            title: "Certificación",
+            text: "Badge verificable en LinkedIn y portfolio",
+          },
+          {
+            icon: TrendingUp,
+            n: "03",
+            title: "Mayor Salario",
+            text: "Justifica pedir 20-30% más con skills de IA",
+          },
+        ].map((b) => (
+          <div
+            key={b.title}
+            className={`${cardClass} group p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40`}
+          >
+            <TopAccent />
+            <div className="mb-4 flex items-center justify-between">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-accent-deep/30 bg-accent-deep/10 transition-colors duration-300 group-hover:border-accent/50 group-hover:bg-accent/15">
+                <b.icon className="h-5 w-5 text-accent" />
+              </span>
+              <span className="text-2xl font-bold text-white/[0.08] transition-colors duration-300 group-hover:text-accent/20">
+                {b.n}
+              </span>
+            </div>
+            <h3 className="font-semibold text-white/90 mb-1">{b.title}</h3>
+            <p className="text-sm text-white/50">{b.text}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Programa Section */}
+      <div className="mt-20 max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <Eyebrow>Programa · 8 clases en 2 días</Eyebrow>
+          <h3 className="text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
+            ¿Qué vas a dominar?
+          </h3>
+          <p className="text-white/50 max-w-2xl mx-auto">
+            Un programa intensivo el sábado 16 y domingo 17 de enero (9:00 AM –
+            12:00 PM) donde pasarás de cero con Codex a construir proyectos
+            completos delegando trabajo a agentes de IA.
+          </p>
+        </div>
+
+        {program.map((block) => (
+          <div key={block.block} className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <Eyebrow>{block.block}</Eyebrow>
+              <span className="text-xs font-semibold uppercase tracking-[0.15em] text-white/40">
+                {block.schedule}
+              </span>
+              <span className="h-px flex-grow bg-white/10" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {block.classes.map((cls) => (
+                <div key={cls.n} className={`${cardClass} p-6`}>
+                  <TopAccent />
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-deep">
+                      Clase {cls.n}
+                    </span>
+                    <span className="text-xs font-medium text-white/40">
+                      {cls.time}
+                    </span>
+                  </div>
+                  <h4 className="font-bold text-white/90 mb-4">{cls.title}</h4>
+                  <ul className="space-y-2 text-sm text-white/60">
+                    {cls.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-accent mt-0.5">·</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Metodología Section */}
+      <div className="mt-20 max-w-4xl mx-auto">
+        <div className="mb-10">
+          <Eyebrow>Metodología</Eyebrow>
+          <h3 className="text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-3">
+            Nuestra propuesta de aprendizaje
+          </h3>
+          <p className="text-white/50 max-w-2xl">
+            No es teoría. Es construir proyectos reales supervisado por
+            instructores en vivo.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {methodology.map((m) => (
+            <div key={m.n} className={`${cardClass} p-6`}>
+              <TopAccent />
+              <div className="text-4xl font-bold text-accent/30 mb-3">
+                {m.n}
+              </div>
+              <h4 className="font-bold text-white/90 mb-2">{m.title}</h4>
+              <p className="text-sm text-white/60">{m.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Requisitos Section */}
+      <div className="mt-20 max-w-4xl mx-auto">
+        <div className="mb-8">
+          <Eyebrow>Requisitos</Eyebrow>
+          <h3 className="text-2xl md:text-3xl font-bold text-white/90 mt-3">
+            ¿Qué necesitas para empezar?
+          </h3>
+        </div>
+        <div className={`${cardClass} p-8`}>
+          <TopAccent />
+          <p className="text-white/60 mb-6">
+            Se recomienda tener conocimientos de programación en algún lenguaje
+            (Python, JavaScript, Java, etc) con la finalidad de sacarle el
+            máximo provecho al curso, pero{" "}
+            <strong className="text-white/90">
+              aun sin ellos puedes matricularte
+            </strong>
+            . No importa si nunca usaste herramientas de IA: arrancamos desde
+            cero con Codex y al final vas a poder construir proyectos
+            completos <strong className="text-accent">3-5x más rápido</strong>.
+          </p>
+          <div className="border-t border-white/10 pt-5 flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+            <p className="text-sm text-white/60">
+              Cada alumno debe contar con su propio plan de ChatGPT. Como
+              mínimo el{" "}
+              <strong className="text-white/90">plan Plus ($20 USD/mes)</strong>
+              . Este costo corre por cuenta del estudiante y no está incluido en
+              la inscripción.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Instructor Section */}
+      <div className="mt-20 max-w-4xl mx-auto">
+        <div className="mb-8">
+          <Eyebrow>Instructor</Eyebrow>
+          <h3 className="text-2xl md:text-3xl font-bold text-white/90 mt-3">
+            Quien te guía
+          </h3>
+        </div>
+        <div className={`${cardClass} p-8`}>
+          <TopAccent />
+          <div className="flex flex-col sm:flex-row gap-6 items-start mb-6">
+            <Image
+              src={angeloImage}
+              alt="Angelo Leva"
+              width={96}
+              height={96}
+              className="w-24 h-24 rounded-full object-cover border border-white/10 shrink-0"
+            />
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-deep mb-1">
+                Docente principal
+              </div>
+              <h4 className="text-2xl font-bold text-white/90">Angelo Leva</h4>
+              <p className="text-accent text-sm mt-1">
+                Senior Software Engineer & GDG Organizer · Founder, Coding Latam
+              </p>
+            </div>
+          </div>
+          <div className="space-y-4 text-sm text-white/60">
+            <p>
+              Ingeniero de software desde 2016, especializado en la intersección
+              de IA y frontend engineering. Integra herramientas como Codex,
+              Claude Code, Antigravity CLI, Skills y MCP Servers en cada etapa del ciclo de
+              desarrollo: desde generación de código y debugging hasta
+              decisiones de arquitectura y automatización de workflows.
+            </p>
+            <p>
+              Combina experiencia profunda en frontend (React, Next.js, Vite,
+              Astro, TypeScript) con prácticas modernas de AI engineering.
+              Diseña sistemas donde la integración de LLMs, agentes de código
+              autónomos y prompt engineering son el core de cómo entrega
+              software rápido, confiable y de alta calidad.
+            </p>
+            <p>
+              A través de Coding Latam, entrena desarrolladores en toda
+              Latinoamérica en desarrollo práctico asistido por IA. Organizador
+              principal de GDG Tacna con eventos de +400 developers.
+            </p>
+          </div>
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-deep mb-3">
+              Stack diario
+            </div>
+            <ul className="space-y-2 text-sm text-white/60">
+              <li className="flex items-start gap-2">
+                <span className="text-accent">→</span>
+                <span>
+                  <strong className="text-white/90">
+                    IA y Automatización:
+                  </strong>{" "}
+                  Codex, Claude Code, MCP Servers, Antigravity CLI, SDD, Prompt Engineering
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-accent">→</span>
+                <span>
+                  <strong className="text-white/90">Frontend y Web:</strong>{" "}
+                  React, Next.js, TypeScript, Vite, Astro, Tailwind
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-accent">→</span>
+                <span>
+                  <strong className="text-white/90">Herramientas:</strong> Git,
+                  Playwright, CI/CD, Node.js
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {[
+              "Codex",
+              "Claude Code",
+              "MCP Servers",
+              "Chrome dev tools",
+              "SDD",
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Antigravity CLI",
+            ].map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonios Section */}
+      {testimonials.length > 0 && (
+        <div className="relative mt-20">
+          {/* Atmospheric terracota glow */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 h-72 w-[80%] max-w-4xl rounded-full bg-accent/10 blur-[100px]"
+          />
+
+          <div className="relative max-w-4xl mx-auto text-center mb-12 px-4">
+            {/* Oversized quote watermark */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -top-16 left-0 select-none font-bold leading-none text-accent/[0.07] text-[10rem] sm:text-[13rem]"
+            >
+              &ldquo;
+            </span>
+            <Eyebrow>Testimonios</Eyebrow>
+            <h3 className="relative text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
+              Lo que dicen nuestros alumnos
+            </h3>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#0a66c2]/30 bg-[#0a66c2]/10 px-3.5 py-1.5">
+              <LinkedInIcon className="h-3.5 w-3.5 text-[#0a66c2]" />
+              <span className="text-xs font-medium text-white/60">
+                Ellos ya llevaron el curso
+              </span>
+            </span>
+          </div>
+
+          {/* Video testimonial — opinión de alumnos en YouTube */}
+          <div className="relative max-w-3xl mx-auto mb-12 px-4">
+            <figure className="group/video relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:shadow-[0_16px_50px_-12px_rgba(139,156,255,0.4)]">
+              {/* Accent line */}
+              <div className="absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-accent/80 via-accent/20 to-transparent transition-opacity duration-300 group-hover/video:via-accent/60" />
+
+              {/* Editor-tab chrome bar */}
+              <figcaption className="flex items-center gap-2 border-b border-white/10 bg-black/40 px-4 py-2.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full bg-accent/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+                </span>
+                <span className="ml-1 truncate text-xs text-white/40">
+                  opiniones-alumnos.mp4
+                </span>
+                <Video className="ml-auto h-3.5 w-3.5 text-accent/70 transition-colors duration-300 group-hover/video:text-accent" />
+              </figcaption>
+
+              {/* YouTube embed — responsive 16:9 */}
+              <div className="relative aspect-video w-full bg-black">
+                <iframe
+                  src="https://www.youtube.com/embed/Y3AMU4OMpX0"
+                  title="Opinión de alumnos de Coding Latam"
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
+            </figure>
+          </div>
+
+          {/* Full-bleed infinite marquee. Pausa en hover para leer/interactuar. */}
+          <div
+            className="group relative overflow-hidden rounded-xl"
+            style={{
+              maskImage:
+                "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
+            }}
+          >
+            <div className="flex w-max gap-6 py-3 animate-testimonial-marquee group-hover:[animation-play-state:paused]">
+              {[...testimonials, ...testimonials].map((t, i) => {
+                const isClone = i >= testimonials.length;
+                const n = (i % testimonials.length) + 1;
+                return (
+                  <figure
+                    key={i}
+                    aria-hidden={isClone}
+                    className="group/card relative flex w-[86vw] max-w-[460px] shrink-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_16px_50px_-12px_rgba(139,156,255,0.4)]"
+                  >
+                    {/* Accent line, brightens on hover */}
+                    <div className="absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-accent/80 via-accent/20 to-transparent transition-opacity duration-300 group-hover/card:via-accent/60" />
+
+                    {/* Editor-tab chrome bar */}
+                    <figcaption className="flex items-center gap-2 border-b border-white/10 bg-black/40 px-4 py-2.5">
+                      <span className="flex items-center gap-1.5">
+                        <span className="h-2.5 w-2.5 rounded-full bg-accent/80" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+                      </span>
+                      <span className="ml-1 truncate text-xs text-white/40">
+                        testimonio-0{n}.md
+                      </span>
+                      <LinkedInIcon className="ml-auto h-3.5 w-3.5 text-[#0a66c2]/70 transition-colors duration-300 group-hover/card:text-[#0a66c2]" />
+                    </figcaption>
+
+                    {/* Captura estática del post de LinkedIn */}
+                    <a
+                      href={t.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      tabIndex={isClone ? -1 : undefined}
+                      aria-label={`Ver testimonio de alumno en LinkedIn ${n}`}
+                    >
+                      <Image
+                        src={t.image}
+                        alt={`Testimonio de alumno en LinkedIn ${n}`}
+                        width={460}
+                        height={t.height}
+                        className="block h-auto w-full bg-[#f3f2ef]"
+                        loading="lazy"
+                      />
+                    </a>
+                  </figure>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Outcomes Section */}
+      <div className="mt-20 max-w-4xl mx-auto">
+        <div className={`${cardClass} p-8 md:p-10`}>
+          <TopAccent />
+          {/* glow interno */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-0 h-40 w-2/3 -translate-x-1/2 rounded-full bg-accent/10 blur-[90px]"
+          />
+          <div className="relative text-center mb-8">
+            <Eyebrow>Resultados</Eyebrow>
+            <h4 className="text-xl md:text-2xl font-bold text-white/90 mt-3">
+              Lo que vas a lograr
+            </h4>
+          </div>
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0">
+            {[
+              { value: "3-5x", text: "Más productivo que antes del programa" },
+              { value: "90%", text: "De tiempo ahorrado en tareas repetitivas" },
+              { value: "20-30%", text: "Incremento salarial en promedio" },
+            ].map((o, i) => (
+              <div
+                key={o.value}
+                className={`text-center md:px-6 ${i > 0 ? "md:border-l md:border-white/10" : ""
+                  }`}
+              >
+                <div className="text-4xl md:text-5xl font-bold text-accent mb-2 drop-shadow-[0_0_28px_rgba(139,156,255,0.35)]">
+                  {o.value}
+                </div>
+                <p className="text-sm text-white/60 max-w-[14rem] mx-auto">
+                  {o.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Inclusions Section */}
+      <div className="mt-20 max-w-4xl mx-auto">
+        <div className="text-center mb-10">
+          <Eyebrow>Inversión</Eyebrow>
+          <h3 className="text-2xl md:text-3xl font-bold text-white/90 mt-3">
+            ¿Qué incluye tu inscripción?
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {inclusions.map((inc) => (
+            <div
+              key={inc.title}
+              className={`${cardClass} p-6 flex items-start gap-4`}
+            >
+              <TopAccent />
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-accent-deep/30 bg-accent-deep/10 shrink-0">
+                <inc.icon className="h-5 w-5 text-accent" />
+              </span>
+              <div>
+                <h4 className="font-bold text-white/90 mb-1">{inc.title}</h4>
+                <p className="text-sm text-white/60">{inc.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="mt-20">
+        <div className={`${cardClass} relative p-8 md:p-12 text-center`}>
+          <TopAccent />
+          {/* glow */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-0 h-48 w-3/4 -translate-x-1/2 rounded-full bg-accent/10 blur-[100px]"
+          />
+
+          <div className="relative">
+            {/* Urgencia */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-accent-deep/40 bg-accent-deep/10 px-4 py-1.5 mb-6">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-deep">
+                Solo quedan pocos lugares
+              </span>
+            </div>
+
+            <h3 className="text-2xl md:text-4xl font-bold text-white/90 mb-4 leading-tight">
+              Asegura tu lugar en la{" "}
+              <span className="text-accent">Cohorte 1</span>
+            </h3>
+            <p className="text-white/55 max-w-xl mx-auto mb-8">
+              2 días intensivos para dominar Codex y salir construyendo
+              proyectos reales. El precio Early Bird es solo para los primeros
+              10.
+            </p>
+
+            {/* Chips de logística */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
+                <Calendar className="h-4 w-4 text-accent" />
+                Sábado 16 y domingo 17 de enero
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
+                <Clock className="h-4 w-4 text-accent" />
+                9:00 AM – 12:00 PM
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
+                <BadgeCheck className="h-4 w-4 text-accent" />
+                Certificación al finalizar
+              </span>
+            </div>
+
+            <Link
+              href={CHECKOUT_URL}
+              className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-accent-deep to-accent px-10 py-5 text-xl font-bold text-white shadow-lg shadow-accent-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-accent/40 cursor-pointer"
+            >
+              <span className="pointer-events-none absolute inset-0 -translate-x-[120%] skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[120%]" />
+              <CheckCircle2 className="h-6 w-6" />
+              Pagar y Asegurar mi Lugar
+              <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+            <p className="text-white/40 text-sm mt-4">
+              Te confirmamos tu inscripción por WhatsApp
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
