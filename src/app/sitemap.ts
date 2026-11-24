@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/en-vivo",
     "/repositorios",
     "/claude",
+    "/codex",
     "/claude-no-programadores",
     "/claude-no-programadores-curso",
     "/privacy",
