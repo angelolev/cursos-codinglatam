@@ -174,7 +174,7 @@ export default function CodexPage() {
   const program = [
     {
       block: "Sábado 16 de enero",
-      schedule: "9:00 AM – 12:00 PM",
+      schedule: "9:00 AM – 12:00 PM (hora Perú, GMT-5)",
       classes: [
         {
           n: 1,
@@ -226,7 +226,7 @@ export default function CodexPage() {
     },
     {
       block: "Domingo 17 de enero",
-      schedule: "9:00 AM – 12:00 PM",
+      schedule: "9:00 AM – 12:00 PM (hora Perú, GMT-5)",
       classes: [
         {
           n: 5,
@@ -818,7 +818,7 @@ export default function CodexPage() {
           </h3>
           <p className="text-white/50 max-w-2xl mx-auto">
             Un programa intensivo el sábado 16 y domingo 17 de enero (9:00 AM –
-            12:00 PM) donde pasarás de cero con Codex a construir proyectos
+            12:00 PM, hora Perú, GMT-5) donde pasarás de cero con Codex a construir proyectos
             completos delegando trabajo a agentes de IA.
           </p>
         </div>
@@ -1041,12 +1041,12 @@ export default function CodexPage() {
             </span>
             <Eyebrow>Testimonios</Eyebrow>
             <h3 className="relative text-2xl md:text-3xl font-bold text-white/90 mt-3 mb-4">
-              Lo que dicen nuestros alumnos
+              Lo que dicen los alumnos de Coding Latam
             </h3>
             <span className="inline-flex items-center gap-2 rounded-full border border-[#0a66c2]/30 bg-[#0a66c2]/10 px-3.5 py-1.5">
               <LinkedInIcon className="h-3.5 w-3.5 text-[#0a66c2]" />
               <span className="text-xs font-medium text-white/60">
-                Ellos ya llevaron el curso
+                Alumnos de nuestro curso de Claude Code
               </span>
             </span>
           </div>
@@ -1163,9 +1163,9 @@ export default function CodexPage() {
           </div>
           <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0">
             {[
-              { value: "3-5x", text: "Más productivo que antes del programa" },
-              { value: "90%", text: "De tiempo ahorrado en tareas repetitivas" },
-              { value: "20-30%", text: "Incremento salarial en promedio" },
+              { value: "8", text: "Clases en vivo con ejercicios prácticos" },
+              { value: "1", text: "Proyecto final completo para tu portfolio" },
+              { value: "3", text: "Formas de usar Codex: CLI, IDE y la nube" },
             ].map((o, i) => (
               <div
                 key={o.value}
@@ -1251,7 +1251,7 @@ export default function CodexPage() {
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <Clock className="h-4 w-4 text-accent" />
-                9:00 AM – 12:00 PM
+                9:00 AM – 12:00 PM (hora Perú, GMT-5)
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                 <BadgeCheck className="h-4 w-4 text-accent" />
