@@ -1,7 +1,6 @@
 "use client";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   CheckCircle2,
   ArrowRight,
@@ -57,7 +56,9 @@ const CONTACTO_WHATSAPP_URL =
 const CHECKOUT_URL = CONTACTO_WHATSAPP_URL;
 
 const FECHA_INICIO = "12 de enero";
-const FECHA_FIN = "4 de febrero de 2027";
+const ANIO = "2027";
+const FECHA_FIN_CORTA = "4 de febrero";
+const FECHA_FIN = `${FECHA_FIN_CORTA} de ${ANIO}`;
 const FECHAS_SESIONES = "Enero 12, 14, 19, 21, 26 y 28 · Febrero 2 y 4";
 const FRECUENCIA = "Martes y jueves · 4 semanas";
 const HORARIO_CURSO = "8:00 – 10:00 PM (hora Perú)";
@@ -120,6 +121,27 @@ function InlineCode({ text }: { text: string }) {
 
 const CTA_CLASS =
   "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-accent-deep to-accent px-10 py-5 text-xl font-bold text-white shadow-lg shadow-accent-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-accent/40 cursor-pointer";
+
+// Link de inscripción: externo (hoy WhatsApp), así que abre en otra pestaña
+// para no perder la landing con los datos de pago.
+function CheckoutLink({
+  className,
+  children,
+}: {
+  className: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={CHECKOUT_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+    >
+      {children}
+    </a>
+  );
+}
 
 function Shine() {
   return (
@@ -808,18 +830,18 @@ export default function CodexPage() {
             Asegura tu lugar con descuento
           </h2>
           <p className="text-white/50 mb-1 text-lg">
-            Inicia el martes {FECHA_INICIO} de 2027
+            Inicia el martes {FECHA_INICIO} de {ANIO}
           </p>
           <p className="text-white/50 mb-6 text-sm">
             Precio Early Bird de lanzamiento: {EARLY_BIRD_PRICE_PEN} en lugar
             de {REGULAR_PRICE_PEN}
           </p>
-          <Link href={CHECKOUT_URL} className={CTA_CLASS}>
+          <CheckoutLink className={CTA_CLASS}>
             <Shine />
             <CheckCircle2 className="h-6 w-6" />
-            Pagar y Asegurar mi Lugar
+            Asegurar mi Lugar
             <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
-          </Link>
+          </CheckoutLink>
           <p className="text-white/40 text-sm mt-4">
             Consultas al <WhatsAppLink />
           </p>
@@ -1161,7 +1183,7 @@ export default function CodexPage() {
               <div className="flex flex-wrap items-center justify-center gap-3 mb-8 text-sm text-white/70">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                   <CalendarDays className="h-4 w-4 text-accent" />
-                  Del {FECHA_INICIO} al {FECHA_FIN.replace(" de 2027", "")} · {FRECUENCIA}
+                  Del {FECHA_INICIO} al {FECHA_FIN_CORTA} · {FRECUENCIA}
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                   <Clock className="h-4 w-4 text-accent" />
@@ -1172,12 +1194,12 @@ export default function CodexPage() {
                   Certificación verificable
                 </span>
               </div>
-              <Link href={CHECKOUT_URL} className={CTA_CLASS}>
+              <CheckoutLink className={CTA_CLASS}>
                 <Shine />
                 <CheckCircle2 className="h-6 w-6" />
                 Inscribirme — {EARLY_BIRD_PRICE_PEN}
                 <ArrowRight className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
+              </CheckoutLink>
               <p className="text-white/40 text-sm mt-4">
                 Consultas al <WhatsAppLink />
               </p>
@@ -1300,15 +1322,12 @@ export default function CodexPage() {
             </p>
           </div>
 
-          <Link
-            href={CHECKOUT_URL}
-            className="group relative mt-5 flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-accent-deep to-accent px-6 py-4 font-bold text-white shadow-lg shadow-accent-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-accent/40 cursor-pointer"
-          >
+          <CheckoutLink className="group relative mt-5 flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-accent-deep to-accent px-6 py-4 font-bold text-white shadow-lg shadow-accent-deep/25 transition-transform duration-200 hover:scale-[1.02] hover:shadow-accent/40 cursor-pointer">
             <Shine />
             <CheckCircle2 className="h-5 w-5" />
             Asegurar mi lugar
             <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
-          </Link>
+          </CheckoutLink>
           <p className="text-center text-white/40 text-[11px] mt-3">
             Yape · Plin · Transferencia · PayPal
           </p>
@@ -1331,7 +1350,7 @@ export default function CodexPage() {
           nota en /claude sobre Safari iOS). */}
       <div
         id="mobile-price-bar"
-        className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#161616] px-4 pb-3 pt-2.5"
+        className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#161616] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-2.5"
       >
         <ul className="mb-2.5 flex flex-col gap-2 text-sm font-medium text-white/65 sm:flex-row sm:items-center sm:gap-3.5 sm:overflow-x-auto sm:whitespace-nowrap sm:text-[10px] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden">
           {MOBILE_BAR_BENEFITS.map(({ icon: Icon, label }) => (
@@ -1355,13 +1374,10 @@ export default function CodexPage() {
               </span>
             </p>
           </div>
-          <Link
-            href={CHECKOUT_URL}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg bg-gradient-to-r from-accent-deep to-accent px-4 py-3 text-base font-bold text-white shadow-lg shadow-accent-deep/25 sm:text-sm"
-          >
+          <CheckoutLink className="flex shrink-0 items-center gap-1.5 rounded-lg bg-gradient-to-r from-accent-deep to-accent px-4 py-3 text-base font-bold text-white shadow-lg shadow-accent-deep/25 sm:text-sm">
             Inscribirme
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CheckoutLink>
         </div>
       </div>
     </main>
