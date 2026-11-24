@@ -14,7 +14,6 @@ import {
   CalendarDays,
   Clock,
   Rocket,
-  Sparkles,
   ChevronDown,
   Download,
 } from "lucide-react";
@@ -62,14 +61,6 @@ const PROMO_LABEL = "Black Friday";
 const PROMO_VIGENCIA = "Hasta el lunes 30 de noviembre · 20 cupos";
 const CUOTAS = "2 × S/ 125";
 const PACK_DUO = "2 por S/ 449";
-
-// Beneficios mostrados en la barra de precio fija de mobile.
-const MOBILE_BAR_BENEFITS: { icon: typeof CheckCircle2; label: string }[] = [
-  { icon: Video, label: "8 clases en vivo" },
-  { icon: Sparkles, label: "Sin saber programar" },
-  { icon: Video, label: "Clases grabadas" },
-  { icon: BadgeCheck, label: "Certificado" },
-];
 
 // Mismo horario real (8:00 – 10:00 PM hora Perú) convertido a la hora
 // local de cada país. Perú, Colombia y Ecuador son UTC-5 todo el año;
@@ -386,7 +377,7 @@ export default function ClaudeCodePage() {
 
   return (
     <main
-      className="pt-24 pb-52 sm:pb-28 xl:pb-16 mx-auto w-full max-w-7xl sm:px-6 px-4 lg:px-0 xl:grid xl:grid-cols-[1fr_360px] xl:gap-8 xl:items-start flex-grow min-w-0 [--accent:#ecb033] [--accent-deep:#e4911c]"
+      className="pt-24 pb-28 xl:pb-16 mx-auto w-full max-w-7xl sm:px-6 px-4 lg:px-0 xl:grid xl:grid-cols-[1fr_360px] xl:gap-8 xl:items-start flex-grow min-w-0 [--accent:#ecb033] [--accent-deep:#e4911c]"
     >
       {/* Fondo de layout de la marca (Eerie Black). */}
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-20 bg-[#171717]" />
@@ -1223,24 +1214,24 @@ export default function ClaudeCodePage() {
         <div className={`${brandCard} p-6`}>
           <TopAccent />
 
-          <div className="flex items-start justify-between gap-3 mb-4">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-primary-500/40 bg-primary-500/10 px-3 py-1">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-60" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary-400" />
-              </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary-500">
-                Inicia el {FECHA_INICIO}
-              </span>
-            </div>
-            <span className="shrink-0 rotate-3 rounded-md border border-primary-300/40 bg-primary-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em] text-primary-300">
-              {PROMO_LABEL}
+          <div className="mb-4 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-primary-500/40 bg-primary-500/10 px-3 py-1">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary-400" />
+            </span>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary-500">
+              Inicia el {FECHA_INICIO}
             </span>
           </div>
 
-          <p className="text-sm font-bold text-white/85">
-            Claude de 0 a 100
-          </p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-bold text-white/85">
+              Claude de 0 a 100
+            </p>
+            <span className="shrink-0 whitespace-nowrap rounded-md border border-primary-300/40 bg-primary-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em] text-primary-300">
+              {PROMO_LABEL}
+            </span>
+          </div>
 
           <div className="mt-4 border-t border-dashed border-white/15 pt-4">
             <div className="flex items-baseline gap-2.5">
@@ -1396,26 +1387,19 @@ export default function ClaudeCodePage() {
           el navbar al hacer scroll. */}
       <div
         id="mobile-price-bar"
-        className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#171717] px-4 pb-3 pt-2.5"
+        className="xl:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#3d3d3d] bg-[#171717]/95 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))]"
       >
-        <ul className="mb-2.5 flex flex-col gap-2 text-sm font-medium text-white/65 sm:flex-row sm:items-center sm:gap-3.5 sm:overflow-x-auto sm:whitespace-nowrap sm:text-[10px] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden">
-          {MOBILE_BAR_BENEFITS.map(({ icon: Icon, label }) => (
-            <li key={label} className="flex items-center gap-1.5 sm:shrink-0">
-              <Icon className="h-4 w-4 shrink-0 text-primary-400 sm:h-3 sm:w-3" />
-              {label}
-            </li>
-          ))}
-        </ul>
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+        {/* Una sola fila: precio a la izquierda, CTA a la derecha. */}
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-xs font-semibold uppercase tracking-[0.1em] text-white/50 sm:text-[10px] sm:tracking-[0.15em] sm:text-white/40">
-              {PROMO_LABEL} · Inicia el {FECHA_INICIO}
+            <p className="truncate text-[10px] font-semibold uppercase tracking-[0.15em] text-primary-400">
+              {PROMO_LABEL} · {DESCUENTO}
             </p>
-            <p className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-white">
+            <p className="flex items-baseline gap-1.5 whitespace-nowrap">
+              <span className="text-2xl font-bold leading-tight text-white">
                 {EARLY_BIRD_PRICE_PEN}
               </span>
-              <span className="text-base text-white/40 line-through sm:text-sm">
+              <span className="text-xs text-white/40 line-through">
                 {REGULAR_PRICE_PEN}
               </span>
             </p>
@@ -1424,9 +1408,9 @@ export default function ClaudeCodePage() {
             href={CHECKOUT_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-400 px-4 py-3 text-base font-bold text-[#171717] shadow-lg shadow-primary-500/25 hover:bg-primary-300 sm:text-sm"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-400 px-4 py-2.5 text-sm font-bold text-[#171717] shadow-lg shadow-primary-500/25 hover:bg-primary-300"
           >
-            Inscribirme
+            Separar cupo
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
