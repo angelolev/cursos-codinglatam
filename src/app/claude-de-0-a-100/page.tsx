@@ -36,6 +36,7 @@ import angeloImage from "@/assets/angelo.jpeg";
 import yapeImage from "@/assets/yape.svg";
 import plinImage from "@/assets/plin.svg";
 import yapeQR from "@/assets/yape-qr.jpeg";
+import { Countdown } from "./Countdown";
 
 const FECHA_INICIO = "12 de enero";
 const FECHA_FIN = "4 de febrero de 2027";
@@ -469,6 +470,9 @@ export default function ClaudeCodePage() {
             automáticas, tu propia web y edición de video,{" "}
             <strong className="text-white/85">sin saber programar</strong>.
           </p>
+
+          {/* Cuenta regresiva de la promo */}
+          <Countdown label={`${PROMO_LABEL} termina en`} className="mb-8" />
 
           {/* CTAs del hero */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
@@ -958,6 +962,11 @@ export default function ClaudeCodePage() {
               ))}
             </div>
 
+            <Countdown
+              label="Este precio termina en"
+              className="mt-8 text-center"
+            />
+
             {/* CTA */}
             <div className="mt-8 flex flex-col items-center gap-3 text-center">
               <Link
@@ -1288,6 +1297,11 @@ export default function ClaudeCodePage() {
           <p className="mt-2 text-xs font-semibold text-primary-400">
             {PROMO_VIGENCIA}
           </p>
+          <Countdown
+            variant="compact"
+            label="Termina en"
+            className="mt-1 block text-xs font-semibold text-white/85"
+          />
           <p className="mt-1 text-xs text-[#b5b5b5]">
             {CUOTAS} · Pack dúo: {PACK_DUO}
           </p>
@@ -1424,8 +1438,8 @@ export default function ClaudeCodePage() {
         {/* Una sola fila: precio a la izquierda, CTA a la derecha. */}
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-xs xl:text-[10px] font-semibold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-400">
-              {PROMO_LABEL} · {DESCUENTO}
+            <p className="truncate text-xs font-semibold text-primary-400">
+              <Countdown variant="compact" label="Termina en" />
             </p>
             <p className="flex items-baseline gap-1.5 whitespace-nowrap">
               <span className="text-2xl font-bold leading-tight text-white">
