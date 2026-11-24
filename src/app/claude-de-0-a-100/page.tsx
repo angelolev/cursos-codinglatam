@@ -36,6 +36,7 @@ import angeloImage from "@/assets/angelo.jpeg";
 import yapeImage from "@/assets/yape.svg";
 import plinImage from "@/assets/plin.svg";
 import yapeQR from "@/assets/yape-qr.jpeg";
+import { Countdown, CountdownBanner } from "./Countdown";
 
 const FECHA_INICIO = "12 de enero";
 const FECHA_FIN = "4 de febrero de 2027";
@@ -421,6 +422,13 @@ export default function ClaudeCodePage() {
   ];
 
   return (
+    <>
+    {/* Franja roja con la cuenta regresiva, siempre visible bajo el navbar. */}
+    <CountdownBanner
+      href="#inversion"
+      price={EARLY_BIRD_PRICE_PEN}
+      promoLabel={PROMO_LABEL}
+    />
     <main
       className="pt-24 pb-28 xl:pb-16 mx-auto w-full max-w-7xl sm:px-6 px-4 lg:px-0 xl:grid xl:grid-cols-[1fr_360px] xl:gap-8 xl:items-start flex-grow min-w-0 [--accent:#ecb033] [--accent-deep:#e4911c]"
     >
@@ -469,6 +477,9 @@ export default function ClaudeCodePage() {
             automáticas, tu propia web y edición de video,{" "}
             <strong className="text-white/85">sin saber programar</strong>.
           </p>
+
+          {/* Cuenta regresiva de la promo */}
+          <Countdown label={`${PROMO_LABEL} termina en`} className="mb-8" />
 
           {/* CTAs del hero */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
@@ -867,7 +878,7 @@ export default function ClaudeCodePage() {
 
         {/* Inversión: precio, detalles, CTA, requisitos y medios de pago en
             un solo bloque. */}
-        <div id="inversion" className="max-w-4xl mx-auto scroll-mt-24">
+        <div id="inversion" className="max-w-4xl mx-auto scroll-mt-32">
           <div className="text-center mb-10">
             <Eyebrow>Inversión</Eyebrow>
             <h2 className="text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3 mb-4">
@@ -957,6 +968,11 @@ export default function ClaudeCodePage() {
                 </div>
               ))}
             </div>
+
+            <Countdown
+              label="Este precio termina en"
+              className="mt-8 text-center"
+            />
 
             {/* CTA */}
             <div className="mt-8 flex flex-col items-center gap-3 text-center">
@@ -1241,7 +1257,7 @@ export default function ClaudeCodePage() {
       </div>
 
       {/* Sidebar de inscripción — solo desktop grande, sigue el scroll */}
-      <aside className="hidden xl:block xl:sticky xl:top-24">
+      <aside className="hidden xl:block xl:sticky xl:top-32">
         <div className={`${brandCard} p-6`}>
           <TopAccent />
 
@@ -1424,7 +1440,7 @@ export default function ClaudeCodePage() {
         {/* Una sola fila: precio a la izquierda, CTA a la derecha. */}
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-xs xl:text-[10px] font-semibold uppercase tracking-[0.06em] md:tracking-[0.15em] text-primary-400">
+            <p className="truncate text-xs font-semibold text-primary-400">
               {PROMO_LABEL} · {DESCUENTO}
             </p>
             <p className="flex items-baseline gap-1.5 whitespace-nowrap">
@@ -1448,5 +1464,6 @@ export default function ClaudeCodePage() {
         </div>
       </div>
     </main>
+    </>
   );
 }
