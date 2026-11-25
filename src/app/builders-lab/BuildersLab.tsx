@@ -9,7 +9,7 @@ import {
   WhatsAppIcon,
   useScrollReveal,
 } from "@/components/claude-brochure";
-import angeloImage from "@/assets/angelo.jpeg";
+import angeloImage from "@/assets/angelo-devfest.jpg";
 import { Countdown } from "../claude-de-0-a-100/Countdown";
 import {
   CIERRE_FUNDADOR,
@@ -196,13 +196,13 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
         <section className="mb-20 max-w-3xl mx-auto">
           <div className={`${brandCard} p-6 sm:p-8`}>
             <TopAccent />
-            <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 items-center sm:items-start text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center text-center sm:text-left">
               <Image
                 src={angeloImage}
-                alt="Angelo Leva"
-                width={96}
-                height={96}
-                className="w-24 h-24 rounded-full object-cover border border-white/10 shrink-0"
+                alt="Angelo Leva dando una charla en el DevFest"
+                sizes="(min-width: 640px) 192px, 224px"
+                placeholder="blur"
+                className="w-56 sm:w-48 aspect-[4/5] h-auto rounded-xl object-cover border border-white/10 shrink-0"
               />
               <div>
                 <Eyebrow>Quién soy</Eyebrow>
