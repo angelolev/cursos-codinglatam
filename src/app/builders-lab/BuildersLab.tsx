@@ -200,9 +200,9 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
               <Image
                 src={angeloImage}
                 alt="Angelo Leva dando una charla en el DevFest"
-                sizes="(min-width: 640px) 192px, 224px"
+                sizes="(min-width: 640px) 160px, 192px"
                 placeholder="blur"
-                className="w-56 sm:w-48 aspect-[4/5] h-auto rounded-xl object-cover border border-white/10 shrink-0"
+                className="w-48 sm:w-40 aspect-square h-auto rounded-full object-cover object-top border-2 border-primary-400/40 shrink-0"
               />
               <div>
                 <Eyebrow>Quién soy</Eyebrow>
