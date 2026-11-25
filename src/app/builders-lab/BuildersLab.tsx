@@ -32,12 +32,12 @@ const INCLUYE = [
   {
     emoji: "🌙",
     title: "Lab Night mensual",
-    text: "Nos juntamos en vivo a compartir lo que estamos creando, lo que aprendimos y lo que nos estresó.",
+    text: "El último viernes de cada mes nos juntamos en vivo a compartir lo que estamos creando, lo que aprendimos y lo que nos estresó.",
   },
   {
     emoji: "🎥",
     title: "Aprendizaje de la semana",
-    text: "Un video corto con lo que probé, lo que funcionó y lo que no.",
+    text: "Un video con lo que probé, lo que funcionó y lo que no.",
   },
   {
     emoji: "⚡",
@@ -47,7 +47,7 @@ const INCLUYE = [
   {
     emoji: "💬",
     title: "Grupo privado",
-    text: `Con los ${CUPOS_TOTALES} builders.`,
+    text: `Nuestro nexo de conexión inmediata con los ${CUPOS_TOTALES} builders para compartir recursos, novedades, herramientas y más sobre IA.`,
   },
   {
     emoji: "🎓",
@@ -151,7 +151,8 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
           </h1>
 
           <p className="text-lg md:text-xl text-[#b5b5b5] max-w-xl mx-auto mb-8">
-            Un grupo pequeño para construir con IA conmigo.
+            Un grupo exclusivo para aplicar IA de verdad y aprender sobre
+            agentes y mucho más.
           </p>
 
           {!cerrado && (
