@@ -9,7 +9,7 @@ import {
   WhatsAppIcon,
   useScrollReveal,
 } from "@/components/claude-brochure";
-import angeloImage from "@/assets/angelo.jpeg";
+import angeloImage from "@/assets/angelo-devfest.jpg";
 import { Countdown } from "../claude-de-0-a-100/Countdown";
 import {
   CIERRE_FUNDADOR,
@@ -72,10 +72,6 @@ const FAQ = [
   {
     q: "¿Qué pasa después del Black Friday?",
     a: `El precio regular es S/79 al mes y, cuando se llenen los ${CUPOS_TOTALES} cupos, solo se entra por lista de espera.`,
-  },
-  {
-    q: "¿Qué pasa si el Lab se cierra?",
-    a: "Te devuelvo la parte proporcional de lo que pagaste.",
   },
 ];
 
@@ -200,13 +196,13 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
         <section className="mb-20 max-w-3xl mx-auto">
           <div className={`${brandCard} p-6 sm:p-8`}>
             <TopAccent />
-            <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 items-center sm:items-start text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center text-center sm:text-left">
               <Image
                 src={angeloImage}
-                alt="Angelo Leva"
-                width={96}
-                height={96}
-                className="w-24 h-24 rounded-full object-cover border border-white/10 shrink-0"
+                alt="Angelo Leva dando una charla en el DevFest"
+                sizes="(min-width: 640px) 160px, 192px"
+                placeholder="blur"
+                className="w-48 sm:w-40 aspect-square h-auto rounded-full object-cover object-top border-2 border-primary-400/40 shrink-0"
               />
               <div>
                 <Eyebrow>Quién soy</Eyebrow>
@@ -217,9 +213,10 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
                   Claude Certified Associate
                 </p>
                 <p className="mt-4 text-base text-[#b5b5b5]">
-                  Todos los días pruebo herramientas de IA, construyo con ellas
-                  y me equivoco. Como Claude Certified Associate, quiero
-                  compartir todo eso con un grupo pequeño de builders.
+                  Todos los días pruebo herramientas de IA y construyo con
+                  ellas, porque la única manera de aprender es haciendo, no
+                  viendo curso tras curso. Como Claude Certified Associate,
+                  quiero compartir todo eso con un grupo pequeño de builders.
                 </p>
               </div>
             </div>
@@ -367,16 +364,10 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
                 ))}
               </div>
 
-              <div className="mt-8 max-w-2xl mx-auto space-y-3 text-center text-base md:text-sm text-[#b5b5b5]">
-                <p>
-                  Te respondo por WhatsApp con los medios de pago (Yape, Plin,
-                  transferencia o PayPal).
-                </p>
-                <p>
-                  🤝 Si el Lab se cierra antes de tiempo, te devuelvo la parte
-                  proporcional.
-                </p>
-              </div>
+              <p className="mt-8 max-w-2xl mx-auto text-center text-base md:text-sm text-[#b5b5b5]">
+                Te respondo por WhatsApp con los medios de pago (Yape, Plin,
+                transferencia o PayPal).
+              </p>
             </>
           )}
         </section>
