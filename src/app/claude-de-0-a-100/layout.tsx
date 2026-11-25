@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { generatePageMetadata } from "@/utils/metadata";
+import { MetaPixel } from "./MetaPixel";
 
 export const metadata: Metadata = {
   ...generatePageMetadata(
@@ -29,5 +30,10 @@ export default function ClaudeDe0a100Layout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <MetaPixel />
+      {children}
+    </>
+  );
 }
