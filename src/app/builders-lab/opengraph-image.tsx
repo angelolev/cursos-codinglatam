@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { CUPOS_TOTALES } from "./config";
 
-export const alt = "Builders Lab — Un grupo exclusivo para aplicar IA de verdad";
+export const alt = "Builders Lab — Deja de ver tutoriales. Empieza a construir con IA.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -59,12 +59,15 @@ export default function OpengraphImage() {
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
               marginTop: 28,
               fontSize: 46,
+              lineHeight: 1.25,
               color: "rgba(255,255,255,0.8)",
             }}
           >
-            Un grupo exclusivo para aplicar IA de verdad.
+            <span>Deja de ver tutoriales.</span>
+            <span style={{ color: "white" }}>Empieza a construir con IA.</span>
           </div>
         </div>
 
