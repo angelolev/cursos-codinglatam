@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 // 23:59:59 hora Perú (UTC-5, sin horario de verano).
 export const PROMO_DEADLINE = new Date("2026-11-30T23:59:59-05:00");
 
-type Remaining = {
+export type Remaining = {
   days: number;
   hours: number;
   minutes: number;
@@ -26,7 +26,7 @@ function getRemaining(deadline: Date): Remaining | "expired" {
 
 // El tiempo restante se calcula solo en el cliente: en el servidor (y en el
 // primer render) es null para no provocar diferencias de hidratación.
-function useCountdown(deadline: Date) {
+export function useCountdown(deadline: Date) {
   const [remaining, setRemaining] = useState<Remaining | "expired" | null>(
     null
   );

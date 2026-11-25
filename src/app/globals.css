@@ -227,3 +227,26 @@ body::before {
     bottom: 5.5rem;
   }
 }
+
+/* Builders Lab: entrada escalonada del título del hero. El estado final es
+   el visible, así sin animación (o con reduced motion) el título se ve. */
+@keyframes builders-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.builders-rise {
+  animation: builders-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .builders-rise {
+    animation: none;
+  }
+}
