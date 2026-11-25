@@ -40,7 +40,7 @@ export default function OpengraphImage() {
               textTransform: "uppercase",
             }}
           >
-            {`Pase Fundador · Solo ${CUPOS_TOTALES} cupos`}
+            {`Conviértete en builder · Solo ${CUPOS_TOTALES} cupos`}
           </div>
         </div>
 

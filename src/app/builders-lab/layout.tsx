@@ -5,8 +5,8 @@ import { generatePageMetadata } from "@/utils/metadata";
 // reemplaza a la imagen por defecto que pone generatePageMetadata.
 export const metadata: Metadata = {
   ...generatePageMetadata(
-    "Builders Lab — Pase Fundador, solo 20 cupos",
-    "Un grupo privado de máximo 20 personas para construir con IA junto a Angelo Leva, Claude Certified Associate. Lab Night mensual en vivo, aprendizaje de la semana, acceso anticipado a los videos y material premium de certificación. Pase Fundador por Black Friday hasta el lunes 30 de noviembre.",
+    "Builders Lab — Conviértete en builder (solo 20 cupos)",
+    "Un grupo privado de máximo 20 personas para construir con IA junto a Angelo Leva, Claude Certified Associate. Lab Night mensual en vivo, aprendizaje de la semana, acceso anticipado a los videos y material premium de certificación. Precio de lanzamiento por Black Friday hasta el lunes 30 de noviembre.",
     "/builders-lab"
   ),
   keywords: [
