@@ -151,8 +151,10 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
           </h1>
 
           <p className="text-lg md:text-xl text-[#b5b5b5] max-w-xl mx-auto mb-8">
-            Un grupo exclusivo para aplicar IA de verdad y aprender sobre
-            agentes y mucho más.
+            <span className="block">Deja de ver tutoriales.</span>
+            <span className="block text-white/85">
+              Empieza a construir con IA.
+            </span>
           </p>
 
           {!cerrado && (
