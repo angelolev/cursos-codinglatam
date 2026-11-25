@@ -73,10 +73,6 @@ const FAQ = [
     q: "¿Qué pasa después del Black Friday?",
     a: `El precio regular es S/79 al mes y, cuando se llenen los ${CUPOS_TOTALES} cupos, solo se entra por lista de espera.`,
   },
-  {
-    q: "¿Qué pasa si el Lab se cierra?",
-    a: "Te devuelvo la parte proporcional de lo que pagaste.",
-  },
 ];
 
 // Cierra el Pase Fundador en vivo si la fecha vence con la página abierta.
@@ -367,16 +363,10 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
                 ))}
               </div>
 
-              <div className="mt-8 max-w-2xl mx-auto space-y-3 text-center text-base md:text-sm text-[#b5b5b5]">
-                <p>
-                  Te respondo por WhatsApp con los medios de pago (Yape, Plin,
-                  transferencia o PayPal).
-                </p>
-                <p>
-                  🤝 Si el Lab se cierra antes de tiempo, te devuelvo la parte
-                  proporcional.
-                </p>
-              </div>
+              <p className="mt-8 max-w-2xl mx-auto text-center text-base md:text-sm text-[#b5b5b5]">
+                Te respondo por WhatsApp con los medios de pago (Yape, Plin,
+                transferencia o PayPal).
+              </p>
             </>
           )}
         </section>
