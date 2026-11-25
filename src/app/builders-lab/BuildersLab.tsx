@@ -213,9 +213,10 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
                   Claude Certified Associate
                 </p>
                 <p className="mt-4 text-base text-[#b5b5b5]">
-                  Todos los días pruebo herramientas de IA, construyo con ellas
-                  y me equivoco. Como Claude Certified Associate, quiero
-                  compartir todo eso con un grupo pequeño de builders.
+                  Todos los días pruebo herramientas de IA y construyo con
+                  ellas, porque la única manera de aprender es haciendo, no
+                  viendo curso tras curso. Como Claude Certified Associate,
+                  quiero compartir todo eso con un grupo pequeño de builders.
                 </p>
               </div>
             </div>
