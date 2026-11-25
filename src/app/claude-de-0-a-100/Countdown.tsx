@@ -118,12 +118,14 @@ export function Countdown({
   variant = "full",
   label = "La promo termina en",
   className = "",
+  deadline = PROMO_DEADLINE,
 }: {
   variant?: "full" | "compact";
   label?: string;
   className?: string;
+  deadline?: Date;
 }) {
-  const remaining = useCountdown(PROMO_DEADLINE);
+  const remaining = useCountdown(deadline);
 
   if (remaining === "expired") return null;
 
