@@ -7,8 +7,22 @@
 export const CIERRE_FUNDADOR = new Date("2026-11-30T23:59:59-05:00");
 
 export const CUPOS_TOTALES = 20;
-// Actualizar a mano cada vez que se confirma un pago. En 0 se cierra el pase.
-export const CUPOS_RESTANTES = 18;
+
+// Los cupos restantes se editan desde /admin (pestaña "Builders Lab") y se
+// guardan en Firestore, en este documento. En 0 se cierra el precio de
+// lanzamiento y la página pasa a lista de espera.
+export const BUILDERS_LAB_DOC_PATH = "config/buildersLab";
+// Respaldo si Firestore falla o el documento aún no existe.
+export const CUPOS_RESTANTES_RESPALDO = 18;
+
+// Devuelve el número si es un entero válido (0 a CUPOS_TOTALES), si no null.
+export const normalizarCupos = (valor: unknown): number | null =>
+  typeof valor === "number" &&
+  Number.isInteger(valor) &&
+  valor >= 0 &&
+  valor <= CUPOS_TOTALES
+    ? valor
+    : null;
 
 export const WHATSAPP_NUMERO = "51964225808";
 
@@ -65,5 +79,7 @@ export const PLANES: Plan[] = [
 export const MENSAJE_LISTA_ESPERA =
   "Hola Angelo, quiero entrar a la lista de espera del Builders Lab.";
 
-export const fundadorCerrado = (ahora: number = Date.now()) =>
-  CUPOS_RESTANTES <= 0 || ahora >= CIERRE_FUNDADOR.getTime();
+export const fundadorCerrado = (
+  cuposRestantes: number,
+  ahora: number = Date.now()
+) => cuposRestantes <= 0 || ahora >= CIERRE_FUNDADOR.getTime();

@@ -13,7 +13,6 @@ import angeloImage from "@/assets/angelo-devfest.jpg";
 import { Countdown } from "../claude-de-0-a-100/Countdown";
 import {
   CIERRE_FUNDADOR,
-  CUPOS_RESTANTES,
   CUPOS_TOTALES,
   MENSAJE_LISTA_ESPERA,
   PLANES,
@@ -96,12 +95,18 @@ function useFundadorCerrado(cerradoInicial: boolean) {
 const sectionTitle =
   "text-[1.7rem] leading-tight md:text-3xl font-bold text-white/90 mt-3";
 
-export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
+export function BuildersLab({
+  cuposRestantes,
+  cerradoInicial,
+}: {
+  cuposRestantes: number;
+  cerradoInicial: boolean;
+}) {
   const contentRef = useRef<HTMLDivElement>(null);
   useScrollReveal(contentRef);
   const cerrado = useFundadorCerrado(cerradoInicial);
 
-  const ocupados = CUPOS_TOTALES - Math.max(CUPOS_RESTANTES, 0);
+  const ocupados = CUPOS_TOTALES - cuposRestantes;
 
   return (
     <main className="pt-24 pb-20 mx-auto w-full max-w-5xl px-4 sm:px-6 flex-grow min-w-0 [--accent:#ecb033] [--accent-deep:#e4911c]">
@@ -169,7 +174,7 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
                 <p className="text-base md:text-sm text-white/80">
                   Quedan{" "}
                   <strong className="text-primary-400 text-lg">
-                    {CUPOS_RESTANTES}
+                    {cuposRestantes}
                   </strong>{" "}
                   de {CUPOS_TOTALES} cupos
                 </p>
@@ -287,7 +292,7 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
             </h2>
             {!cerrado && (
               <p className="mt-3 text-base md:text-sm text-[#b5b5b5]">
-                Quedan {CUPOS_RESTANTES} de {CUPOS_TOTALES} cupos
+                Quedan {cuposRestantes} de {CUPOS_TOTALES} cupos
               </p>
             )}
           </div>
