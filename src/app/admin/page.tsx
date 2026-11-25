@@ -26,6 +26,7 @@ import MetricsCard, { MetricsGrid } from "@/components/admin/MetricsCard";
 import AddRepoForm from "@/components/admin/AddRepoForm";
 import ReposTable from "@/components/admin/ReposTable";
 import BannerManagement from "@/components/admin/BannerManagement";
+import BuildersLabManagement from "@/components/admin/BuildersLabManagement";
 import Toast from "@/components/admin/Toast";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import TabSkeleton from "@/components/admin/Skeleton";
@@ -35,12 +36,13 @@ import { StarterRepoProps } from "@/types/starter-repo";
 import { WorkshopProps } from "@/types/workshop";
 import { Plus, Download, ExternalLink, Pencil, Save, X } from "lucide-react";
 
-type TabType = "usuarios" | "repositorios" | "banner" | "waitlist" | "certificados" | "workshops";
+type TabType = "usuarios" | "repositorios" | "banner" | "builders-lab" | "waitlist" | "certificados" | "workshops";
 
 const TABS: { id: TabType; label: string }[] = [
   { id: "usuarios", label: "Usuarios" },
   { id: "repositorios", label: "Repositorios" },
   { id: "banner", label: "Banner" },
+  { id: "builders-lab", label: "Builders Lab" },
   { id: "waitlist", label: "Waitlist" },
   { id: "certificados", label: "Certificados" },
   { id: "workshops", label: "Workshops" },
@@ -141,8 +143,13 @@ function AdminDashboard() {
   }>({ field: "updatedAt", direction: "desc" });
 
   useEffect(() => {
-    // "banner" hace su propio fetch dentro de BannerManagement.
-    if (activeTab === "banner" || loadedTabs.has(activeTab)) return;
+    // "banner" y "builders-lab" hacen su propio fetch dentro del componente.
+    if (
+      activeTab === "banner" ||
+      activeTab === "builders-lab" ||
+      loadedTabs.has(activeTab)
+    )
+      return;
 
     const fetchers: Partial<Record<TabType, () => Promise<void>>> = {
       usuarios: fetchUsers,
@@ -841,6 +848,16 @@ function AdminDashboard() {
         <BannerManagement
           onSuccess={() => {
             setSuccess("Banner actualizado exitosamente");
+            setTimeout(() => setSuccess(null), 3000);
+          }}
+        />
+      )}
+
+      {/* Builders Lab Tab */}
+      {activeTab === "builders-lab" && (
+        <BuildersLabManagement
+          onSuccess={(cupos) => {
+            setSuccess(`Cupos del Builders Lab actualizados: quedan ${cupos}`);
             setTimeout(() => setSuccess(null), 3000);
           }}
         />
