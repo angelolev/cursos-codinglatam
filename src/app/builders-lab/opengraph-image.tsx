@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { CUPOS_TOTALES } from "./config";
 
-export const alt = "Builders Lab — Un grupo pequeño para construir con IA";
+export const alt = "Builders Lab — Un grupo exclusivo para aplicar IA de verdad";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -64,7 +64,7 @@ export default function OpengraphImage() {
               color: "rgba(255,255,255,0.8)",
             }}
           >
-            Un grupo pequeño para construir con IA.
+            Un grupo exclusivo para aplicar IA de verdad.
           </div>
         </div>
 
