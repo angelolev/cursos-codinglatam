@@ -2,7 +2,7 @@
 // precios y WhatsApp) vive aquí y lo leen la página, los meta tags y la
 // imagen OG.
 
-// Cierre del Pase Fundador: lunes 30 de noviembre de 2026 a las 23:59:59
+// Cierre del precio de lanzamiento: lunes 30 de noviembre de 2026 a las 23:59:59
 // hora Perú (UTC-5, sin horario de verano).
 export const CIERRE_FUNDADOR = new Date("2026-11-30T23:59:59-05:00");
 
@@ -39,7 +39,7 @@ export const PLANES: Plan[] = [
     nota: "Precio congelado al renovar",
     destacado: true,
     mensaje:
-      "Hola Angelo, quiero reservar mi Pase Fundador ANUAL del Builders Lab (S/599).",
+      "Hola Angelo, quiero convertirme en builder con el plan ANUAL del Builders Lab (S/599).",
   },
   {
     id: "semestral",
@@ -49,7 +49,7 @@ export const PLANES: Plan[] = [
     equivalente: "≈ S/58 al mes",
     nota: "Precio congelado al renovar",
     mensaje:
-      "Hola Angelo, quiero reservar mi Pase Fundador SEMESTRAL del Builders Lab (S/349).",
+      "Hola Angelo, quiero convertirme en builder con el plan SEMESTRAL del Builders Lab (S/349).",
   },
   {
     id: "mensual",

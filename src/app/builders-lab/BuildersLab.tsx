@@ -75,7 +75,7 @@ const FAQ = [
   },
 ];
 
-// Cierra el Pase Fundador en vivo si la fecha vence con la página abierta.
+// Cierra el precio de lanzamiento en vivo si la fecha vence con la página abierta.
 function useFundadorCerrado(cerradoInicial: boolean) {
   const [cerrado, setCerrado] = useState(cerradoInicial);
   useEffect(() => {
@@ -138,8 +138,8 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
             )}
             <span className="text-xs font-semibold uppercase tracking-[0.08em] md:tracking-[0.2em] text-primary-500">
               {cerrado
-                ? "Pase Fundador cerrado"
-                : `Solo ${CUPOS_TOTALES} cupos · Pase Fundador hasta el lunes 30`}
+                ? "Precio de lanzamiento cerrado"
+                : `Conviértete en builder · Solo ${CUPOS_TOTALES} cupos hasta el lunes 30`}
             </span>
           </div>
 
@@ -159,7 +159,7 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
             <>
               <Countdown
                 deadline={CIERRE_FUNDADOR}
-                label="El Pase Fundador cierra en"
+                label="El precio de lanzamiento termina en"
                 className="mb-8"
               />
 
@@ -188,7 +188,7 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
             href="#precios"
             className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-primary-400 px-8 py-4 text-lg font-bold text-[#171717] shadow-lg shadow-primary-500/25 transition-colors hover:bg-primary-300"
           >
-            {cerrado ? "Unirme a la lista de espera" : "Reserva tu cupo"}
+            {cerrado ? "Unirme a la lista de espera" : "Conviértete en builder"}
             <ArrowRight className="h-5 w-5" />
           </a>
         </section>
@@ -279,9 +279,9 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
         {/* Precios y reserva */}
         <section id="precios" className="mb-20 scroll-mt-24">
           <div className="text-center mb-10">
-            <Eyebrow>{cerrado ? "Lista de espera" : "Pase Fundador"}</Eyebrow>
+            <Eyebrow>{cerrado ? "Lista de espera" : "Precio de lanzamiento"}</Eyebrow>
             <h2 className={sectionTitle}>
-              {cerrado ? "Pase Fundador cerrado" : "Reserva tu cupo"}
+              {cerrado ? "Precio de lanzamiento cerrado" : "Conviértete en builder"}
             </h2>
             {!cerrado && (
               <p className="mt-3 text-base md:text-sm text-[#b5b5b5]">
@@ -295,7 +295,7 @@ export function BuildersLab({ cerradoInicial }: { cerradoInicial: boolean }) {
               <TopAccent />
               <Lock className="mx-auto h-8 w-8 text-primary-400" />
               <p className="mt-4 text-base text-[#b5b5b5]">
-                Los precios de fundador ya no están disponibles. Déjame tu
+                Los precios de lanzamiento ya no están disponibles. Déjame tu
                 nombre en la lista de espera y te escribo cuando se abra un
                 cupo.
               </p>
