@@ -225,5 +225,14 @@ body::before {
 @media (max-width: 1279.98px) {
   body:has(#mobile-price-bar) #whatsapp-float {
     bottom: 5.5rem;
+    z-index: 50;
+  }
+}
+
+/* Bajo sm la barra apila sus beneficios en filas y mide ~190px: la burbuja
+   sube por encima de toda la barra. */
+@media (max-width: 639.98px) {
+  body:has(#mobile-price-bar) #whatsapp-float {
+    bottom: 12.5rem;
   }
 }
