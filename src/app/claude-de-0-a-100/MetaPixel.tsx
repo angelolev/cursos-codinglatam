@@ -3,6 +3,10 @@ import { useEffect } from "react";
 import Script from "next/script";
 
 const PIXEL_ID = "1589015306249568";
+// Pixel de la cuenta publicitaria que corre los anuncios (294521562). Los
+// anuncios solo pueden atribuir conversiones y armar públicos con pixeles
+// de su cuenta, así que los eventos se envían a ambos.
+const ADS_PIXEL_ID = "1099535653834248";
 
 type Fbq = (...args: unknown[]) => void;
 
@@ -39,6 +43,7 @@ export function MetaPixel() {
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
           fbq('init', '${PIXEL_ID}');
+          fbq('init', '${ADS_PIXEL_ID}');
           fbq('track', 'PageView');
         `}
       </Script>
